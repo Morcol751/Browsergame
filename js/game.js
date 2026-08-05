@@ -13,7 +13,7 @@ import {Backpack} from "./backpack.js";
 import {AudioManager} from "./audio.js";
 
 import {BuildingSystem} from "./building.js";
-import {BuildingInteraction} from "./buildingInteraction.js";
+import {BuildingInteraction} from "./buildinginteraction.js";
 import {Workbench} from "./workbench.js";
 
 import {ITEMS} from "./items.js";
