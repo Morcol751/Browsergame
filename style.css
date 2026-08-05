@@ -1,0 +1,63 @@
+body{
+
+    margin:0;
+    overflow:hidden;
+    background:black;
+    font-family:Arial;
+
+}
+
+
+
+canvas{
+
+    display:block;
+
+}
+
+
+
+#tooltip{
+
+    position:absolute;
+
+    background:rgba(0,0,0,0.8);
+
+    color:white;
+
+    padding:8px 12px;
+
+    border-radius:5px;
+
+    font-size:18px;
+
+    pointer-events:none;
+
+    display:none;
+
+}
+
+#radar{
+
+    position:absolute;
+
+    top:20px;
+    right:20px;
+
+
+    width:220px;
+    height:220px;
+
+
+    border-radius:50%;
+
+
+    border:3px solid white;
+
+
+    background:#111;
+
+
+    image-rendering:pixelated;
+
+}
