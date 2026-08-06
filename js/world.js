@@ -16,6 +16,8 @@ this.tiles=[];
 
 this.veins=[];
 
+this.grassRotation=[];
+
 
 
 
@@ -24,11 +26,18 @@ for(let y=0;y<this.height;y++){
 
 this.tiles[y]=[];
 
+this.grassRotation[y]=[];
+
 
 for(let x=0;x<this.width;x++){
 
 
 this.tiles[y][x]=0;
+
+
+// zufällige Drehung für Gras
+this.grassRotation[y][x] =
+Math.floor(Math.random()*4);
 
 
 }
@@ -59,7 +68,7 @@ this.generateStone();
 generateOres(){
 
 
-let totalVeins=700;
+let totalVeins=500;
 
 
 
@@ -174,7 +183,7 @@ y:y
 generateTrees(){
 
 
-let forests = 180;
+let forests = 200;
 
 
 
@@ -210,7 +219,7 @@ continue;
 
 let size =
 Math.floor(
-Math.random()*12
+Math.random()*6
 )+8;
 
 
@@ -556,42 +565,42 @@ let r=Math.random();
 
 
 
-if(r < 0.005+bonus*0.015)
+if(r < 0.1+bonus*0.015)
 return 11;
 
 
 
-if(r < 0.015+bonus*0.025)
+if(r < 0.2+bonus*0.025)
 return 10;
 
 
 
-if(r < 0.04+bonus*0.05)
+if(r < 0.3+bonus*0.05)
 return 9;
 
 
 
-if(r < 0.08+bonus*0.08)
+if(r < 0.4+bonus*0.08)
 return 8;
 
 
 
-if(r < 0.16+bonus*0.10)
+if(r < 0.5+bonus*0.10)
 return 7;
 
 
 
-if(r < 0.30+bonus*0.12)
+if(r < 0.60+bonus*0.12)
 return 6;
 
 
 
-if(r < 0.50+bonus*0.15)
+if(r < 0.70+bonus*0.15)
 return 5;
 
 
 
-if(r < 0.75)
+if(r < 0.8)
 return 4;
 
 
@@ -621,23 +630,23 @@ getVeinSize(type){
 switch(type){
 
 
-case 2:return 12;
+case 2:return 7;
 
-case 3:return 11;
+case 3:return 6;
 
-case 4:return 10;
+case 4:return 6;
 
-case 5:return 8;
+case 5:return 6;
 
-case 6:return 7;
+case 6:return 5;
 
-case 7:return 6;
+case 7:return 5;
 
 case 8:return 5;
 
 case 9:return 4;
 
-case 10:return 3;
+case 10:return 4;
 
 case 11:return 3;
 

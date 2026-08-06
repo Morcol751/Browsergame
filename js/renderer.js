@@ -7,10 +7,56 @@ constructor(ctx,items){
 
 this.ctx=ctx;
 
+this.ctx.imageSmoothingEnabled = false;
+
 this.items=items;
 
 
 this.tileSize=32;
+
+this.tiles = {};
+
+this.grassRotation = [];
+
+this.tiles.grass = new Image();
+this.tiles.grass.src = "./assets/tiles/grass.png";
+
+this.tiles.stone = new Image();
+this.tiles.stone.src = "./assets/tiles/stone.png";
+
+this.tiles.tree = new Image();
+this.tiles.tree.src = "./assets/tiles/tree.png";
+
+this.tiles.coal = new Image();
+this.tiles.coal.src = "./assets/tiles/coal.png";
+
+this.tiles.copper = new Image();
+this.tiles.copper.src = "./assets/tiles/copper.png";
+
+this.tiles.iron = new Image();
+this.tiles.iron.src = "./assets/tiles/iron.png";
+
+this.tiles.silver = new Image();
+this.tiles.silver.src = "./assets/tiles/silver.png";
+
+this.tiles.gold = new Image();
+this.tiles.gold.src = "./assets/tiles/gold.png";
+
+this.tiles.diamond = new Image();
+this.tiles.diamond.src = "./assets/tiles/diamond.png";
+
+this.tiles.cobalt = new Image();
+this.tiles.cobalt.src = "./assets/tiles/cobalt.png";
+
+this.tiles.mithril = new Image();
+this.tiles.mithril.src = "./assets/tiles/mithril.png";
+
+this.tiles.obsidian = new Image();
+this.tiles.obsidian.src = "./assets/tiles/obsidian.png";
+
+this.tiles.adamant = new Image();
+this.tiles.adamant.src = "./assets/tiles/adamant.png";
+
 
 
 this.tooltip =
@@ -43,7 +89,23 @@ this.mouseY=y;
 
 }
 
+getGrassRotation(x,y){
 
+let key =
+x+"_"+y;
+
+
+if(this.grassRotation[key]===undefined){
+
+this.grassRotation[key] =
+Math.floor(Math.random()*4);
+
+}
+
+
+return this.grassRotation[key];
+
+}
 
 
 
@@ -326,11 +388,576 @@ ore=tile.ore;
 }
 
 
+// ======================
+// GRASS TEXTUR
+// ======================
+
+
+if(ore===0){
+
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
 
 
 
+let rotation =
+this.getGrassRotation(x,y);
 
 
+
+ctx.save();
+
+
+
+ctx.translate(
+screenX+this.tileSize/2,
+screenY+this.tileSize/2
+);
+
+
+
+ctx.rotate(
+rotation*Math.PI/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.grass,
+
+-this.tileSize/2,
+
+-this.tileSize/2,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+ctx.restore();
+
+
+
+continue;
+
+}
+
+// ======================
+// STEIN TEXTUR
+// ======================
+
+if(ore===12){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.stone,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+// ======================
+// Baum TEXTUR
+// ======================
+
+if(ore===1){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.tree,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Kohle TEXTUR
+// ======================
+
+if(ore===2){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.coal,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Kupfer TEXTUR
+// ======================
+
+if(ore===3){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.copper,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Eisen TEXTUR
+// ======================
+
+if(ore===4){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.iron,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Silber TEXTUR
+// ======================
+
+if(ore===5){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.silver,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Gold TEXTUR
+// ======================
+
+if(ore===6){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.gold,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Diamant TEXTUR
+// ======================
+
+if(ore===7){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.diamond,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Kobalt TEXTUR
+// ======================
+
+if(ore===8){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.cobalt,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Mithril TEXTUR
+// ======================
+
+if(ore===9){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.mithril,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Obsidian TEXTUR
+// ======================
+
+if(ore===10){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.obsidian,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
+
+
+// ======================
+// Adamant TEXTUR
+// ======================
+
+if(ore===11){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+
+
+ctx.drawImage(
+
+this.tiles.adamant,
+
+screenX,
+
+screenY,
+
+this.tileSize,
+
+this.tileSize
+
+);
+
+
+
+continue;
+
+}
 
 
 switch(ore){
@@ -371,7 +998,7 @@ break;
 
 case 4:
 
-ctx.fillStyle="#888";
+ctx.fillStyle="#8888885d";
 
 break;
 
@@ -379,7 +1006,7 @@ break;
 
 case 5:
 
-ctx.fillStyle="#ccc";
+ctx.fillStyle="#dad6d6";
 
 break;
 
@@ -419,7 +1046,7 @@ break;
 
 case 10:
 
-ctx.fillStyle="#111";
+ctx.fillStyle="#130a47";
 
 break;
 

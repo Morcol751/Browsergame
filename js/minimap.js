@@ -225,7 +225,7 @@ break;
 
 case 4:
 
-ctx.fillStyle="#888";
+ctx.fillStyle="#8888885d";
 
 break;
 
@@ -233,7 +233,7 @@ break;
 
 case 5:
 
-ctx.fillStyle="#ccc";
+ctx.fillStyle="#dad6d6";
 
 break;
 
@@ -273,7 +273,7 @@ break;
 
 case 10:
 
-ctx.fillStyle="#111";
+ctx.fillStyle="#130a47";
 
 break;
 
@@ -282,6 +282,13 @@ break;
 case 11:
 
 ctx.fillStyle="pink";
+
+break;
+
+
+case 12:
+
+ctx.fillStyle="#666";
 
 break;
 
