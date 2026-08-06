@@ -1,3 +1,10 @@
+import {
+COLLISION,
+TILE_COLLISION,
+BUILDING_COLLISION
+} from "./collision.js";
+
+
 export class World{
 
 
@@ -17,6 +24,9 @@ this.tiles=[];
 this.veins=[];
 
 this.grassRotation=[];
+
+// Einzelne X/Y-Felder können die Standard-Kollision überschreiben.
+this.tileCollisionOverrides = new Map();
 
 
 
@@ -955,6 +965,153 @@ return this.tiles[y][x];
 
 }
 
+
+
+
+
+// ==================================================
+// TILE-KOLLISION
+// ==================================================
+
+getTileCollision(x,y){
+
+// Außerhalb der Welt ist immer blockiert.
+if(
+x<0 ||
+y<0 ||
+x>=this.width ||
+y>=this.height
+){
+return COLLISION.NICHT_PASSIERBAR;
+}
+
+
+// Erst prüfen, ob dieses konkrete X/Y-Feld überschrieben wurde.
+let key = x+","+y;
+
+if(this.tileCollisionOverrides.has(key)){
+return this.tileCollisionOverrides.get(key);
+}
+
+
+let tile = this.tiles[y][x];
+
+
+// Gras ist bei dir als 0 gespeichert.
+if(tile===0){
+return TILE_COLLISION[0] ?? COLLISION.NICHT_PASSIERBAR;
+}
+
+
+// Gebäude haben eigene Regeln.
+if(tile.building){
+return (
+BUILDING_COLLISION[tile.building] ??
+COLLISION.NICHT_PASSIERBAR
+);
+}
+
+
+// Ressourcen / Bäume / Steine / Erze über ore-ID.
+return (
+TILE_COLLISION[tile.ore] ??
+COLLISION.NICHT_PASSIERBAR
+);
+
+}
+
+
+
+isWalkable(x,y){
+
+return (
+this.getTileCollision(x,y)===
+COLLISION.DRUEBERLAUFEN
+);
+
+}
+
+
+
+setTileCollision(x,y,collision){
+
+if(
+x<0 ||
+y<0 ||
+x>=this.width ||
+y>=this.height
+)
+return false;
+
+
+if(
+collision!==COLLISION.NICHT_PASSIERBAR &&
+collision!==COLLISION.DRUEBERLAUFEN
+)
+return false;
+
+
+this.tileCollisionOverrides.set(
+x+","+y,
+collision
+);
+
+return true;
+
+}
+
+
+
+clearTileCollision(x,y){
+
+this.tileCollisionOverrides.delete(
+x+","+y
+);
+
+}
+
+
+
+exportTileCollisionOverrides(){
+
+let result=[];
+
+for(let [key,collision] of this.tileCollisionOverrides){
+
+let parts=key.split(",");
+
+result.push({
+x:Number(parts[0]),
+y:Number(parts[1]),
+c:collision
+});
+
+}
+
+return result;
+
+}
+
+
+
+importTileCollisionOverrides(data){
+
+this.tileCollisionOverrides.clear();
+
+if(!Array.isArray(data))
+return;
+
+for(let entry of data){
+
+this.setTileCollision(
+entry.x,
+entry.y,
+entry.c
+);
+
+}
+
+}
 
 
 

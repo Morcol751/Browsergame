@@ -16,6 +16,24 @@ this.y=y;
 this.speed=0.2;
 
 
+// ======================
+// CHARAKTER SPRITE
+// ======================
+
+this.sprite=new Image();
+this.sprite.src="./assets/player/player_walk.png";
+
+this.spriteFrameWidth=32;
+this.spriteFrameHeight=48;
+this.spriteFrames=4;
+
+this.direction="down";
+this.walking=false;
+this.animationFrame=0;
+this.animationTimer=0;
+this.animationSpeed=120;
+
+
 this.keys={};
 
 
@@ -170,33 +188,256 @@ this.audio.stopMiningSound();
 
 
 
-update(){
+update(world){
+
+let moved=false;
 
 
+// ======================
+// VERTIKALE BEWEGUNG
+// ======================
 
-if(this.keys["w"])
-this.y-=this.speed;
+if(this.keys["w"]){
 
+this.direction="up";
 
+let newY=this.y-this.speed;
 
-if(this.keys["s"])
-this.y+=this.speed;
-
-
-
-if(this.keys["a"])
-this.x-=this.speed;
-
-
-
-if(this.keys["d"])
-this.x+=this.speed;
-
-
+if(
+!world ||
+this.canOccupy(world,this.x,newY)
+){
+this.y=newY;
+moved=true;
+}
 
 }
 
 
+if(this.keys["s"]){
+
+this.direction="down";
+
+let newY=this.y+this.speed;
+
+if(
+!world ||
+this.canOccupy(world,this.x,newY)
+){
+this.y=newY;
+moved=true;
+}
+
+}
+
+
+// ======================
+// HORIZONTALE BEWEGUNG
+// ======================
+
+if(this.keys["a"]){
+
+this.direction="left";
+
+let newX=this.x-this.speed;
+
+if(
+!world ||
+this.canOccupy(world,newX,this.y)
+){
+this.x=newX;
+moved=true;
+}
+
+}
+
+
+if(this.keys["d"]){
+
+this.direction="right";
+
+let newX=this.x+this.speed;
+
+if(
+!world ||
+this.canOccupy(world,newX,this.y)
+){
+this.x=newX;
+moved=true;
+}
+
+}
+
+
+this.walking=moved;
+
+if(this.walking){
+
+let now=Date.now();
+
+if(now-this.animationTimer>=this.animationSpeed){
+this.animationFrame=(this.animationFrame+1)%this.spriteFrames;
+this.animationTimer=now;
+}
+
+}
+else{
+this.animationFrame=0;
+this.animationTimer=Date.now();
+}
+
+}
+
+
+
+
+// ======================
+// SPIELER-KOLLISIONSBOX
+// ======================
+//
+// x/y beschreiben das 1x1-Tile, auf dem die Füße des
+// Spielers stehen. Der 32x48-Sprite darf weiterhin 16 Pixel
+// nach oben über dieses Tile hinausragen.
+//
+// Für die Kollision prüfen wir aber die KOMPLETTE 1x1-Fläche.
+// Dadurch kann kein Teil des Spieler-Tiles mehr in einen Stein,
+// ein Erz, einen Baum oder ein Gebäude hineinrutschen.
+//
+// Das kleine EPSILON verhindert, dass eine exakt berührte
+// Tile-Kante schon als das nächste Tile gewertet wird.
+// ======================
+
+canOccupy(world,x,y){
+
+if(!world)
+return true;
+
+
+const EPSILON=0.001;
+
+
+// ======================
+// FUSS-HITBOX
+// ======================
+//
+// x = horizontale MITTE des Spielers
+// y = Weltposition des Spielers
+//
+// Der Sprite ist 32x48 Pixel.
+// Kollidieren soll nur der Bereich
+// direkt um die Füße.
+// ======================
+
+
+// Seitlich symmetrisch.
+// 0.90 = 90 % eines Tiles breit.
+const hitboxWidth = 0.60;
+
+
+// Fußbereich vertikal.
+//
+// WICHTIG:
+// Diese Werte sind relativ zu y,
+// NICHT von 0 bis 1 innerhalb eines Tiles.
+const hitboxTopOffset = 0.15;
+
+const hitboxBottomOffset = 0.425;
+
+
+
+// ======================
+// HITBOX-GRENZEN
+// ======================
+
+
+const left =
+x -
+hitboxWidth/2;
+
+
+const right =
+x +
+hitboxWidth/2;
+
+
+const top =
+y +
+hitboxTopOffset;
+
+
+const bottom =
+y +
+hitboxBottomOffset;
+
+
+
+// ======================
+// BETROFFENE TILES
+// ======================
+
+
+const tileLeft =
+Math.floor(
+left
+);
+
+
+const tileRight =
+Math.floor(
+right-EPSILON
+);
+
+
+const tileTop =
+Math.floor(
+top
+);
+
+
+const tileBottom =
+Math.floor(
+bottom-EPSILON
+);
+
+
+
+// ======================
+// KOLLISION
+// ======================
+
+
+return(
+
+world.isWalkable(
+tileLeft,
+tileTop
+)
+
+&&
+
+world.isWalkable(
+tileRight,
+tileTop
+)
+
+&&
+
+world.isWalkable(
+tileLeft,
+tileBottom
+)
+
+&&
+
+world.isWalkable(
+tileRight,
+tileBottom
+)
+
+);
+
+
+}
 
 
 
@@ -1153,33 +1394,49 @@ canvas,
 tileSize
 ){
 
+let directionRow={
+down:0,
+left:1,
+right:2,
+up:3
+};
 
+let row=directionRow[this.direction] ?? 0;
 
-ctx.fillStyle="red";
+let sourceX=
+this.animationFrame*this.spriteFrameWidth;
 
+let sourceY=
+row*this.spriteFrameHeight;
 
-
-ctx.fillRect(
-
-canvas.width/2-
-tileSize/2,
-
-
-canvas.height/2-
-tileSize/2,
-
-
-tileSize,
-
-
-tileSize
-
+// Füße bleiben auf dem ursprünglichen 32x32-Spielertile.
+// Der 32x48-Charakter ragt 16 Pixel nach oben heraus.
+let screenX=Math.floor(
+canvas.width/2-tileSize/2
 );
 
+let screenY=Math.floor(
+canvas.height/2+tileSize/2-this.spriteFrameHeight
+);
 
+ctx.save();
+ctx.imageSmoothingEnabled=false;
+
+ctx.drawImage(
+this.sprite,
+sourceX,
+sourceY,
+this.spriteFrameWidth,
+this.spriteFrameHeight,
+screenX,
+screenY,
+tileSize,
+Math.round(tileSize*1.5)
+);
+
+ctx.restore();
 
 }
-
 
 
 }

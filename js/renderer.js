@@ -57,6 +57,12 @@ this.tiles.obsidian.src = "./assets/tiles/obsidian.png";
 this.tiles.adamant = new Image();
 this.tiles.adamant.src = "./assets/tiles/adamant.png";
 
+this.tiles.workbench = new Image();
+this.tiles.workbench.src = "./assets/buildings/workbench_sprite.png";
+
+this.tiles.furnace = new Image();
+this.tiles.furnace.src = "./assets/buildings/furnace_sprite.png";
+
 
 
 this.tooltip =
@@ -212,6 +218,12 @@ this.tileSize
 )+2;
 
 
+// Mehrteilige Gebäude nach dem Terrain-Pass zeichnen, damit
+// ihre Child-Tiles das große Sprite nicht wieder mit Gras übermalen.
+let workbenchesToDraw=[];
+let furnacesToDraw=[];
+
+
 
 
 
@@ -257,117 +269,113 @@ tile.building
 ){
 
 
-
 let screenX =
-
+Math.floor(
 (x-camera.x)
 *
 this.tileSize
 +
-canvas.width/2;
-
+canvas.width/2
+);
 
 
 let screenY =
-
+Math.floor(
 (y-camera.y)
 *
 this.tileSize
 +
-canvas.height/2;
-
-
-
-
-
-
-
-ctx.fillStyle="#555";
-
-
-
-ctx.fillRect(
-
-screenX,
-
-screenY,
-
-this.tileSize,
-
-this.tileSize
-
+canvas.height/2
 );
 
 
+// Unter Gebäuden weiterhin Gras zeichnen.
+// Dadurch funktionieren transparente Gebäude-Sprites sauber.
+let rotation =
+this.getGrassRotation(x,y);
+
+
+ctx.save();
+
+ctx.translate(
+screenX+this.tileSize/2,
+screenY+this.tileSize/2
+);
+
+ctx.rotate(
+rotation*Math.PI/2
+);
+
+ctx.drawImage(
+this.tiles.grass,
+-this.tileSize/2,
+-this.tileSize/2,
+this.tileSize,
+this.tileSize
+);
+
+ctx.restore();
 
 
 
-
-ctx.font="26px Arial";
-
-ctx.textAlign="center";
-
-ctx.textBaseline="middle";
-
-
+// ======================
+// OFEN 1x2 (1 breit, 2 hoch)
+// ======================
 
 if(
 tile.building==="furnace"
 ){
 
+if(
+tile.buildingPart==="origin"
+){
 
-ctx.fillText(
+furnacesToDraw.push({
 
-"🔥",
+x:screenX,
 
-screenX+16,
+y:screenY
 
-screenY+16
+});
 
-);
+}
 
-
+continue;
 
 }
 
 
 
-
+// ======================
+// HANDWERKSBANK 2x1
+// ======================
 
 if(
 tile.building==="crafting_table"
 ){
 
+if(
+tile.buildingPart==="origin"
+){
 
+workbenchesToDraw.push({
 
-ctx.fillText(
+x:screenX,
 
-"🔨",
+y:screenY
 
-screenX+16,
-
-screenY+16
-
-);
-
-
+});
 
 }
 
+continue;
 
-
+}
 
 
 continue;
 
-
-
 }
-
-
-
-
-
 
 
 
@@ -1117,6 +1125,45 @@ this.tileSize
 
 }
 
+
+
+
+// ======================
+// HANDWERKSBÄNKE ÜBER TERRAIN
+// ======================
+
+for(
+let workbench of workbenchesToDraw
+){
+
+ctx.drawImage(
+this.tiles.workbench,
+workbench.x,
+workbench.y,
+this.tileSize*2,
+this.tileSize
+);
+
+}
+
+
+// ======================
+// ÖFEN ÜBER TERRAIN
+// ======================
+
+for(
+let furnace of furnacesToDraw
+){
+
+ctx.drawImage(
+this.tiles.furnace,
+furnace.x,
+furnace.y,
+this.tileSize,
+this.tileSize*2
+);
+
+}
 
 
 

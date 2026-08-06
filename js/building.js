@@ -188,7 +188,7 @@ return {
 
 width:1,
 
-height:1
+height:2
 
 };
 
@@ -390,6 +390,14 @@ dy++
 
 
 
+let buildingPart =
+(dx===0 && dy===0)
+?
+"origin"
+:
+"child";
+
+
 this.world.tiles
 [pos.y+dy]
 [pos.x+dx]
@@ -397,6 +405,8 @@ this.world.tiles
 {
 
 building:this.placing.id,
+
+buildingPart:buildingPart,
 
 ore:0,
 

@@ -15,6 +15,7 @@ import {AudioManager} from "./audio.js";
 import {BuildingSystem} from "./building.js";
 import {BuildingInteraction} from "./buildinginteraction.js";
 import {Workbench} from "./workbench.js";
+import {Furnace} from "./furnace.js";
 
 import {ITEMS} from "./items.js";
 import {Console} from "./console.js";
@@ -155,6 +156,14 @@ this
 );
 
 
+this.furnace =
+new Furnace(
+this.backpack,
+this.audio,
+this
+);
+
+
 
 
 
@@ -270,7 +279,8 @@ new BuildingInteraction(
 this.player,
 this.building,
 this.backpack,
-this.workbench
+this.workbench,
+this.furnace
 );
 
 
@@ -807,6 +817,7 @@ update(){
 if(
 this.settingsOpen ||
 this.workbench.open ||
+this.furnace.open ||
 this.worldMap.open
 )
 return;
@@ -817,7 +828,9 @@ return;
 
 
 
-this.player.update();
+this.player.update(
+this.world
+);
 
 
 
@@ -1024,6 +1037,12 @@ this.canvas
 
 
 this.workbench.draw(
+this.ctx,
+this.canvas
+);
+
+
+this.furnace.draw(
 this.ctx,
 this.canvas
 );

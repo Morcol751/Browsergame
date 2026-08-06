@@ -12,7 +12,7 @@ HAND: {
 
     name:"Hand",
 
-    icon:"✋",
+    icon:"./assets/items/hand.png",
 
     type:"tool",
 
@@ -37,7 +37,7 @@ HAND: {
 WOOD_PICKAXE:{
     id:"wood_pickaxe",
     name:"Holzspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:1,
@@ -50,7 +50,7 @@ WOOD_PICKAXE:{
 STONE_PICKAXE:{
     id:"stone_pickaxe",
     name:"Steinspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:2,
@@ -63,7 +63,7 @@ STONE_PICKAXE:{
 COPPER_PICKAXE:{
     id:"copper_pickaxe",
     name:"Kupferspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:3,
@@ -76,7 +76,7 @@ COPPER_PICKAXE:{
 IRON_PICKAXE:{
     id:"iron_pickaxe",
     name:"Eisenspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:4,
@@ -89,7 +89,7 @@ IRON_PICKAXE:{
 SILVER_PICKAXE:{
     id:"silver_pickaxe",
     name:"Silberspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:5,
@@ -102,7 +102,7 @@ SILVER_PICKAXE:{
 GOLD_PICKAXE:{
     id:"gold_pickaxe",
     name:"Goldspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:6,
@@ -115,7 +115,7 @@ GOLD_PICKAXE:{
 DIAMOND_PICKAXE:{
     id:"diamond_pickaxe",
     name:"Diamantspitzhacke",
-    icon:"💎",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:7,
@@ -128,7 +128,7 @@ DIAMOND_PICKAXE:{
 COBALT_PICKAXE:{
     id:"cobalt_pickaxe",
     name:"Kobaltspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:8,
@@ -141,7 +141,7 @@ COBALT_PICKAXE:{
 MITHRIL_PICKAXE:{
     id:"mithril_pickaxe",
     name:"Mithrilspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:9,
@@ -154,7 +154,7 @@ MITHRIL_PICKAXE:{
 OBSIDIAN_PICKAXE:{
     id:"obsidian_pickaxe",
     name:"Obsidianhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:10,
@@ -167,7 +167,7 @@ OBSIDIAN_PICKAXE:{
 ADAMANT_PICKAXE:{
     id:"adamant_pickaxe",
     name:"Adamantspitzhacke",
-    icon:"⛏",
+    icon:"./assets/items/pickaxe.png",
     type:"tool",
     toolType:"pickaxe",
     tier:11,
@@ -187,7 +187,7 @@ ADAMANT_PICKAXE:{
 WOOD_AXE:{
     id:"wood_axe",
     name:"Holzaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:1,
@@ -198,7 +198,7 @@ WOOD_AXE:{
 STONE_AXE:{
     id:"stone_axe",
     name:"Steinaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:2,
@@ -211,7 +211,7 @@ STONE_AXE:{
 COPPER_AXE:{
     id:"copper_axe",
     name:"Kupferaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:3,
@@ -224,7 +224,7 @@ COPPER_AXE:{
 IRON_AXE:{
     id:"iron_axe",
     name:"Eisenaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:4,
@@ -234,7 +234,7 @@ IRON_AXE:{
 SILVER_AXE:{
     id:"silver_axe",
     name:"Silberaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:5,
@@ -247,7 +247,7 @@ SILVER_AXE:{
 GOLD_AXE:{
     id:"gold_axe",
     name:"Goldaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:6,
@@ -260,7 +260,7 @@ GOLD_AXE:{
 DIAMOND_AXE:{
     id:"diamond_axe",
     name:"Diamantaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:7,
@@ -273,7 +273,7 @@ DIAMOND_AXE:{
 COBALT_AXE:{
     id:"cobalt_axe",
     name:"Kobaltaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:8,
@@ -286,7 +286,7 @@ COBALT_AXE:{
 MITHRIL_AXE:{
     id:"mithril_axe",
     name:"Mithrilaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:9,
@@ -299,7 +299,7 @@ MITHRIL_AXE:{
 OBSIDIAN_AXE:{
     id:"obsidian_axe",
     name:"Obsidianaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:10,
@@ -312,7 +312,7 @@ OBSIDIAN_AXE:{
 ADAMANT_AXE:{
     id:"adamant_axe",
     name:"Adamantaxt",
-    icon:"🪓",
+    icon:"./assets/items/axe.png",
     type:"tool",
     toolType:"axe",
     tier:11,
@@ -331,7 +331,7 @@ ADAMANT_AXE:{
 WOOD:{
     id:"wood",
     name:"Holz",
-    icon:"🌲",
+    icon:"./assets/items/wood.png",
     type:"resource",
     stack:100
 },
@@ -341,7 +341,7 @@ WOOD:{
 STONE:{
     id:"stone",
     name:"Stein",
-    icon:"🪨",
+    icon:"./assets/items/stone.png",
     type:"resource",
     stack:100
 },
@@ -351,7 +351,7 @@ STONE:{
 COAL:{
     id:"coal",
     name:"Kohle",
-    icon:"⬛",
+    icon:"./assets/items/coal.png",
     type:"resource",
     oreId:2,
     stack:100
@@ -362,7 +362,7 @@ COAL:{
 COPPER_ORE:{
     id:"copper_ore",
     name:"Kupfererz",
-    icon:"🟠",
+    icon:"./assets/items/copper_ore.png",
     type:"resource",
     oreId:3,
     stack:100
@@ -373,7 +373,7 @@ COPPER_ORE:{
 IRON_ORE:{
     id:"iron_ore",
     name:"Eisenerz",
-    icon:"⚙",
+    icon:"./assets/items/iron_ore.png",
     type:"resource",
     oreId:4,
     stack:100
@@ -384,7 +384,7 @@ IRON_ORE:{
 SILVER_ORE:{
     id:"silver_ore",
     name:"Silbererz",
-    icon:"🥈",
+    icon:"./assets/items/silver_ore.png",
     type:"resource",
     oreId:5,
     stack:100
@@ -395,7 +395,7 @@ SILVER_ORE:{
 GOLD_ORE:{
     id:"gold_ore",
     name:"Golderz",
-    icon:"🟡",
+    icon:"./assets/items/gold_ore.png",
     type:"resource",
     oreId:6,
     stack:100
@@ -406,7 +406,7 @@ GOLD_ORE:{
 DIAMOND_ORE:{
     id:"diamond_ore",
     name:"Diamant",
-    icon:"💎",
+    icon:"./assets/items/diamond_ore.png",
     type:"resource",
     oreId:7,
     stack:100
@@ -417,7 +417,7 @@ DIAMOND_ORE:{
 COBALT_ORE:{
     id:"cobalt_ore",
     name:"Kobalterz",
-    icon:"🔷",
+    icon:"./assets/items/cobalt_ore.png",
     type:"resource",
     oreId:8,
     stack:100
@@ -428,7 +428,7 @@ COBALT_ORE:{
 MITHRIL_ORE:{
     id:"mithril_ore",
     name:"Mithrilerz",
-    icon:"🟣",
+    icon:"./assets/items/mithril_ore.png",
     type:"resource",
     oreId:9,
     stack:100
@@ -439,7 +439,7 @@ MITHRIL_ORE:{
 OBSIDIAN:{
     id:"obsidian",
     name:"Obsidian",
-    icon:"⬛",
+    icon:"./assets/items/obsidian_ore.png",
     type:"resource",
     oreId:10,
     stack:100
@@ -450,7 +450,7 @@ OBSIDIAN:{
 ADAMANT_ORE:{
     id:"adamant_ore",
     name:"Adamant",
-    icon:"💗",
+    icon:"./assets/items/adamant_ore.png",
     type:"resource",
     oreId:11,
     stack:100
@@ -467,7 +467,7 @@ ADAMANT_ORE:{
 WOOD_PLANKS:{
     id:"wood_planks",
     name:"Holzbretter",
-    icon:"🪵",
+    icon:"./assets/items/wood_planks.png",
     type:"resource",
     stack:100
 },
@@ -477,7 +477,7 @@ WOOD_PLANKS:{
 COPPER_BAR:{
     id:"copper_bar",
     name:"Kupferbarren",
-    icon:"🟠",
+    icon:"./assets/items/copper_bar.png",
     type:"resource",
     stack:100
 },
@@ -487,7 +487,7 @@ COPPER_BAR:{
 IRON_BAR:{
     id:"iron_bar",
     name:"Eisenbarren",
-    icon:"🔩",
+    icon:"./assets/items/iron_bar.png",
     type:"resource",
     stack:100
 },
@@ -497,7 +497,7 @@ IRON_BAR:{
 SILVER_BAR:{
     id:"silver_bar",
     name:"Silberbarren",
-    icon:"🥈",
+    icon:"./assets/items/silver_bar.png",
     type:"resource",
     stack:100
 },
@@ -507,7 +507,17 @@ SILVER_BAR:{
 GOLD_BAR:{
     id:"gold_bar",
     name:"Goldbarren",
-    icon:"🟡",
+    icon:"./assets/items/gold_bar.png",
+    type:"resource",
+    stack:100
+},
+
+
+
+DIAMOND_BAR:{
+    id:"diamond_bar",
+    name:"Diamantbarren",
+    icon:"./assets/items/diamond_bar.png",
     type:"resource",
     stack:100
 },
@@ -517,7 +527,7 @@ GOLD_BAR:{
 COBALT_BAR:{
     id:"cobalt_bar",
     name:"Kobaltbarren",
-    icon:"🔷",
+    icon:"./assets/items/cobalt_bar.png",
     type:"resource",
     stack:100
 },
@@ -527,7 +537,7 @@ COBALT_BAR:{
 MITHRIL_BAR:{
     id:"mithril_bar",
     name:"Mithrilbarren",
-    icon:"🟣",
+    icon:"./assets/items/mithril_bar.png",
     type:"resource",
     stack:100
 },
@@ -537,7 +547,7 @@ MITHRIL_BAR:{
 OBSIDIAN_BAR:{
     id:"obsidian_bar",
     name:"Obsidianbarren",
-    icon:"⬛",
+    icon:"./assets/items/obsidian_bar.png",
     type:"resource",
     stack:100
 },
@@ -547,7 +557,7 @@ OBSIDIAN_BAR:{
 ADAMANT_BAR:{
     id:"adamant_bar",
     name:"Adamantbarren",
-    icon:"💗",
+    icon:"./assets/items/adamant_bar.png",
     type:"resource",
     stack:100
 },
@@ -568,7 +578,7 @@ CRAFTING_TABLE:{
 
     name:"Handwerksbank",
 
-    icon:"🔨",
+    icon:"./assets/items/crafting_table.png",
 
     type:"building"
 
@@ -583,7 +593,7 @@ FURNACE:{
 
     name:"Ofen",
 
-    icon:"🔥",
+    icon:"./assets/items/furnace.png",
 
     type:"building"
 

@@ -232,7 +232,11 @@ width:game.world.width,
 height:game.world.height,
 
 
-tiles:tiles
+tiles:tiles,
+
+
+collisionOverrides:
+game.world.exportTileCollisionOverrides()
 
 
 },
@@ -506,6 +510,17 @@ quality:tile.q
 
 
 // =================================
+// INDIVIDUELLE TILE-KOLLISIONEN LADEN
+// =================================
+
+game.world.importTileCollisionOverrides(
+(data.world && data.world.collisionOverrides) || []
+);
+
+
+
+
+// =================================
 // SPIELER
 // =================================
 
@@ -564,6 +579,14 @@ dy++
 
 
 
+let buildingPart =
+(dx===0 && dy===0)
+?
+"origin"
+:
+"child";
+
+
 game.world.tiles
 [
 building.y+dy
@@ -577,6 +600,10 @@ building.x+dx
 
 building:
 building.id,
+
+
+buildingPart:
+buildingPart,
 
 
 ore:0,

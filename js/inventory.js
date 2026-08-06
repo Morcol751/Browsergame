@@ -1,3 +1,5 @@
+import {ITEMS} from "./items.js";
+
 export class Inventory{
 
 
@@ -20,27 +22,7 @@ this.selectedSlot=null;
 
 
 
-this.hand={
-
-
-id:"hand",
-
-name:"Hand",
-
-icon:"✋",
-
-type:"tool",
-
-toolType:"hand",
-
-tier:0,
-
-damage:1,
-
-range:3
-
-
-};
+this.hand=ITEMS.HAND;
 
 
 

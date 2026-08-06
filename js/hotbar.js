@@ -1,3 +1,5 @@
+import {drawItemIcon} from "./itemicons.js";
+
 export class Hotbar{
 
 
@@ -441,10 +443,12 @@ if(item){
 ctx.fillStyle="white";
 
 
-ctx.fillText(
-item.icon,
-x+this.slotSize/2,
-y+this.slotSize/2-5
+drawItemIcon(
+ctx,
+item,
+x+(this.slotSize-32)/2,
+y+8,
+32
 );
 
 

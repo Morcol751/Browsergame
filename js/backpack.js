@@ -1,3 +1,5 @@
+import {drawItemIcon} from "./itemicons.js";
+
 export class Backpack{
 
 
@@ -390,10 +392,16 @@ ctx.fillStyle="white";
 
 
 
+drawItemIcon(
+ctx,
+entry.item,
+x+20,
+y+offset-23,
+26
+);
+
 ctx.fillText(
 
-entry.item.icon+
-" "+
 entry.item.name+
 (
 entry.amount
@@ -403,12 +411,8 @@ entry.amount
 ""
 ),
 
-
-x+20,
-
-
+x+55,
 y+offset
-
 
 );
 

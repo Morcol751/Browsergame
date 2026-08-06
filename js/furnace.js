@@ -2,7 +2,7 @@ import {ITEMS} from "./items.js";
 import {drawItemIcon,drawIngredientLine} from "./itemicons.js";
 
 
-export class Workbench{
+export class Furnace{
 
 
 constructor(backpack,audio,game){
@@ -18,18 +18,16 @@ this.game=game;
 this.open=false;
 
 
-this.category="Verarbeitung";
+this.category="Schmelzen";
 
 
 this.mouseX=0;
 this.mouseY=0;
 
 
-
 this.scroll=0;
 
 this.maxScroll=0;
-
 
 
 
@@ -47,7 +45,6 @@ let rect =
 canvas.getBoundingClientRect();
 
 
-
 this.mouseX =
 e.clientX-rect.left;
 
@@ -56,11 +53,7 @@ this.mouseY =
 e.clientY-rect.top;
 
 
-
 });
-
-
-
 
 
 
@@ -75,7 +68,6 @@ if(!this.open)
 return;
 
 
-
 if(e.key==="Escape"){
 
 
@@ -85,10 +77,7 @@ this.close();
 }
 
 
-
 });
-
-
 
 
 
@@ -107,12 +96,11 @@ if(!this.open)
 return;
 
 
-
 this.handleClick();
 
 
-
 });
+
 
 
 
@@ -130,7 +118,6 @@ this.scroll+=
 e.deltaY*0.3;
 
 
-
 this.scroll =
 Math.max(
 0,
@@ -141,16 +128,10 @@ this.maxScroll
 );
 
 
-
 });
 
 
-
-
 }
-
-
-
 
 
 
@@ -166,8 +147,8 @@ this.open=true;
 this.scroll=0;
 
 
-
 if(this.game){
+
 
 this.game.inputLocked=true;
 
@@ -175,9 +156,7 @@ this.game.inputLocked=true;
 }
 
 
-
 }
-
 
 
 
@@ -192,17 +171,14 @@ this.open=false;
 
 if(this.game){
 
+
 this.game.inputLocked=false;
 
 
 }
 
 
-
 }
-
-
-
 
 
 
@@ -215,7 +191,6 @@ getLayout(canvas){
 let width=900;
 
 let height=600;
-
 
 
 return {
@@ -237,11 +212,7 @@ height
 };
 
 
-
 }
-
-
-
 
 
 
@@ -261,7 +232,6 @@ this.getLayout(canvas);
 
 
 
-
 // =====================
 // KATEGORIEN
 // =====================
@@ -269,13 +239,16 @@ this.getLayout(canvas);
 
 if(
 this.mouseX>=l.x+40 &&
-this.mouseX<=l.x+240
-&&
+this.mouseX<=l.x+240 &&
 this.mouseY>=l.y+90 &&
 this.mouseY<=l.y+140
 ){
 
-this.category="Verarbeitung";
+
+this.category="Schmelzen";
+
+this.scroll=0;
+
 
 }
 
@@ -283,30 +256,18 @@ this.category="Verarbeitung";
 
 if(
 this.mouseX>=l.x+40 &&
-this.mouseX<=l.x+240
-&&
+this.mouseX<=l.x+240 &&
 this.mouseY>=l.y+150 &&
 this.mouseY<=l.y+200
 ){
 
-this.category="Werkzeuge";
+
+this.category="Köhlerei";
+
+this.scroll=0;
+
 
 }
-
-
-
-if(
-this.mouseX>=l.x+40 &&
-this.mouseX<=l.x+240
-&&
-this.mouseY>=l.y+210 &&
-this.mouseY<=l.y+260
-){
-
-this.category="Förderbänder";
-
-}
-
 
 
 
@@ -321,7 +282,6 @@ let recipes =
 this.getRecipes();
 
 
-
 recipes.forEach(
 (recipe,index)=>{
 
@@ -330,8 +290,6 @@ let y =
 l.y+140+
 index*90-
 this.scroll;
-
-
 
 
 if(
@@ -353,16 +311,10 @@ this.craft(recipe);
 }
 
 
-
 });
 
 
-
-
 }
-
-
-
 
 
 
@@ -372,8 +324,13 @@ this.craft(recipe);
 getRecipes(){
 
 
+// =====================
+// SCHMELZEN
+// =====================
+
+
 if(
-this.category==="Verarbeitung"
+this.category==="Schmelzen"
 ){
 
 
@@ -381,19 +338,101 @@ return [
 
 {
 
-name:"Holzbretter",
+name:"Kupferbarren",
 
-icon:"🪵",
+icon:"🟠",
 
-input:ITEMS.WOOD,
+ingredients:[
 
-amount:1,
+{
+item:ITEMS.COPPER_ORE,
+amount:5
+},
 
-output:ITEMS.WOOD_PLANKS,
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.COPPER_BAR,
+
+outputAmount:2
+
+},
+
+{
+
+name:"Eisenbarren",
+
+icon:"🔩",
+
+ingredients:[
+
+{
+item:ITEMS.IRON_ORE,
+amount:5
+},
+
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.IRON_BAR,
+
+outputAmount:2
+
+}
+
+];
+
+
+}
+
+
+
+
+
+// =====================
+// KÖHLEREI
+// =====================
+
+
+if(
+this.category==="Köhlerei"
+){
+
+
+return [
+
+{
+
+name:"Kohle",
+
+icon:ITEMS.COAL.icon,
+
+ingredients:[
+
+{
+item:ITEMS.WOOD,
+amount:1
+},
+
+{
+item:ITEMS.COAL,
+amount:1
+}
+
+],
+
+output:ITEMS.COAL,
 
 outputAmount:3
 
-
 }
 
 ];
@@ -402,272 +441,10 @@ outputAmount:3
 }
 
 
-
-
-
-
-
-if(
-this.category==="Werkzeuge"
-){
-
-
-return [
-
-
-{
-
-name:"Holzaxt",
-
-icon:"🪓",
-
-ingredients:[
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:5
-}
-
-],
-
-output:ITEMS.WOOD_AXE,
-
-outputAmount:1
-
-
-},
-
-
-
-{
-
-name:"Holzspitzhacke",
-
-icon:"⛏",
-
-ingredients:[
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:5
-}
-
-],
-
-output:ITEMS.WOOD_PICKAXE,
-
-outputAmount:1
-
-
-},
-
-
-
-
-{
-
-name:"Steinaxt",
-
-icon:"🪓",
-
-ingredients:[
-
-{
-item:ITEMS.STONE,
-amount:3
-},
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:2
-}
-
-],
-
-output:ITEMS.STONE_AXE,
-
-outputAmount:1
-
-
-},
-
-
-
-
-{
-
-name:"Steinspitzhacke",
-
-icon:"⛏",
-
-ingredients:[
-
-{
-item:ITEMS.STONE,
-amount:3
-},
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:2
-}
-
-],
-
-output:ITEMS.STONE_PICKAXE,
-
-outputAmount:1
-
-
-},
-
-
-
-{
-
-name:"Kupferaxt",
-
-icon:"🪓",
-
-ingredients:[
-
-{
-item:ITEMS.COPPER_BAR,
-amount:3
-},
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:2
-}
-
-],
-
-output:ITEMS.COPPER_AXE,
-
-outputAmount:1
-
-
-},
-
-
-
-
-{
-
-name:"Kupferspitzhacke",
-
-icon:"⛏",
-
-ingredients:[
-
-{
-item:ITEMS.COPPER_BAR,
-amount:3
-},
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:2
-}
-
-],
-
-output:ITEMS.COPPER_PICKAXE,
-
-outputAmount:1
-
-
-},
-
-
-{
-
-name:"Eisenaxt",
-
-icon:"🪓",
-
-ingredients:[
-
-{
-item:ITEMS.IRON_BAR,
-amount:3
-},
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:2
-}
-
-],
-
-output:ITEMS.IRON_AXE,
-
-outputAmount:1
-
-
-},
-
-
-
-
-{
-
-name:"Eisenspitzhacke",
-
-icon:"⛏",
-
-ingredients:[
-
-{
-item:ITEMS.IRON_BAR,
-amount:3
-},
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:2
-}
-
-],
-
-output:ITEMS.IRON_PICKAXE,
-
-outputAmount:1
-
-
-}
-
-
-
-];
-
-
-}
-
-
-
-
-
-
-if(
-this.category==="Förderbänder"
-){
-
-
-return [];
-
-}
-
-
-
 return [];
 
 
 }
-
-
-
 
 
 
@@ -683,18 +460,13 @@ e=>e.item.id===item.id
 );
 
 
-
 return (
 entry &&
 entry.amount>=amount
 );
 
 
-
 }
-
-
-
 
 
 
@@ -710,14 +482,11 @@ e=>e.item.id===item.id
 );
 
 
-
 if(!entry)
 return;
 
 
-
 entry.amount-=amount;
-
 
 
 if(entry.amount<=0){
@@ -735,11 +504,7 @@ this.backpack.items.indexOf(entry),
 }
 
 
-
 }
-
-
-
 
 
 
@@ -749,74 +514,6 @@ this.backpack.items.indexOf(entry),
 craft(recipe){
 
 
-
-// Verarbeitung
-
-
-if(recipe.input){
-
-
-
-if(
-!this.hasItem(
-recipe.input,
-recipe.amount
-)
-)
-return;
-
-
-
-
-this.removeItem(
-
-recipe.input,
-
-recipe.amount
-
-);
-
-
-
-
-this.backpack.add(
-
-recipe.output,
-
-recipe.outputAmount
-
-);
-
-
-
-
-if(this.audio){
-
-this.audio.playSound(
-"craft"
-);
-
-
-}
-
-
-
-return;
-
-
-}
-
-
-
-
-
-
-
-
-
-// Werkzeuge
-
-
 for(
 let ing of recipe.ingredients
 ){
@@ -832,9 +529,6 @@ return;
 
 
 }
-
-
-
 
 
 
@@ -856,10 +550,6 @@ ing.amount
 
 
 
-
-
-
-
 this.backpack.add(
 
 recipe.output,
@@ -869,11 +559,8 @@ recipe.outputAmount
 );
 
 
-
-
-
-
 if(this.audio){
+
 
 this.audio.playSound(
 "craft"
@@ -883,12 +570,7 @@ this.audio.playSound(
 }
 
 
-
-
 }
-
-
-
 
 
 
@@ -898,17 +580,12 @@ this.audio.playSound(
 draw(ctx,canvas){
 
 
-
 if(!this.open)
 return;
 
 
-
-
 let l =
 this.getLayout(canvas);
-
-
 
 
 ctx.save();
@@ -916,6 +593,9 @@ ctx.save();
 
 
 
+// =====================
+// FENSTER
+// =====================
 
 
 ctx.fillStyle=
@@ -933,9 +613,6 @@ l.width,
 l.height
 
 );
-
-
-
 
 
 
@@ -959,21 +636,21 @@ l.height
 
 
 
-
-
+// =====================
+// TITEL
+// =====================
 
 
 ctx.fillStyle="white";
 
 ctx.textAlign="center";
 
-
 ctx.font="32px Arial";
 
 
 ctx.fillText(
 
-"Handwerksbank",
+"Ofen",
 
 canvas.width/2,
 
@@ -984,11 +661,9 @@ l.y+45
 
 
 
-
-
-
-
-// Kategorien
+// =====================
+// KATEGORIEN
+// =====================
 
 
 ctx.font="22px Arial";
@@ -996,17 +671,13 @@ ctx.font="22px Arial";
 ctx.textAlign="left";
 
 
-
 let cats=[
 
-"Verarbeitung",
+"Schmelzen",
 
-"Werkzeuge",
-
-"Förderbänder"
+"Köhlerei"
 
 ];
-
 
 
 cats.forEach(
@@ -1017,15 +688,18 @@ if(
 this.category===cat
 ){
 
+
 ctx.fillStyle="yellow";
+
 
 }
 else{
 
+
 ctx.fillStyle="white";
 
-}
 
+}
 
 
 ctx.fillText(
@@ -1039,13 +713,7 @@ l.y+110+i*60
 );
 
 
-
 });
-
-
-
-
-
 
 
 
@@ -1059,13 +727,11 @@ let recipes =
 this.getRecipes();
 
 
-
 this.maxScroll =
 Math.max(
 0,
 recipes.length*90-350
 );
-
 
 
 ctx.save();
@@ -1090,14 +756,9 @@ l.y+90,
 ctx.clip();
 
 
-
-
-
 ctx.textAlign="left";
 
-
 ctx.font="20px Arial";
-
 
 
 recipes.forEach(
@@ -1108,7 +769,6 @@ let y =
 l.y+140+
 index*90-
 this.scroll;
-
 
 
 
@@ -1139,14 +799,9 @@ y
 
 ctx.fillStyle="#aaa";
 
-let ingredients =
-recipe.input
-? [{item:recipe.input,amount:recipe.amount}]
-: recipe.ingredients;
-
 drawIngredientLine(
 ctx,
-ingredients || [],
+recipe.ingredients,
 l.x+330,
 y+25
 );
@@ -1156,22 +811,6 @@ y+25
 
 
 let canCraft=true;
-
-
-
-if(recipe.input){
-
-
-canCraft =
-this.hasItem(
-recipe.input,
-recipe.amount
-);
-
-
-}
-else if(recipe.ingredients){
-
 
 
 for(
@@ -1193,15 +832,7 @@ canCraft=false;
 }
 
 
-
 }
-
-
-}
-
-
-
-
 
 
 
@@ -1214,7 +845,6 @@ canCraft
 "#2ecc71"
 :
 "#555";
-
 
 
 ctx.fillRect(
@@ -1230,22 +860,16 @@ y-30,
 );
 
 
-
-
-
-
 ctx.fillStyle="white";
 
-
 ctx.textAlign="center";
-
 
 ctx.font="18px Arial";
 
 
 ctx.fillText(
 
-"Bauen",
+"Schmelzen",
 
 l.x+760,
 
@@ -1254,17 +878,12 @@ y
 );
 
 
-
-
 ctx.textAlign="left";
-
 
 ctx.font="20px Arial";
 
 
-
 });
-
 
 
 ctx.restore();
@@ -1272,13 +891,16 @@ ctx.restore();
 
 
 
-
+// =====================
+// SCHLIESSEN
+// =====================
 
 
 ctx.font="16px Arial";
 
-
 ctx.fillStyle="white";
+
+ctx.textAlign="left";
 
 
 ctx.fillText(
@@ -1292,15 +914,10 @@ l.y+l.height-30
 );
 
 
-
-
-
 ctx.restore();
 
 
-
 }
-
 
 
 }
