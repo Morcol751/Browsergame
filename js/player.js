@@ -1322,7 +1322,7 @@ if(tile.ore===10){
 
 
 backpack.add(
-ITEMS.OBSIDIAN,
+ITEMS.OBSIDIAN_ORE,
 amount
 );
 

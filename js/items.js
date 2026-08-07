@@ -436,9 +436,9 @@ MITHRIL_ORE:{
 
 
 
-OBSIDIAN:{
-    id:"obsidian",
-    name:"Obsidian",
+OBSIDIAN_ORE:{
+    id:"obsidian_ore",
+    name:"Obsidianerz",
     icon:"./assets/items/obsidian_ore.png",
     type:"resource",
     oreId:10,
@@ -472,7 +472,21 @@ WOOD_PLANKS:{
     stack:100
 },
 
+WOOD_ROD:{
+    id:"wood_rod",
+    name:"Holzstange",
+    icon:"./assets/items/wood_rod.png",
+    type:"resource",
+    stack:100
+},
 
+STONE_PLATE:{
+    id:"stone_plate",
+    name:"Steinplatte",
+    icon:"./assets/items/stone_plate.png",
+    type:"resource",
+    stack:100
+},
 
 COPPER_BAR:{
     id:"copper_bar",
@@ -482,7 +496,13 @@ COPPER_BAR:{
     stack:100
 },
 
-
+COPPER_PLATE:{
+    id:"copper_plate",
+    name:"Kupferplatte",
+    icon:"./assets/items/copper_plate.png",
+    type:"resource",
+    stack:100
+},
 
 IRON_BAR:{
     id:"iron_bar",
@@ -492,7 +512,13 @@ IRON_BAR:{
     stack:100
 },
 
-
+IRON_PLATE:{
+    id:"iron_plate",
+    name:"Eisenplatte",
+    icon:"./assets/items/iron_plate.png",
+    type:"resource",
+    stack:100
+},
 
 SILVER_BAR:{
     id:"silver_bar",
@@ -502,7 +528,13 @@ SILVER_BAR:{
     stack:100
 },
 
-
+SILVER_PLATE:{
+    id:"silver_plate",
+    name:"Silberplatte",
+    icon:"./assets/items/silver_plate.png",
+    type:"resource",
+    stack:100
+},
 
 GOLD_BAR:{
     id:"gold_bar",
@@ -512,7 +544,13 @@ GOLD_BAR:{
     stack:100
 },
 
-
+GOLD_PLATE:{
+    id:"gold_plate",
+    name:"Goldplatte",
+    icon:"./assets/items/gold_plate.png",
+    type:"resource",
+    stack:100
+},
 
 DIAMOND_BAR:{
     id:"diamond_bar",
@@ -522,7 +560,13 @@ DIAMOND_BAR:{
     stack:100
 },
 
-
+DIAMOND_PLATE:{
+    id:"diamond_plate",
+    name:"Diamantplatte",
+    icon:"./assets/items/diamond_plate.png",
+    type:"resource",
+    stack:100
+},
 
 COBALT_BAR:{
     id:"cobalt_bar",
@@ -532,7 +576,13 @@ COBALT_BAR:{
     stack:100
 },
 
-
+COBALT_PLATE:{
+    id:"cobalt_plate",
+    name:"Kobaltplatte",
+    icon:"./assets/items/cobalt_plate.png",
+    type:"resource",
+    stack:100
+},
 
 MITHRIL_BAR:{
     id:"mithril_bar",
@@ -542,7 +592,13 @@ MITHRIL_BAR:{
     stack:100
 },
 
-
+MITHRIL_PLATE:{
+    id:"mithril_plate",
+    name:"Mithrilplatte",
+    icon:"./assets/items/mithril_plate.png",
+    type:"resource",
+    stack:100
+},
 
 OBSIDIAN_BAR:{
     id:"obsidian_bar",
@@ -552,7 +608,13 @@ OBSIDIAN_BAR:{
     stack:100
 },
 
-
+OBSIDIAN_PLATE:{
+    id:"obsidian_plate",
+    name:"Obsidianplatte",
+    icon:"./assets/items/obsidian_plate.png",
+    type:"resource",
+    stack:100
+},
 
 ADAMANT_BAR:{
     id:"adamant_bar",
@@ -562,7 +624,13 @@ ADAMANT_BAR:{
     stack:100
 },
 
-
+ADAMANT_PLATE:{
+    id:"adamant_plate",
+    name:"Adamantplatte",
+    icon:"./assets/items/adamant_plate.png",
+    type:"resource",
+    stack:100
+},
 
 
 

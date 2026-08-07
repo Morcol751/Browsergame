@@ -314,7 +314,7 @@ switch(tile.ore){
 
 
 case 1:
-ctx.fillStyle="#8b5a2b";
+ctx.fillStyle="#8B5A2B";
 break;
 
 
@@ -324,57 +324,57 @@ break;
 
 
 case 3:
-ctx.fillStyle="#b87333";
+ctx.fillStyle="#B87333";
 break;
 
 
 case 4:
-ctx.fillStyle="#8888885d";
+ctx.fillStyle="#8A8D8F";
 break;
 
 
 case 5:
-ctx.fillStyle="#dad6d6";
+ctx.fillStyle="#D8D8D8";
 break;
 
 
 case 6:
-ctx.fillStyle="gold";
+ctx.fillStyle="#FFD700";
 break;
 
 
 case 7:
-ctx.fillStyle="cyan";
+ctx.fillStyle="#39E6E6";
 break;
 
 
 case 8:
-ctx.fillStyle="blue";
+ctx.fillStyle="#245BDB";
 break;
 
 
 case 9:
-ctx.fillStyle="purple";
+ctx.fillStyle="#9B4DFF";
 break;
 
 
 case 10:
-ctx.fillStyle="#130a47";
+ctx.fillStyle="#24102F";
 break;
 
 
 case 11:
-ctx.fillStyle="pink";
+ctx.fillStyle="#FF3E96";
 break;
 
 
 case 12:
-ctx.fillStyle="#666";
+ctx.fillStyle="#707070";
 break;
 
 
 default:
-ctx.fillStyle="#05e70c";
+ctx.fillStyle="#54606B";
 
 
 }

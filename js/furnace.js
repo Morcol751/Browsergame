@@ -340,8 +340,6 @@ return [
 
 name:"2x Kupferbarren",
 
-icon:"🟠",
-
 ingredients:[
 
 {
@@ -366,8 +364,6 @@ outputAmount:2
 
 name:"2x Eisenbarren",
 
-icon:"🔩",
-
 ingredients:[
 
 {
@@ -383,6 +379,174 @@ amount:2
 ],
 
 output:ITEMS.IRON_BAR,
+
+outputAmount:2
+
+},
+
+{
+
+name:"2x Silberbarren",
+
+ingredients:[
+
+{
+item:ITEMS.SILVER_ORE,
+amount:5
+},
+
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.SILVER_BAR,
+
+outputAmount:2
+
+},
+
+{
+
+name:"2x Goldbarren",
+
+ingredients:[
+
+{
+item:ITEMS.GOLD_ORE,
+amount:5
+},
+
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.GOLD_BAR,
+
+outputAmount:2
+
+},
+
+{
+
+name:"2x Diamantbarren",
+
+ingredients:[
+
+{
+item:ITEMS.DIAMOND_ORE,
+amount:5
+},
+
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.DIAMOND_BAR,
+
+outputAmount:2
+
+},
+
+{
+
+name:"2x Kobaltbarren",
+
+ingredients:[
+
+{
+item:ITEMS.COBALT_ORE,
+amount:5
+},
+
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.COBALT_BAR,
+
+outputAmount:2
+
+},
+
+{
+
+name:"2x Mithrilbarren",
+
+ingredients:[
+
+{
+item:ITEMS.MITHRIL_ORE,
+amount:5
+},
+
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.MITHRIL_BAR,
+
+outputAmount:2
+
+},
+
+{
+
+name:"2x Obsidianbarren",
+
+ingredients:[
+
+{
+item:ITEMS.OBSIDIAN_ORE,
+amount:5
+},
+
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.OBSIDIAN_BAR,
+
+outputAmount:2
+
+},
+
+{
+
+name:"2x Adamantbarren",
+
+ingredients:[
+
+{
+item:ITEMS.ADAMANT_ORE,
+amount:5
+},
+
+{
+item:ITEMS.COAL,
+amount:2
+}
+
+],
+
+output:ITEMS.ADAMANT_BAR,
 
 outputAmount:2
 
@@ -412,8 +576,6 @@ return [
 {
 
 name:"3x Kohle",
-
-icon:ITEMS.COAL.icon,
 
 ingredients:[
 

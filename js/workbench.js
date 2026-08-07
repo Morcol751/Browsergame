@@ -21,12 +21,12 @@ this.open=false;
 this.category="Verarbeitung";
 
 
+
 this.mouseX=0;
 this.mouseY=0;
 
 
 
-this.scroll=0;
 
 this.maxScroll=0;
 
@@ -276,6 +276,7 @@ this.mouseY<=l.y+140
 ){
 
 this.category="Verarbeitung";
+this.scroll=0;
 
 }
 
@@ -290,6 +291,7 @@ this.mouseY<=l.y+200
 ){
 
 this.category="Werkzeuge";
+this.scroll=0;
 
 }
 
@@ -304,6 +306,7 @@ this.mouseY<=l.y+260
 ){
 
 this.category="Förderbänder";
+this.scroll=0;
 
 }
 
@@ -381,9 +384,7 @@ return [
 
 {
 
-name:"3x Holzbretter",
-
-icon:"🪵",
+name:"Holzbretter",
 
 input:ITEMS.WOOD,
 
@@ -391,10 +392,176 @@ amount:1,
 
 output:ITEMS.WOOD_PLANKS,
 
+outputAmount:1
+
+
+},
+
+{
+
+name:"3x Holzstangen",
+
+input:ITEMS.WOOD_PLANKS,
+
+amount:1,
+
+output:ITEMS.WOOD_ROD,
+
 outputAmount:3
 
 
-}
+},
+
+{
+
+name:"Steinplatte",
+
+input:ITEMS.STONE,
+
+amount:1,
+
+output:ITEMS.STONE_PLATE,
+
+outputAmount:1
+
+
+},
+
+{
+
+name:"3x Kupferplatte",
+
+input:ITEMS.COPPER_BAR,
+
+amount:2,
+
+output:ITEMS.COPPER_PLATE,
+
+outputAmount:3
+
+
+},
+
+{
+
+name:"3x Eisenplatte",
+
+
+input:ITEMS.IRON_BAR,
+
+amount:2,
+
+output:ITEMS.IRON_PLATE,
+
+outputAmount:3
+
+
+},
+
+{
+
+name:"3x Silberplatte",
+
+input:ITEMS.SILVER_BAR,
+
+amount:2,
+
+output:ITEMS.SILVER_PLATE,
+
+outputAmount:3
+
+
+},
+
+{
+
+name:"3x Goldplatte",
+
+input:ITEMS.GOLD_BAR,
+
+amount:2,
+
+output:ITEMS.GOLD_PLATE,
+
+outputAmount:3
+
+
+},
+
+{
+
+name:"3x Diamantplatte",
+
+input:ITEMS.DIAMOND_BAR,
+
+amount:2,
+
+output:ITEMS.DIAMOND_PLATE,
+
+outputAmount:3
+
+
+},
+
+{
+
+name:"3x Kobaltplatte",
+
+input:ITEMS.COBALT_BAR,
+
+amount:2,
+
+output:ITEMS.COBALT_PLATE,
+
+outputAmount:3
+
+
+},
+
+{
+
+name:"3x Mithrilplatte",
+
+input:ITEMS.MITHRIL_BAR,
+
+amount:2,
+
+output:ITEMS.MITHRIL_PLATE,
+
+outputAmount:3
+
+
+},
+
+{
+
+name:"3x Obsidianplatte",
+
+input:ITEMS.OBSIDIAN_BAR,
+
+amount:2,
+
+output:ITEMS.OBSIDIAN_PLATE,
+
+outputAmount:3
+
+
+},
+
+{
+
+name:"3x Adamantplatte",
+
+input:ITEMS.ADAMANT_BAR,
+
+amount:2,
+
+output:ITEMS.ADAMANT_PLATE,
+
+outputAmount:3
+
+
+},
 
 ];
 
@@ -419,13 +586,16 @@ return [
 
 name:"Holzaxt",
 
-icon:"🪓",
-
 ingredients:[
 
 {
 item:ITEMS.WOOD_PLANKS,
-amount:5
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
 }
 
 ],
@@ -443,13 +613,16 @@ outputAmount:1
 
 name:"Holzspitzhacke",
 
-icon:"⛏",
-
 ingredients:[
 
 {
 item:ITEMS.WOOD_PLANKS,
-amount:5
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
 }
 
 ],
@@ -468,17 +641,15 @@ outputAmount:1
 
 name:"Steinaxt",
 
-icon:"🪓",
-
 ingredients:[
 
 {
-item:ITEMS.STONE,
+item:ITEMS.STONE_PLATE,
 amount:3
 },
 
 {
-item:ITEMS.WOOD_PLANKS,
+item:ITEMS.WOOD_ROD,
 amount:2
 }
 
@@ -498,17 +669,15 @@ outputAmount:1
 
 name:"Steinspitzhacke",
 
-icon:"⛏",
-
 ingredients:[
 
 {
-item:ITEMS.STONE,
+item:ITEMS.STONE_PLATE,
 amount:3
 },
 
 {
-item:ITEMS.WOOD_PLANKS,
+item:ITEMS.WOOD_ROD,
 amount:2
 }
 
@@ -527,17 +696,15 @@ outputAmount:1
 
 name:"Kupferaxt",
 
-icon:"🪓",
-
 ingredients:[
 
 {
-item:ITEMS.COPPER_BAR,
+item:ITEMS.COPPER_PLATE,
 amount:3
 },
 
 {
-item:ITEMS.WOOD_PLANKS,
+item:ITEMS.WOOD_ROD,
 amount:2
 }
 
@@ -557,17 +724,15 @@ outputAmount:1
 
 name:"Kupferspitzhacke",
 
-icon:"⛏",
-
 ingredients:[
 
 {
-item:ITEMS.COPPER_BAR,
+item:ITEMS.COPPER_PLATE,
 amount:3
 },
 
 {
-item:ITEMS.WOOD_PLANKS,
+item:ITEMS.WOOD_ROD,
 amount:2
 }
 
@@ -585,17 +750,15 @@ outputAmount:1
 
 name:"Eisenaxt",
 
-icon:"🪓",
-
 ingredients:[
 
 {
-item:ITEMS.IRON_BAR,
+item:ITEMS.IRON_PLATE,
 amount:3
 },
 
 {
-item:ITEMS.WOOD_PLANKS,
+item:ITEMS.WOOD_ROD,
 amount:2
 }
 
@@ -615,17 +778,15 @@ outputAmount:1
 
 name:"Eisenspitzhacke",
 
-icon:"⛏",
-
 ingredients:[
 
 {
-item:ITEMS.IRON_BAR,
+item:ITEMS.IRON_PLATE,
 amount:3
 },
 
 {
-item:ITEMS.WOOD_PLANKS,
+item:ITEMS.WOOD_ROD,
 amount:2
 }
 
@@ -636,9 +797,378 @@ output:ITEMS.IRON_PICKAXE,
 outputAmount:1
 
 
+},
+
+{
+
+name:"Silberaxt",
+
+ingredients:[
+
+{
+item:ITEMS.SILVER_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
 }
 
+],
 
+output:ITEMS.SILVER_AXE,
+
+outputAmount:1
+
+
+},
+
+
+
+
+{
+
+name:"Silberspitzhacke",
+
+ingredients:[
+
+{
+item:ITEMS.SILVER_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.SILVER_PICKAXE,
+
+outputAmount:1
+
+
+},
+
+{
+
+name:"Goldaxt",
+
+ingredients:[
+
+{
+item:ITEMS.GOLD_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.GOLD_AXE,
+
+outputAmount:1
+
+
+},
+
+
+
+
+{
+
+name:"Goldspitzhacke",
+
+ingredients:[
+
+{
+item:ITEMS.GOLD_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.GOLD_PICKAXE,
+
+outputAmount:1
+
+
+},
+
+{
+
+name:"Diamantaxt",
+
+ingredients:[
+
+{
+item:ITEMS.DIAMOND_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.DIAMOND_AXE,
+
+outputAmount:1
+
+
+},
+
+
+
+
+{
+
+name:"Diamantspitzhacke",
+
+ingredients:[
+
+{
+item:ITEMS.DIAMOND_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.DIAMOND_PICKAXE,
+
+outputAmount:1
+
+
+},
+
+{
+
+name:"Kobaltaxt",
+
+ingredients:[
+
+{
+item:ITEMS.COBALT_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.COBALT_AXE,
+
+outputAmount:1
+
+
+},
+
+
+
+
+{
+
+name:"Kobaltspitzhacke",
+
+ingredients:[
+
+{
+item:ITEMS.COBALT_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.COBALT_PICKAXE,
+
+outputAmount:1
+
+
+},
+
+{
+
+name:"Mithrilaxt",
+
+ingredients:[
+
+{
+item:ITEMS.MITHRIL_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.MITHRIL_AXE,
+
+outputAmount:1
+
+
+},
+
+
+
+
+{
+
+name:"Mithrilspitzhacke",
+
+ingredients:[
+
+{
+item:ITEMS.MITHRIL_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.MITHRIL_PICKAXE,
+
+outputAmount:1
+
+
+},
+
+{
+
+name:"Obsidianaxt",
+
+ingredients:[
+
+{
+item:ITEMS.OBSIDIAN_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.OBSIDIAN_AXE,
+
+outputAmount:1
+
+
+},
+
+
+
+
+{
+
+name:"Obsidianspitzhacke",
+
+ingredients:[
+
+{
+item:ITEMS.OBSIDIAN_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.OBSIDIAN_PICKAXE,
+
+outputAmount:1
+
+
+},
+
+{
+
+name:"Adamantaxt",
+
+ingredients:[
+
+{
+item:ITEMS.ADAMANT_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.ADAMANT_AXE,
+
+outputAmount:1
+
+
+},
+
+
+
+
+{
+
+name:"Adamantspitzhacke",
+
+ingredients:[
+
+{
+item:ITEMS.ADAMANT_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.ADAMANT_PICKAXE,
+
+outputAmount:1
+
+
+}
 
 ];
 
