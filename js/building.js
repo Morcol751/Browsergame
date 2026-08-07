@@ -1,3 +1,6 @@
+import {ITEMS} from "./items.js";
+
+
 export class BuildingSystem{
 
 
@@ -344,9 +347,6 @@ if(!this.placing)
 return;
 
 
-
-
-
 let pos =
 this.getMouseWorld();
 
@@ -605,13 +605,7 @@ building.id==="crafting_table"
 
 
 this.inventory.backpack.add(
-{
-id:"wood",
-name:"Holz",
-icon:"🌲",
-type:"resource",
-stack:100
-},
+ITEMS.WOOD,
 10
 );
 
@@ -628,13 +622,7 @@ building.id==="furnace"
 
 
 this.inventory.backpack.add(
-{
-id:"stone",
-name:"Stein",
-icon:"🪨",
-type:"resource",
-stack:100
-},
+ITEMS.STONE,
 10
 );
 

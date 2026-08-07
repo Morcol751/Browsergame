@@ -156,39 +156,17 @@ return;
 
 
 // ======================
-// BACKPACK ITEM AUSWAHL
+// BACKPACK INTERAKTION
 // ======================
 
+if(this.backpack.open){
 
-if(
-this.backpack.open
-){
-
-
-
-let index =
-this.backpack.getItemAtMouse(
-x,
-y
-);
-
-
-
-if(index!==null){
-
-
-
-this.backpack.selectItem(
-index
-);
-
-
-return;
-
-
-}
-
-
+    // Kategorien + Itemauswahl werden zentral vom Backpack behandelt.
+    // true bedeutet: Der Klick gehörte zum Backpack und darf nicht
+    // an Hotbar/Welt weitergereicht werden.
+    if(this.backpack.handleClick(x,y)){
+        return;
+    }
 
 }
 
@@ -242,6 +220,12 @@ this.backpack.selectedItem.amount
 this.backpack.clearSelection();
 
 
+// Ein Item wurde nur einem Slot zugewiesen.
+// Ein alter Gebäude-Platzierungsmodus darf dabei
+// nicht aktiv bleiben.
+this.building.cancel();
+
+
 return;
 
 
@@ -272,6 +256,24 @@ item.type==="building"
 this.inventory.select(slot);
 
 
+// Derselbe Slot wurde deaktiviert.
+// Dann MUSS auch der Platzierungsmodus enden.
+if(
+this.inventory.selectedSlot===null
+){
+
+
+this.building.cancel();
+
+
+return;
+
+
+}
+
+
+// Gebäude-Slot ist aktiv:
+// exakt dieses Gebäude platzieren.
 this.building.startPlacing(
 item
 );
@@ -293,7 +295,13 @@ return;
 
 
 
+// Normaler Slot / leerer Slot:
+// Auswahl umschalten und jeden eventuell
+// aktiven Gebäude-Platzierungsmodus beenden.
 this.inventory.select(slot);
+
+
+this.building.cancel();
 
 
 
