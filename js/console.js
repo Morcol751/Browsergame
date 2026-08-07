@@ -224,6 +224,41 @@ command.trim().split(" ");
 
 
 
+// ======================
+// KOMPLETTE KARTE AUFDECKEN
+// ======================
+
+if(
+args[0]==="revealmap"
+){
+
+
+if(
+this.game.worldMap &&
+typeof this.game.worldMap.revealAll==="function"
+){
+
+
+this.game.worldMap.revealAll();
+
+
+console.log(
+"🗺️ Komplette Weltkarte aufgedeckt!"
+);
+
+
+}
+
+
+return;
+
+
+}
+
+
+
+
+
 
 
 if(

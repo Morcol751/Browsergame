@@ -244,6 +244,23 @@ game.world.exportTileCollisionOverrides()
 
 
 
+// =================================
+// FOG OF WAR / WELTKARTE SPEICHERN
+// =================================
+
+worldMap:{
+
+
+discovered:
+(
+game.worldMap &&
+typeof game.worldMap.exportDiscovered==="function"
+)
+? game.worldMap.exportDiscovered()
+: []
+
+
+},
 
 
 
@@ -542,9 +559,6 @@ data.player.y;
 
 
 
-
-
-
 // =================================
 // GEBÄUDE LADEN
 // =================================
@@ -623,6 +637,29 @@ quality:1
 
 }
 
+
+
+}
+
+
+
+// =================================
+// FOG OF WAR / WELTKARTE LADEN
+// =================================
+//
+// Erst NACH den Gebäuden importieren, damit der
+// Karten-Cache beim Neuaufbau bereits die komplette
+// geladene Welt inklusive Gebäude sieht.
+
+if(
+game.worldMap &&
+typeof game.worldMap.importDiscovered==="function"
+){
+
+
+game.worldMap.importDiscovered(
+(data.worldMap && data.worldMap.discovered) || []
+);
 
 
 }

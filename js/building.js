@@ -415,6 +415,18 @@ quality:1
 };
 
 
+if(
+typeof this.world.notifyTileChanged==="function"
+){
+
+this.world.notifyTileChanged(
+pos.x+dx,
+pos.y+dy
+);
+
+}
+
+
 
 }
 

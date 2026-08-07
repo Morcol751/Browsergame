@@ -175,8 +175,8 @@ this
 
 this.world =
 new World(
-1600,
-1600
+2500,
+2500
 );
 
 
@@ -265,9 +265,9 @@ this.building
 this.player =
 new Player(
 
-800,
+1250,
 
-800,
+1250,
 
 this.audio
 

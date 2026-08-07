@@ -29,6 +29,12 @@ this.grassRotation=[];
 this.tileCollisionOverrides = new Map();
 
 
+// Listener für Änderungen an einzelnen Welt-Tiles.
+// Die WorldMap nutzt das, um nur den betroffenen
+// Kartenpixel zu aktualisieren.
+this.tileChangeListeners = [];
+
+
 
 
 for(let y=0;y<this.height;y++){
@@ -78,7 +84,14 @@ this.generateStone();
 generateOres(){
 
 
-let totalVeins=500;
+const worldScale =
+(this.width * this.height) /
+(1600 * 1600);
+
+let totalVeins =
+Math.round(
+500 * worldScale
+);
 
 
 
@@ -193,7 +206,14 @@ y:y
 generateTrees(){
 
 
-let forests = 200;
+const worldScale =
+(this.width * this.height) /
+(1600 * 1600);
+
+let forests =
+Math.round(
+200 * worldScale
+);
 
 
 
@@ -363,7 +383,14 @@ quality:this.generateWoodQuality()
 generateStone(){
 
 
-let stones = 700;
+const worldScale =
+(this.width * this.height) /
+(1600 * 1600);
+
+let stones =
+Math.round(
+500 * worldScale
+);
 
 
 
@@ -1195,6 +1222,45 @@ return [
 
 
 
+// ==================================================
+// TILE-CHANGE EVENTS
+// ==================================================
+
+addTileChangeListener(listener){
+
+if(
+typeof listener!=="function"
+)
+return;
+
+this.tileChangeListeners.push(
+listener
+);
+
+}
+
+
+
+notifyTileChanged(x,y){
+
+for(
+let listener of this.tileChangeListeners
+){
+
+listener(
+x,
+y
+);
+
+}
+
+}
+
+
+
+
+
+
 removeTile(x,y){
 
 
@@ -1211,6 +1277,12 @@ return;
 
 
 this.tiles[y][x]=0;
+
+
+this.notifyTileChanged(
+x,
+y
+);
 
 
 
