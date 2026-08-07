@@ -381,7 +381,7 @@ return [
 
 {
 
-name:"Holzbretter",
+name:"3x Holzbretter",
 
 icon:"🪵",
 

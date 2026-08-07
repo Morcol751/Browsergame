@@ -338,7 +338,7 @@ return [
 
 {
 
-name:"Kupferbarren",
+name:"2x Kupferbarren",
 
 icon:"🟠",
 
@@ -364,7 +364,7 @@ outputAmount:2
 
 {
 
-name:"Eisenbarren",
+name:"2x Eisenbarren",
 
 icon:"🔩",
 
@@ -411,7 +411,7 @@ return [
 
 {
 
-name:"Kohle",
+name:"3x Kohle",
 
 icon:ITEMS.COAL.icon,
 
