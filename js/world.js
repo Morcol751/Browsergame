@@ -2983,7 +2983,13 @@ return [
 
 "Adamant",
 
-"Stein"
+"Stein",
+
+"Wasser",
+
+"Sand",
+
+"Kautschukbaum"
 
 
 ][id];
