@@ -7,8 +7,6 @@ id:"crafting_table",
 
 name:"Handwerksbank",
 
-icon:"🔨",
-
 width:2,
 
 height:1
@@ -23,9 +21,19 @@ id:"furnace",
 
 name:"Ofen",
 
-icon:"🔥",
-
 width:1,
+
+height:2
+
+},
+
+MECHANICAL_WORKBENCH:{
+
+id:"mechanical_workbench",
+
+name:"Mechanische Werkbank",
+
+width:2,
 
 height:1
 

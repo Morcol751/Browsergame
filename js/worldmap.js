@@ -129,6 +129,9 @@ grass:"#111111",
 10:"#24102F", // Obsidian
 11:"#FF3E96", // Adamant
 12:"#707070", // Stein
+13:"#2F80ED", // Wasser
+14:"#D8C27A", // Sand
+bridge:"#8B5A2B",
 
 default:"#54606B" // Gebäude / Sonstiges
 
@@ -155,6 +158,9 @@ grass:[17,17,17],
 10:[36,16,47],
 11:[255,62,150],
 12:[112,112,112],
+13:[47,128,237],
+14:[216,194,122],
+bridge:[139,90,43],
 
 default:[84,96,107]
 
@@ -489,13 +495,13 @@ row[x];
 
 if(tile!==0){
 
+if(tile.building==="wood_bridge") return "bridge";
+
 if(
 tile.ore>=1 &&
-tile.ore<=12
+tile.ore<=14
 ){
-
 return tile.ore;
-
 }
 
 // Gebäude / sonstige belegte Tiles

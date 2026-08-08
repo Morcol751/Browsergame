@@ -137,7 +137,37 @@ let game=this.game;
 
 
 
-let tiles=[];
+// Ressourcen werden extrem kompakt gespeichert:
+//
+// Eine einzige 32-Bit-Zahl enthält:
+// - 25 Bit Weltindex
+// - 4 Bit Erztyp
+// - 2 Bit Qualität
+// - 1 Bit "liegt auf Sand"
+//
+// Damit vermeiden wir zehntausende JSON-Objekte.
+// 25 Bit Index reichen bis 33.554.432 Weltfelder
+// (also auch für 5000x5000).
+let compactTiles=[];
+
+
+// Wasser und Sand werden nicht mehr Tile für Tile gespeichert.
+// Stattdessen speichern wir zusammenhängende Bereiche pro Zeile.
+//
+// Ein Run:
+// [y, startX, laenge, ore]
+//
+// Beispiel:
+// [120, 400, 18, 13]
+// = in Zeile 120 sind X 400-417 Wasser.
+
+
+let terrainRuns=[];
+
+let resourceCounts={
+trees:0,rubberTrees:0,stone:0,coal:0,copper:0,iron:0,silver:0,
+gold:0,diamond:0,cobalt:0,mithril:0,obsidian:0,adamant:0
+};
 
 
 
@@ -156,6 +186,49 @@ y++
 ){
 
 
+let activeTerrain=0;
+
+let runStart=0;
+
+let runLength=0;
+
+
+
+let flushTerrainRun=()=>{
+
+
+if(
+activeTerrain===13 ||
+activeTerrain===14
+){
+
+
+terrainRuns.push([
+
+y,
+
+runStart,
+
+runLength,
+
+activeTerrain
+
+]);
+
+
+}
+
+
+activeTerrain=0;
+
+runLength=0;
+
+
+};
+
+
+
+
 for(
 let x=0;
 x<game.world.width;
@@ -167,31 +240,167 @@ x++
 let tile =
 game.world.tiles[y][x];
 
+if(tile!==0 && !tile.building){
+switch(tile.ore){
+case 1:resourceCounts.trees++;break;
+case 2:resourceCounts.coal++;break;
+case 3:resourceCounts.copper++;break;
+case 4:resourceCounts.iron++;break;
+case 5:resourceCounts.silver++;break;
+case 6:resourceCounts.gold++;break;
+case 7:resourceCounts.diamond++;break;
+case 8:resourceCounts.cobalt++;break;
+case 9:resourceCounts.mithril++;break;
+case 10:resourceCounts.obsidian++;break;
+case 11:resourceCounts.adamant++;break;
+case 12:resourceCounts.stone++;break;
+case 15:resourceCounts.rubberTrees++;break;
+}
+}
 
 
-if(tile!==0){
+
+// =================================
+// LEERES FELD
+// =================================
 
 
+if(tile===0){
 
-tiles.push({
 
-x:x,
+flushTerrainRun();
 
-y:y,
-
-o:tile.ore,
-
-q:tile.quality || 1
-
-});
-
+continue;
 
 
 }
 
 
 
+// =================================
+// GEBÄUDE
+// =================================
+//
+// Gebäude werden bereits separat in
+// data.buildings gespeichert.
+//
+// Deshalb nicht nochmal als normales
+// Welt-Tile in den Save schreiben.
+// =================================
+
+
+if(tile.building){
+
+
+flushTerrainRun();
+
+continue;
+
+
 }
+
+
+
+// =================================
+// REINES WASSER / REINER SAND
+// =================================
+//
+// Nur Terrain ohne Ressource/Gebäude
+// wird komprimiert.
+// =================================
+
+
+if(
+tile.ore===13 ||
+tile.ore===14
+){
+
+
+if(activeTerrain===tile.ore){
+
+
+runLength++;
+
+
+}
+else{
+
+
+flushTerrainRun();
+
+
+activeTerrain=tile.ore;
+
+runStart=x;
+
+runLength=1;
+
+
+}
+
+
+continue;
+
+
+}
+
+
+
+// =================================
+// NORMALES TILE / RESSOURCE
+// =================================
+
+
+flushTerrainRun();
+
+
+let index =
+y*game.world.width+x;
+
+
+// 25 Bit Weltindex
+if(index>0x1FFFFFF){
+
+throw new Error(
+"Welt ist fuer das kompakte Save-Format zu gross."
+);
+
+}
+
+
+let ore =
+(tile.ore || 0) & 0xF;
+
+
+let quality =
+(tile.quality || 1) & 0x3;
+
+
+let onSand =
+(tile.underlyingOre===14)
+? 1
+: 0;
+
+
+let packed =
+(
+(index & 0x1FFFFFF) |
+(ore << 25) |
+(quality << 29) |
+(onSand << 31)
+) >>> 0;
+
+
+compactTiles.push(packed);
+
+
+
+}
+
+
+// Run am Ende der Zeile abschließen.
+
+flushTerrainRun();
 
 
 
@@ -232,7 +441,12 @@ width:game.world.width,
 height:game.world.height,
 
 
-tiles:tiles,
+// Neues kompaktes Ressourcenformat.
+compactTiles:compactTiles,
+
+
+// Kompakt gespeicherte Wasser-/Sandflächen.
+terrainRuns:terrainRuns,
 
 
 collisionOverrides:
@@ -315,6 +529,70 @@ let json =
 JSON.stringify(data);
 
 
+console.log(
+"========== SAVE DEBUG =========="
+);
+
+console.log(
+"Gesamter JSON:",
+Math.round(json.length/1024),
+"KB"
+);
+
+console.log(
+"Kompakte Ressourcen-Tiles:",
+compactTiles.length
+);
+
+console.log(
+"Terrain-Runs (Wasser/Sand):",
+terrainRuns.length
+);
+
+console.log(
+"World-Block:",
+Math.round(
+JSON.stringify(data.world).length/1024
+),
+"KB"
+);
+
+console.log(
+"WorldMap-Block:",
+Math.round(
+JSON.stringify(data.worldMap).length/1024
+),
+"KB"
+);
+
+console.log("========== RESSOURCEN DEBUG ==========");
+console.log("Bäume:",resourceCounts.trees);
+console.log("Kautschukbäume:",resourceCounts.rubberTrees);
+console.log("Steine:",resourceCounts.stone);
+console.log("Kohle:",resourceCounts.coal);
+console.log("Kupfer:",resourceCounts.copper);
+console.log("Eisen:",resourceCounts.iron);
+console.log("Silber:",resourceCounts.silver);
+console.log("Gold:",resourceCounts.gold);
+console.log("Diamant:",resourceCounts.diamond);
+console.log("Kobalt:",resourceCounts.cobalt);
+console.log("Mithril:",resourceCounts.mithril);
+console.log("Obsidian:",resourceCounts.obsidian);
+console.log("Adamant:",resourceCounts.adamant);
+console.log(
+"Erze gesamt:",
+resourceCounts.coal+resourceCounts.copper+resourceCounts.iron+
+resourceCounts.silver+resourceCounts.gold+resourceCounts.diamond+
+resourceCounts.cobalt+resourceCounts.mithril+resourceCounts.obsidian+
+resourceCounts.adamant
+);
+console.log("======================================");
+
+console.log(
+"================================"
+);
+
+
 
 localStorage.setItem(
 
@@ -336,7 +614,13 @@ Math.round(
 json.length/1024
 ),
 
-"KB"
+"KB | Ressourcen-Tiles:",
+
+compactTiles.length,
+
+"| Terrain-Runs:",
+
+terrainRuns.length
 
 );
 
@@ -485,12 +769,198 @@ game.world.tiles[y][x]=0;
 
 
 // =================================
+// WASSER / SAND KOMPAKT LADEN
+// =================================
+//
+// Neue Saves speichern Wasser und Sand
+// als Runs. Alte Saves besitzen dieses
+// Feld nicht und funktionieren weiterhin,
+// weil dort Wasser/Sand noch in tiles
+// enthalten waren.
+// =================================
+
+
+if(
+data.world &&
+Array.isArray(data.world.terrainRuns)
+){
+
+
+for(
+let run of data.world.terrainRuns
+){
+
+
+if(
+!Array.isArray(run) ||
+run.length<4
+)
+continue;
+
+
+let y=run[0];
+
+let startX=run[1];
+
+let length=run[2];
+
+let ore=run[3];
+
+
+if(
+(ore!==13 && ore!==14) ||
+!Number.isInteger(y) ||
+!Number.isInteger(startX) ||
+!Number.isInteger(length) ||
+length<=0
+)
+continue;
+
+
+if(
+y<0 ||
+y>=game.world.height
+)
+continue;
+
+
+let endX =
+Math.min(
+game.world.width,
+startX+length
+);
+
+
+for(
+let x=Math.max(0,startX);
+x<endX;
+x++
+){
+
+
+game.world.tiles[y][x]={
+
+ore:ore,
+
+quality:1
+
+};
+
+
+}
+
+
+}
+
+
+}
+
+
+
+
+
+
+
+// =================================
+// KOMPAKTE RESSOURCEN LADEN
+// =================================
+//
+// Neue Saves: eine 32-Bit-Zahl pro Tile.
+// Alte Saves mit data.world.tiles werden
+// darunter weiterhin unterstützt.
+// =================================
+
+
+if(
+data.world &&
+Array.isArray(data.world.compactTiles)
+){
+
+
+for(
+let packed of data.world.compactTiles
+){
+
+
+if(
+!Number.isInteger(packed) ||
+packed<0
+)
+continue;
+
+
+// Auf unsigned 32 Bit normalisieren.
+packed = packed >>> 0;
+
+
+let index =
+packed & 0x1FFFFFF;
+
+
+let ore =
+(packed >>> 25) & 0xF;
+
+
+let quality =
+(packed >>> 29) & 0x3;
+
+
+let onSand =
+(packed >>> 31) & 0x1;
+
+
+let x =
+index % game.world.width;
+
+
+let y =
+Math.floor(
+index / game.world.width
+);
+
+
+if(
+x<0 ||
+y<0 ||
+x>=game.world.width ||
+y>=game.world.height ||
+ore<=0 ||
+ore===13 ||
+ore===14
+)
+continue;
+
+
+game.world.tiles[y][x]={
+
+ore:ore,
+
+quality:quality || 1,
+
+underlyingOre:
+onSand
+? 14
+: 0
+
+};
+
+
+}
+
+
+}
+
+
+
+
+// =================================
 // NORMALE TILES LADEN
 // =================================
 
 
 if(
 data.world &&
+!Array.isArray(data.world.compactTiles) &&
 data.world.tiles
 ){
 
@@ -507,9 +977,9 @@ game.world.tiles[tile.y][tile.x]={
 
 ore:tile.o,
 
+quality:tile.q,
 
-quality:tile.q
-
+underlyingOre:tile.u || 0
 
 };
 
@@ -615,10 +1085,19 @@ building.x+dx
 building:
 building.id,
 
-
 buildingPart:
 buildingPart,
 
+underlyingOre:(()=>{
+if(Array.isArray(building.underlyingTiles)){
+let saved=building.underlyingTiles.find(
+t=>t.dx===dx && t.dy===dy
+);
+if(saved) return saved.ore || 0;
+}
+if(building.id==="wood_bridge") return 13;
+return building.underlyingOre || 0;
+})(),
 
 ore:0,
 

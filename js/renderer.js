@@ -24,8 +24,17 @@ this.tiles.grass.src = "./assets/tiles/grass.png";
 this.tiles.stone = new Image();
 this.tiles.stone.src = "./assets/tiles/stone.png";
 
+this.tiles.sand = new Image();
+this.tiles.sand.src = "./assets/tiles/sand.png";
+
+this.tiles.water = new Image();
+this.tiles.water.src = "./assets/tiles/water.png";
+
 this.tiles.tree = new Image();
 this.tiles.tree.src = "./assets/tiles/tree.png";
+
+this.tiles.rubber_tree = new Image();
+this.tiles.rubber_tree.src = "./assets/tiles/rubber_tree.png";
 
 this.tiles.coal = new Image();
 this.tiles.coal.src = "./assets/tiles/coal.png";
@@ -62,6 +71,12 @@ this.tiles.workbench.src = "./assets/buildings/workbench_sprite.png";
 
 this.tiles.furnace = new Image();
 this.tiles.furnace.src = "./assets/buildings/furnace_sprite.png";
+
+this.tiles.mechanical_workbench = new Image();
+this.tiles.mechanical_workbench.src = "./assets/buildings/mechanical_workbench.png";
+
+this.tiles.wood_bridge = new Image();
+this.tiles.wood_bridge.src = "./assets/tiles/wood_bridge.png";
 
 
 
@@ -221,6 +236,7 @@ this.tileSize
 // Mehrteilige Gebäude nach dem Terrain-Pass zeichnen, damit
 // ihre Child-Tiles das große Sprite nicht wieder mit Gras übermalen.
 let workbenchesToDraw=[];
+let mechanicalWorkbenchesToDraw=[];
 let furnacesToDraw=[];
 
 
@@ -289,8 +305,36 @@ canvas.height/2
 );
 
 
-// Unter Gebäuden weiterhin Gras zeichnen.
-// Dadurch funktionieren transparente Gebäude-Sprites sauber.
+// Holzbrücke: festes 32x32-Tile, keine Drehung und keine Nachbarerkennung.
+if(tile.building==="wood_bridge"){
+
+ctx.drawImage(
+this.tiles.wood_bridge,
+screenX,
+screenY,
+this.tileSize,
+this.tileSize
+);
+
+continue;
+
+}
+
+// Normale Landgebäude können auf Gras oder Sand stehen.
+// Bei Sand wird der gespeicherte Untergrund weitergezeichnet.
+if(tile.underlyingOre===14){
+
+ctx.drawImage(
+this.tiles.sand,
+screenX,
+screenY,
+this.tileSize,
+this.tileSize
+);
+
+}
+else{
+
 let rotation =
 this.getGrassRotation(x,y);
 
@@ -316,6 +360,7 @@ this.tileSize
 
 ctx.restore();
 
+}
 
 
 // ======================
@@ -359,6 +404,33 @@ tile.buildingPart==="origin"
 ){
 
 workbenchesToDraw.push({
+
+x:screenX,
+
+y:screenY
+
+});
+
+}
+
+continue;
+
+}
+
+
+// ======================
+// MECHANISCHE WERKBANK 2x1
+// ======================
+
+if(
+tile.building==="mechanical_workbench"
+){
+
+if(
+tile.buildingPart==="origin"
+){
+
+mechanicalWorkbenchesToDraw.push({
 
 x:screenX,
 
@@ -466,6 +538,66 @@ continue;
 }
 
 // ======================
+// WASSER TEXTUR
+// ======================
+
+if(ore===13){
+
+let screenX=
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+let screenY=
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+ctx.drawImage(
+this.tiles.water,
+screenX,
+screenY,
+this.tileSize,
+this.tileSize
+);
+
+continue;
+
+}
+
+// ======================
+// SAND TEXTUR
+// ======================
+
+if(ore===14){
+
+let screenX=
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+let screenY=
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+ctx.drawImage(
+this.tiles.sand,
+screenX,
+screenY,
+this.tileSize,
+this.tileSize
+);
+
+continue;
+
+}
+
+// ======================
 // STEIN TEXTUR
 // ======================
 
@@ -542,6 +674,37 @@ this.tileSize
 );
 
 
+
+continue;
+
+}
+
+
+// ======================
+// KAUTSCHUKBAUM TEXTUR
+// ======================
+
+if(ore===15){
+
+let screenX =
+Math.floor(
+(x-camera.x)*this.tileSize+
+canvas.width/2
+);
+
+let screenY =
+Math.floor(
+(y-camera.y)*this.tileSize+
+canvas.height/2
+);
+
+ctx.drawImage(
+this.tiles.rubber_tree,
+screenX,
+screenY,
+this.tileSize,
+this.tileSize
+);
 
 continue;
 
@@ -1148,6 +1311,25 @@ this.tileSize
 
 
 // ======================
+// MECHANISCHE WERKBÄNKE ÜBER TERRAIN
+// ======================
+
+for(
+let workbench of mechanicalWorkbenchesToDraw
+){
+
+ctx.drawImage(
+this.tiles.mechanical_workbench,
+workbench.x,
+workbench.y,
+this.tileSize*2,
+this.tileSize
+);
+
+}
+
+
+// ======================
 // ÖFEN ÜBER TERRAIN
 // ======================
 
@@ -1598,7 +1780,9 @@ worldMouseY
 
 if(
 
-hovered!==0
+hovered!==0 &&
+hovered.ore!==13 &&
+hovered.ore!==14
 
 ){
 

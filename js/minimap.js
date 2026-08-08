@@ -287,9 +287,15 @@ break;
 
 
 case 12:
-
 ctx.fillStyle="#707070";
+break;
 
+case 13:
+ctx.fillStyle="#2F80ED";
+break;
+
+case 14:
+ctx.fillStyle="#D8C27A";
 break;
 
 

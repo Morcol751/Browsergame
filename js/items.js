@@ -336,7 +336,13 @@ WOOD:{
     stack:100
 },
 
-
+RAW_RUBBER:{
+    id:"raw_rubber",
+    name:"Kautschuk",
+    icon:"./assets/items/raw_rubber.png",
+    type:"resource",
+    stack:100
+},
 
 STONE:{
     id:"stone",
@@ -480,6 +486,22 @@ WOOD_ROD:{
     stack:100
 },
 
+RUBBER:{
+    id:"rubber",
+    name:"Gummi",
+    icon:"./assets/items/rubber.png",
+    type:"resource",
+    stack:100
+},
+
+RUBBER_BELT:{
+    id:"rubber_belt",
+    name:"Gummiband",
+    icon:"./assets/items/rubber_belt.png",
+    type:"resource",
+    stack:100
+},
+
 STONE_PLATE:{
     id:"stone_plate",
     name:"Steinplatte",
@@ -504,6 +526,14 @@ COPPER_PLATE:{
     stack:100
 },
 
+COPPER_SCREW:{
+    id:"copper_screw",
+    name:"Kupferschrauben",
+    icon:"./assets/items/copper_screw.png",
+    type:"resource",
+    stack:100
+},
+
 IRON_BAR:{
     id:"iron_bar",
     name:"Eisenbarren",
@@ -516,6 +546,14 @@ IRON_PLATE:{
     id:"iron_plate",
     name:"Eisenplatte",
     icon:"./assets/items/iron_plate.png",
+    type:"resource",
+    stack:100
+},
+
+IRON_SCREW:{
+    id:"iron_screw",
+    name:"Eisenschrauben",
+    icon:"./assets/items/iron_screw.png",
     type:"resource",
     stack:100
 },
@@ -536,6 +574,14 @@ SILVER_PLATE:{
     stack:100
 },
 
+SILVER_SCREW:{
+    id:"silver_screw",
+    name:"Silberschrauben",
+    icon:"./assets/items/silver_screw.png",
+    type:"resource",
+    stack:100
+},
+
 GOLD_BAR:{
     id:"gold_bar",
     name:"Goldbarren",
@@ -548,6 +594,14 @@ GOLD_PLATE:{
     id:"gold_plate",
     name:"Goldplatte",
     icon:"./assets/items/gold_plate.png",
+    type:"resource",
+    stack:100
+},
+
+GOLD_SCREW:{
+    id:"gold_screw",
+    name:"Goldschrauben",
+    icon:"./assets/items/gold_screw.png",
     type:"resource",
     stack:100
 },
@@ -568,6 +622,14 @@ DIAMOND_PLATE:{
     stack:100
 },
 
+DIAMOND_SCREW:{
+    id:"diamond_screw",
+    name:"Diamantschrauben",
+    icon:"./assets/items/diamond_screw.png",
+    type:"resource",
+    stack:100
+},
+
 COBALT_BAR:{
     id:"cobalt_bar",
     name:"Kobaltbarren",
@@ -580,6 +642,14 @@ COBALT_PLATE:{
     id:"cobalt_plate",
     name:"Kobaltplatte",
     icon:"./assets/items/cobalt_plate.png",
+    type:"resource",
+    stack:100
+},
+
+COBALT_SCREW:{
+    id:"cobalt_screw",
+    name:"Kobaltschrauben",
+    icon:"./assets/items/cobalt_screw.png",
     type:"resource",
     stack:100
 },
@@ -600,6 +670,14 @@ MITHRIL_PLATE:{
     stack:100
 },
 
+MITHRIL_SCREW:{
+    id:"mithril_screw",
+    name:"Mithrilschrauben",
+    icon:"./assets/items/mithril_screw.png",
+    type:"resource",
+    stack:100
+},
+
 OBSIDIAN_BAR:{
     id:"obsidian_bar",
     name:"Obsidianbarren",
@@ -612,6 +690,14 @@ OBSIDIAN_PLATE:{
     id:"obsidian_plate",
     name:"Obsidianplatte",
     icon:"./assets/items/obsidian_plate.png",
+    type:"resource",
+    stack:100
+},
+
+OBSIDIAN_SCREW:{
+    id:"obsidian_screw",
+    name:"Obsidianschrauben",
+    icon:"./assets/items/obsidian_screw.png",
     type:"resource",
     stack:100
 },
@@ -632,6 +718,14 @@ ADAMANT_PLATE:{
     stack:100
 },
 
+ADAMANT_SCREW:{
+    id:"adamant_screw",
+    name:"Adamantschrauben",
+    icon:"./assets/items/adamant_screw.png",
+    type:"resource",
+    stack:100
+},
+
 
 
 // ==================================================
@@ -648,22 +742,45 @@ CRAFTING_TABLE:{
 
     icon:"./assets/items/crafting_table.png",
 
-    type:"building"
+    type:"building",
+
+    placementSurface:"land"
 
 },
 
+MECHANICAL_WORKBENCH:{
 
+
+    id:"mechanical_workbench",
+
+    name:"Mechanische Werkbank",
+
+    icon:"./assets/items/mechanical_workbench.png",
+
+    type:"building",
+
+    placementSurface:"land"
+
+},
 
 FURNACE:{
 
-
     id:"furnace",
-
     name:"Ofen",
-
     icon:"./assets/items/furnace.png",
+    type:"building",
+    placementSurface:"land"
 
-    type:"building"
+},
+
+WOOD_BRIDGE:{
+
+    id:"wood_bridge",
+    name:"Holzbrücke",
+    // Vorläufig vorhandenes Holz-Icon; die Brücke selbst wird ingame prozedural gezeichnet.
+    icon:"./assets/items/wood_bridge.png",
+    type:"building",
+    placementSurface:"water"
 
 }
 

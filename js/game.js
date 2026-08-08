@@ -16,6 +16,7 @@ import {BuildingSystem} from "./building.js";
 import {BuildingInteraction} from "./buildinginteraction.js";
 import {Workbench} from "./workbench.js";
 import {Furnace} from "./furnace.js";
+import {MechanicalWorkbench} from "./mechanicalworkbench.js";
 
 import {ITEMS} from "./items.js";
 import {Console} from "./console.js";
@@ -164,6 +165,14 @@ this
 );
 
 
+this.mechanicalWorkbench =
+new MechanicalWorkbench(
+this.backpack,
+this.audio,
+this
+);
+
+
 
 
 
@@ -280,7 +289,8 @@ this.player,
 this.building,
 this.backpack,
 this.workbench,
-this.furnace
+this.furnace,
+this.mechanicalWorkbench
 );
 
 
@@ -818,6 +828,7 @@ if(
 this.settingsOpen ||
 this.workbench.open ||
 this.furnace.open ||
+this.mechanicalWorkbench.open ||
 this.worldMap.open
 )
 return;
@@ -1043,6 +1054,12 @@ this.canvas
 
 
 this.furnace.draw(
+this.ctx,
+this.canvas
+);
+
+
+this.mechanicalWorkbench.draw(
 this.ctx,
 this.canvas
 );

@@ -797,6 +797,14 @@ return;
 
 
 
+// Wasser und Sand sind Terrain und werden nicht abgebaut.
+if(tile!==0 && (tile.ore===13 || tile.ore===14)){
+this.stopMining();
+this.miningTile=null;
+this.mineStart=0;
+return;
+}
+
 if(tile===0){
 
 
@@ -822,7 +830,7 @@ return;
 
 // HOLZ
 
-if(tile.ore===1){
+if(tile.ore===1 || tile.ore===15){
 
 
 
@@ -924,7 +932,8 @@ return;
 
 if(
 tile.ore>=2 &&
-tile.ore!==12
+tile.ore!==12 &&
+tile.ore!==15
 ){
 
 
@@ -1061,7 +1070,7 @@ if(this.audio){
 
 
 
-if(tile.ore===1){
+if(tile.ore===1 || tile.ore===15){
 
 
 
@@ -1151,19 +1160,23 @@ tile.quality || 1
 
 // HOLZ
 
-if(tile.ore===1){
-
-
+if(tile.ore===1 || tile.ore===15){
 
 backpack.add(
-
 ITEMS.WOOD,
-
 amount
-
 );
 
+}
 
+
+// KAUTSCHUKBAUM: zusätzlich rohen Kautschuk erhalten
+if(tile.ore===15){
+
+backpack.add(
+ITEMS.RAW_RUBBER,
+amount
+);
 
 }
 

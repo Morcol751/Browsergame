@@ -1,292 +1,326 @@
-export class Crafting {
+import {ITEMS} from "./items.js";
+import {drawItemIcon,drawIngredientLine} from "./itemicons.js";
 
+
+export class Crafting{
 
 
 constructor(backpack){
 
-
-this.backpack = backpack;
-
+this.backpack=backpack;
 
 this.open=false;
 
+this.category="Werkbänke";
 
 this.mouseX=0;
 this.mouseY=0;
 
-
-
-
+this.scroll=0;
+this.maxScroll=0;
 
 
 window.addEventListener(
 "keydown",
 (e)=>{
 
+if(e.key.toLowerCase()==="c"){
 
-if(
-e.key.toLowerCase()==="c"
-){
-
-this.open =
-!this.open;
+this.open=!this.open;
+this.scroll=0;
 
 }
 
+if(this.open && e.key==="Escape"){
+
+this.open=false;
+this.scroll=0;
+
+}
 
 });
-
-
-
-
-
-
 
 
 window.addEventListener(
 "mousemove",
 (e)=>{
 
+let canvas=document.getElementById("game");
+let rect=canvas.getBoundingClientRect();
 
-let canvas =
-document.getElementById("game");
-
-
-let rect =
-canvas.getBoundingClientRect();
-
-
-
-this.mouseX =
-e.clientX-rect.left;
-
-
-this.mouseY =
-e.clientY-rect.top;
-
+this.mouseX=e.clientX-rect.left;
+this.mouseY=e.clientY-rect.top;
 
 });
-
-
-
-
-
-
-
 
 
 window.addEventListener(
 "mousedown",
 (e)=>{
 
-
 if(e.button!==0)
 return;
-
 
 if(!this.open)
 return;
 
-
-
 this.handleClick();
-
-
 
 });
 
 
+window.addEventListener(
+"wheel",
+(e)=>{
+
+if(!this.open)
+return;
+
+this.scroll+=e.deltaY*0.3;
+
+this.scroll=Math.max(
+0,
+Math.min(
+this.scroll,
+this.maxScroll
+)
+);
+
+});
+
 }
-
-
-
-
-
-
 
 
 
 getLayout(canvas){
 
-
-
-let width=1300;
-
-let height=420;
-
-
-
-let x =
-canvas.width/2-width/2;
-
-
-let y =
-canvas.height/2-height/2;
-
-
+let width=900;
+let height=600;
 
 return {
 
-x:x,
-
-y:y,
-
-width:width,
-
-height:height,
-
-
-nameX:x+50,
-
-costX:x+300,
-
-buttonX:x+500,
-
-
-rows:[
-y+160,
-y+230
-]
-
+x:canvas.width/2-width/2,
+y:canvas.height/2-height/2,
+width,
+height
 
 };
 
-
-
 }
-
-
-
-
-
-
 
 
 
 handleClick(){
 
+let canvas=document.getElementById("game");
+let l=this.getLayout(canvas);
 
 
-let canvas =
-document.getElementById("game");
+// =====================
+// KATEGORIEN
+// =====================
 
+if(
+this.mouseX>=l.x+40 &&
+this.mouseX<=l.x+240 &&
+this.mouseY>=l.y+90 &&
+this.mouseY<=l.y+140
+){
 
+this.category="Werkbänke";
+this.scroll=0;
 
-let l =
-this.getLayout(canvas);
-
-
-
-let row1=l.rows[0];
-let row2=l.rows[1];
-
-
-
+}
 
 
 if(
-
-this.mouseX >= l.buttonX &&
-
-this.mouseX <= l.buttonX+120 &&
-
-this.mouseY >= row1 &&
-
-this.mouseY <= row1+45
-
+this.mouseX>=l.x+40 &&
+this.mouseX<=l.x+240 &&
+this.mouseY>=l.y+150 &&
+this.mouseY<=l.y+200
 ){
 
-this.craftCraftingTable();
+this.category="Maschinen";
+this.scroll=0;
 
 }
-
-
-
 
 
 if(
-
-this.mouseX >= l.buttonX &&
-
-this.mouseX <= l.buttonX+120 &&
-
-this.mouseY >= row2 &&
-
-this.mouseY <= row2+45
-
+this.mouseX>=l.x+40 &&
+this.mouseX<=l.x+240 &&
+this.mouseY>=l.y+210 &&
+this.mouseY<=l.y+260
 ){
 
-this.craftFurnace();
+this.category="Platzierbares";
+this.scroll=0;
+
+}
+
+
+// =====================
+// REZEPTE
+// =====================
+
+let recipes=this.getRecipes();
+
+recipes.forEach(
+(recipe,index)=>{
+
+let y=l.y+140+index*90-this.scroll;
+
+if(
+this.mouseX>=l.x+700 &&
+this.mouseX<=l.x+820 &&
+this.mouseY>=y-30 &&
+this.mouseY<=y+15
+){
+
+this.craft(recipe);
+
+}
+
+});
 
 }
 
 
 
+getRecipes(){
+
+
+if(this.category==="Werkbänke"){
+
+return [
+
+{
+name:"Handwerksbank",
+ingredients:[
+{item:ITEMS.WOOD,amount:10}
+],
+output:ITEMS.CRAFTING_TABLE,
+outputAmount:1
+},
+
+{
+name:"Ofen",
+ingredients:[
+{item:ITEMS.STONE,amount:10}
+],
+output:ITEMS.FURNACE,
+outputAmount:1
+},
+
+{
+name:"Mechanische Werkbank",
+ingredients:[
+{item:ITEMS.WOOD_PLANKS,amount:2},
+{item:ITEMS.WOOD_ROD,amount:4},
+{item:ITEMS.IRON_BAR,amount:1}
+],
+output:ITEMS.MECHANICAL_WORKBENCH,
+outputAmount:1
+}
+
+];
+
+}
+
+
+if(this.category==="Maschinen"){
+
+return [];
+
+}
+
+
+if(this.category==="Platzierbares"){
+
+return [
+
+{
+name:"3x Holzbrücke",
+ingredients:[
+{item:ITEMS.WOOD_PLANKS,amount:5},
+{item:ITEMS.WOOD_ROD,amount:4}
+],
+output:ITEMS.WOOD_BRIDGE,
+outputAmount:3
+}
+
+];
+
+}
+
+
+return [];
+
 }
 
 
 
+hasItem(item,amount){
 
-
-
-
-
-
-craftCraftingTable(){
-
-
-
-let wood =
-
-this.backpack.items.find(
-
-e=>e.item.id==="wood"
-
+let entry=this.backpack.items.find(
+e=>e.item.id===item.id
 );
 
+return(
+entry &&
+entry.amount>=amount
+);
+
+}
 
 
 
-if(!wood || wood.amount<10)
+removeItem(item,amount){
+
+let entry=this.backpack.items.find(
+e=>e.item.id===item.id
+);
+
+if(!entry)
 return;
 
+entry.amount-=amount;
 
-
-
-
-wood.amount-=10;
-
-
-
-if(wood.amount<=0){
-
+if(entry.amount<=0){
 
 this.backpack.items.splice(
-
-this.backpack.items.indexOf(wood),
-
+this.backpack.items.indexOf(entry),
 1
-
 );
 
+}
 
 }
 
 
 
+craft(recipe){
 
+for(let ing of recipe.ingredients){
 
+if(!this.hasItem(ing.item,ing.amount))
+return;
 
-import("./items.js")
-.then(
-module=>{
+}
 
+for(let ing of recipe.ingredients){
 
-this.backpack.add(
-module.ITEMS.CRAFTING_TABLE,
-1
+this.removeItem(
+ing.item,
+ing.amount
 );
 
+}
+
+this.backpack.add(
+recipe.output,
+recipe.outputAmount
+);
 
 if(this.backpack.audio){
 
@@ -296,627 +330,205 @@ this.backpack.audio.playSound(
 
 }
 
-});
-
-
-
 }
 
 
 
-
-
-
-
-
-
-craftFurnace(){
-
-
-
-let stone =
-
-this.backpack.items.find(
-
-e=>e.item.id==="stone"
-
-);
-
-
-
-
-
-if(!stone || stone.amount<10)
-return;
-
-
-
-
-
-stone.amount-=10;
-
-
-
-if(stone.amount<=0){
-
-
-this.backpack.items.splice(
-
-this.backpack.items.indexOf(stone),
-
-1
-
-);
-
-
-}
-
-
-
-
-
-
-import("./items.js")
-.then(
-module=>{
-
-
-this.backpack.add(
-
-module.ITEMS.FURNACE,
-
-1
-
-);
-
-if(this.backpack.audio){
-
-this.backpack.audio.playSound(
-"craft"
-);
-
-}
-
-
-});
-
-
-
-}
-
-
-
-
-
-
-
-
-
-hasWood(){
-
-
-let wood =
-
-this.backpack.items.find(
-
-e=>e.item.id==="wood"
-
-);
-
-
-
-return wood && wood.amount>=10;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-hasStone(){
-
-
-let stone =
-
-this.backpack.items.find(
-
-e=>e.item.id==="stone"
-
-);
-
-
-
-return stone && stone.amount>=10;
-
-
-
-}
-
-
-
-
-
-
-
-
-
-draw(
-ctx,
-canvas
-){
-
-
+draw(ctx,canvas){
 
 if(!this.open)
 return;
 
-
-
-
-
-let l =
-this.getLayout(canvas);
-
-
-
-let row1=l.rows[0];
-let row2=l.rows[1];
-
-
-
-
+let l=this.getLayout(canvas);
 
 ctx.save();
 
 
-
-// ===============================
-// RESET CANVAS STATE
-// ===============================
-
-
-ctx.font="20px Arial";
-
-ctx.textAlign="left";
-
-ctx.textBaseline="alphabetic";
-
-ctx.fillStyle="white";
-
-
-
-
-
-
-
-
-
-// ===============================
-// HINTERGRUND
-// ===============================
-
+// =====================
+// FENSTER
+// =====================
 
 ctx.fillStyle="rgba(0,0,0,0.9)";
-
-
-ctx.fillRect(
-
-l.x,
-
-l.y,
-
-l.width,
-
-l.height
-
-);
-
-
-
-
-
+ctx.fillRect(l.x,l.y,l.width,l.height);
 
 ctx.strokeStyle="white";
-
 ctx.lineWidth=3;
+ctx.strokeRect(l.x,l.y,l.width,l.height);
 
 
-ctx.strokeRect(
-
-l.x,
-
-l.y,
-
-l.width,
-
-l.height
-
-);
-
-
-
-
-
-
-
-
-
-// ===============================
+// =====================
 // TITEL
-// ===============================
+// =====================
 
-
+ctx.fillStyle="white";
+ctx.textAlign="center";
 ctx.font="32px Arial";
 
-ctx.textAlign="center";
-
-
-ctx.fillStyle="white";
-
-
 ctx.fillText(
-
 "Crafting",
-
 canvas.width/2,
-
 l.y+45
-
 );
 
 
+// =====================
+// KATEGORIEN
+// =====================
 
+ctx.font="22px Arial";
+ctx.textAlign="left";
 
-
-
-
-
-
-// ===============================
-// ÜBERSCHRIFTEN
-// ===============================
-
-
-ctx.font="26px Arial";
-
-
-ctx.fillText(
-
+let cats=[
 "Werkbänke",
-
-l.x+300,
-
-l.y+100
-
-);
-
-
-
-ctx.fillText(
-
 "Maschinen",
+"Platzierbares"
+];
 
-l.x+1000,
+cats.forEach(
+(cat,i)=>{
 
-l.y+100
+ctx.fillStyle=(this.category===cat)
+? "yellow"
+: "white";
 
+ctx.fillText(
+cat,
+l.x+40,
+l.y+110+i*60
 );
 
+});
 
 
-
-
-
-
-
-
-// ===============================
-// TRENNLINIE
-// ===============================
-
-
-ctx.strokeStyle="#777";
-
-ctx.lineWidth=2;
-
-
-ctx.beginPath();
-
-
-ctx.moveTo(
-
-l.x+650,
-
-l.y+70
-
-);
-
-
-ctx.lineTo(
-
-l.x+650,
-
-l.y+370
-
-);
-
-
-ctx.stroke();
-
-
-
-
-
-
-
-
-
-// ===============================
+// =====================
 // REZEPTE
-// ===============================
+// =====================
 
+let recipes=this.getRecipes();
 
-ctx.textAlign="left";
-
-ctx.font="20px Arial";
-
-ctx.fillStyle="white";
-
-
-
-
-// -------------------------------
-// HANDWERKSBANK
-// -------------------------------
-
-
-ctx.fillText(
-
-"Handwerksbank",
-
-l.nameX,
-
-row1+30
-
+this.maxScroll=Math.max(
+0,
+recipes.length*90-350
 );
-
-
-
-ctx.fillText(
-
-"10 Holz",
-
-l.costX,
-
-row1+30
-
-);
-
-
-
-this.drawButton(
-
-ctx,
-
-l.buttonX,
-
-row1,
-
-120,
-
-45,
-
-this.hasWood()
-
-);
-
-
-
-
-
-
-
-// -------------------------------
-// OFEN
-// -------------------------------
-
-
-ctx.font="20px Arial";
-
-ctx.textAlign="left";
-
-
-ctx.fillText(
-
-"Ofen",
-
-l.nameX,
-
-row2+30
-
-);
-
-
-
-ctx.font="20px Arial";
-
-ctx.fillText(
-
-"10 Stein",
-
-l.costX,
-
-row2+30
-
-);
-
-
-
-this.drawButton(
-
-ctx,
-
-l.buttonX,
-
-row2,
-
-120,
-
-45,
-
-this.hasStone()
-
-);
-
-
-
-
-
-
-
-
-
-// ===============================
-// MASCHINEN
-// ===============================
-
-
-ctx.font="18px Arial";
-
-ctx.textAlign="center";
-
-
-ctx.fillText(
-
-"(später)",
-
-l.x+1000,
-
-row1+30
-
-);
-
-
-
-
-
-
-ctx.restore();
-
-
-
-}
-
-
-
-
-
-
-
-
-
-drawButton(
-ctx,
-x,
-y,
-w,
-h,
-active
-){
-
-
 
 ctx.save();
-
-
-
-if(active){
-
-ctx.fillStyle="#2ecc71";
-
-}
-else{
-
-ctx.fillStyle="#555";
-
-}
-
-
-
-
-
-ctx.fillRect(
-
-x,
-
-y,
-
-w,
-
-h
-
+ctx.beginPath();
+ctx.rect(
+l.x+300,
+l.y+90,
+550,
+400
 );
+ctx.clip();
 
+ctx.textAlign="left";
+ctx.font="20px Arial";
 
+recipes.forEach(
+(recipe,index)=>{
 
-
-
-
-
-ctx.strokeStyle="#aaa";
-
-
-ctx.strokeRect(
-
-x,
-
-y,
-
-w,
-
-h
-
-);
-
-
-
-
-
-
-ctx.font="18px Arial";
-
-ctx.textAlign="center";
-
-ctx.textBaseline="alphabetic";
-
+let y=l.y+140+index*90-this.scroll;
 
 ctx.fillStyle="white";
 
-
-ctx.fillText(
-
-"Bauen",
-
-x+w/2,
-
-y+29
-
+drawItemIcon(
+ctx,
+recipe.output,
+l.x+330,
+y-25,
+30
 );
 
+ctx.textAlign="left";
+ctx.textBaseline="alphabetic";
+ctx.font="20px Arial";
 
+ctx.fillText(
+recipe.name,
+l.x+370,
+y
+);
+
+ctx.fillStyle="#aaa";
+
+drawIngredientLine(
+ctx,
+recipe.ingredients,
+l.x+330,
+y+25
+);
+
+let canCraft=true;
+
+for(let ing of recipe.ingredients){
+
+if(!this.hasItem(ing.item,ing.amount)){
+canCraft=false;
+}
+
+}
+
+ctx.fillStyle=canCraft
+? "#2ecc71"
+: "#555";
+
+ctx.fillRect(
+l.x+700,
+y-30,
+120,
+45
+);
+
+ctx.fillStyle="white";
+ctx.textAlign="center";
+ctx.font="18px Arial";
+
+ctx.fillText(
+"Bauen",
+l.x+760,
+y
+);
+
+ctx.textAlign="left";
+ctx.font="20px Arial";
+
+});
 
 ctx.restore();
 
 
+// =====================
+// HINWEIS / SCHLIESSEN
+// =====================
+
+if(
+this.category==="Maschinen" &&
+recipes.length===0
+){
+
+ctx.fillStyle="#aaa";
+ctx.font="18px Arial";
+ctx.textAlign="left";
+ctx.fillText(
+"Noch keine Rezepte verfügbar.",
+l.x+330,
+l.y+140
+);
 
 }
 
+ctx.font="16px Arial";
+ctx.fillStyle="white";
+ctx.textAlign="left";
 
+ctx.fillText(
+"[C / ESC] Schließen",
+l.x+40,
+l.y+l.height-30
+);
+
+ctx.restore();
+
+}
 
 }

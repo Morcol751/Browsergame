@@ -6,7 +6,8 @@ player,
 buildingSystem,
 backpack,
 workbench,
-furnace
+furnace,
+mechanicalWorkbench
 ){
 
 
@@ -23,6 +24,10 @@ this.workbench=workbench;
 
 
 this.furnace=furnace;
+
+
+this.mechanicalWorkbench=
+mechanicalWorkbench;
 
 
 this.nearBuilding=null;
@@ -125,6 +130,28 @@ if(this.furnace){
 
 
 this.furnace.openMenu();
+
+
+}
+
+
+}
+
+
+
+// MECHANISCHE WERKBANK
+
+
+if(
+this.nearBuilding &&
+this.nearBuilding.id==="mechanical_workbench"
+){
+
+
+if(this.mechanicalWorkbench){
+
+
+this.mechanicalWorkbench.openMenu();
 
 
 }
@@ -519,6 +546,31 @@ canvas.height-130
 
 );
 
+
+
+}
+
+
+
+// ======================
+// MECHANISCHE WERKBANK
+// ======================
+
+
+if(
+this.nearBuilding.id==="mechanical_workbench"
+){
+
+
+ctx.fillText(
+
+"[E] Öffnen",
+
+canvas.width/2,
+
+canvas.height-130
+
+);
 
 
 }

@@ -1184,7 +1184,6 @@ if(
 this.category==="Förderbänder"
 ){
 
-
 return [];
 
 }

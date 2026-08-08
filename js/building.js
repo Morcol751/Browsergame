@@ -184,6 +184,21 @@ height:1
 
 
 
+case "mechanical_workbench":
+
+
+return {
+
+width:2,
+
+height:1
+
+};
+
+
+
+
+
 case "furnace":
 
 
@@ -275,13 +290,20 @@ this.canvas.height/2
 
 canPlace(x,y){
 
-
-
 let size =
 this.getSize();
 
 
-
+// Platzierungsfläche kommt direkt vom Item.
+// land  = Gras oder Sand
+// water = ausschließlich Wasser
+// any   = Gras, Sand oder Wasser
+// Neue Wassergebäude brauchen später also nur
+// placementSurface:"water" in items.js.
+let surface =
+(this.placing && this.placing.placementSurface)
+||
+"land";
 
 
 for(
@@ -290,15 +312,11 @@ dx<size.width;
 dx++
 ){
 
-
-
 for(
 let dy=0;
 dy<size.height;
 dy++
 ){
-
-
 
 let tile =
 this.world.getTile(
@@ -307,32 +325,54 @@ y+dy
 );
 
 
+let isGrass =
+tile===0;
+
+let isSand =
+tile!==0 &&
+tile.ore===14 &&
+!tile.building;
+
+let isWater =
+tile!==0 &&
+tile.ore===13 &&
+!tile.building;
 
 
+if(surface==="water"){
 
-if(tile!==0)
+if(!isWater)
 return false;
 
+}
+else if(surface==="any"){
 
+if(
+!isGrass &&
+!isSand &&
+!isWater
+)
+return false;
+
+}
+else{
+
+// Standard: Landgebäude niemals auf Wasser.
+if(
+!isGrass &&
+!isSand
+)
+return false;
 
 }
 
-
-
 }
 
-
-
-
+}
 
 return true;
 
-
-
 }
-
-
-
 
 
 
@@ -398,6 +438,9 @@ let buildingPart =
 "child";
 
 
+let oldTile = this.world.tiles[pos.y+dy][pos.x+dx];
+let underlyingOre = (oldTile!==0 && oldTile.ore) ? oldTile.ore : 0;
+
 this.world.tiles
 [pos.y+dy]
 [pos.x+dx]
@@ -405,6 +448,7 @@ this.world.tiles
 {
 
 building:this.placing.id,
+underlyingOre:underlyingOre,
 
 buildingPart:buildingPart,
 
@@ -454,7 +498,24 @@ y:pos.y,
 
 width:size.width,
 
-height:size.height
+height:size.height,
+
+// Untergrund jedes Gebäudefeldes speichern, damit beim
+// Entfernen Sand/Wasser sauber wiederhergestellt wird.
+underlyingTiles:(()=>{
+let result=[];
+for(let dx=0;dx<size.width;dx++){
+for(let dy=0;dy<size.height;dy++){
+let tile=this.world.tiles[pos.y+dy][pos.x+dx];
+result.push({
+dx:dx,
+dy:dy,
+ore:tile.underlyingOre || 0
+});
+}
+}
+return result;
+})()
 
 });
 
@@ -575,10 +636,37 @@ dy++
 
 
 
+let savedUnderlying = 0;
+
+if(Array.isArray(building.underlyingTiles)){
+let saved=building.underlyingTiles.find(
+t=>t.dx===dx && t.dy===dy
+);
+if(saved) savedUnderlying=saved.ore || 0;
+}
+else if(building.id==="wood_bridge"){
+// Kompatibilität mit alten Brücken-Saves.
+savedUnderlying=13;
+}
+else{
+savedUnderlying=building.underlyingOre || 0;
+}
+
+if(savedUnderlying===13 || savedUnderlying===14){
+this.world.tiles[building.y+dy][building.x+dx]={
+ore:savedUnderlying,
+quality:1
+};
+
+if(typeof this.world.notifyTileChanged==="function")
+this.world.notifyTileChanged(building.x+dx,building.y+dy);
+}
+else{
 this.world.removeTile(
 building.x+dx,
 building.y+dy
 );
+}
 
 
 
@@ -631,14 +719,34 @@ ITEMS.WOOD,
 if(
 building.id==="furnace"
 ){
+this.inventory.backpack.add(ITEMS.STONE,10);
+}
 
+
+if(
+building.id==="mechanical_workbench"
+){
 
 this.inventory.backpack.add(
-ITEMS.STONE,
-10
+ITEMS.WOOD_PLANKS,
+2
 );
 
+this.inventory.backpack.add(
+ITEMS.WOOD_ROD,
+4
+);
 
+this.inventory.backpack.add(
+ITEMS.IRON_BAR,
+1
+);
+
+}
+
+
+if(building.id==="wood_bridge"){
+this.inventory.backpack.add(ITEMS.WOOD_BRIDGE,1);
 }
 
 
