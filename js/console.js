@@ -1276,8 +1276,6 @@ amount
 
 draw(ctx){
 
-
-
 if(
 !this.open &&
 !this.passwordMode
@@ -1285,77 +1283,112 @@ if(
 return;
 
 
+let canvas =
+document.getElementById("game");
+
+
+if(!canvas)
+return;
+
 
 ctx.save();
 
 
+// ======================
+// POSITION
+// ======================
+//
+// Hotbar:
+// Höhe 56 px
+// Abstand zum unteren Rand 20 px
+//
+// Die Konsole sitzt 16 px über der Hotbar
+// und wird horizontal dynamisch zentriert.
+
+const width=500;
+
+const hotbarHeight=56;
+
+const hotbarBottomMargin=20;
+
+const gapToHotbar=16;
 
 
+const hotbarTop=
+canvas.height-
+hotbarHeight-
+hotbarBottomMargin;
 
+
+const x=
+Math.max(
+20,
+(canvas.width-width)/2
+);
 
 
 // ======================
 // PASSWORTFENSTER
 // ======================
 
-
-
 if(
 this.passwordMode
 ){
 
+const height=75;
+
+const y=
+Math.max(
+20,
+hotbarTop-
+gapToHotbar-
+height
+);
 
 
 ctx.fillStyle=
 "rgba(0,0,0,0.9)";
 
 
-
 ctx.fillRect(
-20,
-20,
-500,
-75
+x,
+y,
+width,
+height
 );
-
 
 
 ctx.strokeStyle="#777";
 
-
 ctx.lineWidth=2;
 
 
-
 ctx.strokeRect(
-20,
-20,
-500,
-75
+x,
+y,
+width,
+height
 );
-
-
-
 
 
 ctx.fillStyle=
 "white";
 
 
-
 ctx.font=
 "18px Arial";
 
 
+ctx.textAlign="left";
+
+ctx.textBaseline="alphabetic";
+
 
 ctx.fillText(
 "🔒 Debug-Konsole – Passwort:",
-30,
-47
+x+10,
+y+27
 );
-
-
-
 
 
 let masked =
@@ -1364,92 +1397,86 @@ this.passwordInput.length
 );
 
 
-
 ctx.font=
 "22px Arial";
 
 
-
 ctx.fillText(
 "> "+masked,
-30,
-78
+x+10,
+y+58
 );
-
 
 
 ctx.restore();
 
-
-
 return;
 
-
-
 }
-
-
-
-
-
-
 
 
 // ======================
 // NORMALE KONSOLE
 // ======================
 
+const height=40;
+
+const y=
+Math.max(
+20,
+hotbarTop-
+gapToHotbar-
+height
+);
 
 
 ctx.fillStyle=
 "rgba(0,0,0,0.8)";
 
 
-
 ctx.fillRect(
-20,
-20,
-500,
-40
+x,
+y,
+width,
+height
 );
 
 
+ctx.strokeStyle="#777";
+
+ctx.lineWidth=2;
 
 
-
+ctx.strokeRect(
+x,
+y,
+width,
+height
+);
 
 
 ctx.fillStyle=
 "white";
 
 
-
 ctx.font=
 "22px Arial";
 
 
+ctx.textAlign="left";
 
+ctx.textBaseline="alphabetic";
 
 
 ctx.fillText(
 "> "+this.input,
-30,
-48
+x+10,
+y+28
 );
-
-
-
-
-
 
 
 ctx.restore();
 
-
-
 }
-
-
-
 
 }

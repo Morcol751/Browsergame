@@ -460,6 +460,33 @@ y+8,
 );
 
 
+if(
+entry.amount!==undefined &&
+entry.amount!==null &&
+(
+item.type!=="tool" ||
+entry.amount>1
+)
+){
+
+ctx.font="bold 13px Arial";
+ctx.textAlign="right";
+ctx.textBaseline="bottom";
+ctx.fillStyle="white";
+
+ctx.fillText(
+String(entry.amount),
+x+this.slotSize-5,
+y+this.slotSize-4
+);
+
+ctx.textAlign="center";
+ctx.textBaseline="middle";
+ctx.font="28px Arial";
+
+}
+
+
 }
 
 

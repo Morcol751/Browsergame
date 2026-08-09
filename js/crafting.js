@@ -221,6 +221,17 @@ ingredients:[
 ],
 output:ITEMS.MECHANICAL_WORKBENCH,
 outputAmount:1
+},
+
+{
+name:"Kochstation",
+ingredients:[
+{item:ITEMS.WOOD_PLANKS,amount:4},
+{item:ITEMS.STONE,amount:4},
+{item:ITEMS.IRON_BAR,amount:1}
+],
+output:ITEMS.COOKING_STATION,
+outputAmount:1
 }
 
 ];

@@ -993,6 +993,20 @@ y:game.player.y
 },
 
 
+// Spielerwerte / Survival.
+// Alte Saves ohne dieses Feld bekommen automatisch die Startwerte.
+
+playerStats:
+(
+game.playerStats &&
+typeof game.playerStats.exportData==="function"
+)
+?
+game.playerStats.exportData()
+:
+null,
+
+
 
 
 
@@ -1671,6 +1685,24 @@ data.player.y;
 }
 
 
+// =================================
+// SPIELERSTATS / SURVIVAL LADEN
+// =================================
+
+if(
+game.playerStats &&
+typeof game.playerStats.importData==="function"
+){
+
+
+game.playerStats.importData(
+data.playerStats || null
+);
+
+
+}
+
+
 
 
 
@@ -1804,6 +1836,19 @@ data.backpack || [];
 
 game.inventory.slots =
 data.inventory || [];
+
+
+// Stackbare Hotbar-Items nach dem JSON-Laden wieder
+// direkt mit den Backpack-Stacks verknüpfen.
+
+if(
+game.inventory &&
+typeof game.inventory.relinkStackableSlots==="function"
+){
+
+game.inventory.relinkStackableSlots();
+
+}
 
 
 

@@ -14,14 +14,18 @@ this.category="Ressourcen";
 this.categories=[
     {name:"Ressourcen",type:"resource"},
     {name:"Werkzeuge",type:"tool"},
-    {name:"Platzierbares",type:"building"}
+    {name:"Platzierbares",type:"building"},
+    {name:"Essen",type:"food"},
+    {name:"Trinken",type:"drink"}
 ];
 
 // Scrollposition wird pro Kategorie getrennt gespeichert
 this.scrollByCategory={
     Ressourcen:0,
     Werkzeuge:0,
-    Platzierbares:0
+    Platzierbares:0,
+    Essen:0,
+    Trinken:0
 };
 
 this.rowHeight=42;
@@ -69,7 +73,7 @@ window.addEventListener("wheel",(e)=>{
 getLayout(){
 
 const x=30;
-const y=30;
+const y=235;
 const width=500;
 const height=500;
 
@@ -138,33 +142,64 @@ else{
 }
 
 
-removeItem(item){
+removeItem(item,amount=1){
 
-let index=this.items.findIndex(entry=>entry.item.id===item.id);
+let index=this.items.findIndex(
+entry=>entry.item.id===item.id
+);
 
 if(index===-1)
-return;
+return false;
 
 let entry=this.items[index];
-entry.amount--;
+
+amount=
+Math.max(
+1,
+Math.floor(
+Number(amount) || 1
+)
+);
+
+entry.amount-=amount;
 
 if(entry.amount<=0){
-    this.items.splice(index,1);
+
+entry.amount=0;
+
+this.items.splice(index,1);
+
+if(
+this.inventory &&
+typeof this.inventory.clearItemFromSlots==="function"
+){
+
+this.inventory.clearItemFromSlots(
+item.id
+);
+
+}
+
 }
 
 if(
-    this.selectedItem &&
-    this.selectedItem.item.id===item.id
+this.selectedItem &&
+this.selectedItem.item.id===item.id &&
+entry.amount<=0
 ){
-    this.selectedItem=null;
+
+this.selectedItem=null;
+
 }
 
-// Nach dem Entfernen Scrollposition wieder in gültigen Bereich bringen
 let maxScroll=this.getMaxScroll();
+
 this.scrollByCategory[this.category]=Math.min(
-    this.scrollByCategory[this.category] || 0,
-    maxScroll
+this.scrollByCategory[this.category] || 0,
+maxScroll
 );
+
+return true;
 
 }
 
@@ -197,7 +232,13 @@ let l=this.getLayout();
 
 const gap=8;
 const innerWidth=l.width-40;
-const buttonWidth=(innerWidth-gap*2)/3;
+const buttonWidth=
+(
+innerWidth-
+gap*(this.categories.length-1)
+)
+/
+this.categories.length;
 
 for(let i=0;i<this.categories.length;i++){
 
@@ -270,9 +311,15 @@ ctx.fillText("Rucksack",l.x+20,l.y+38);
 
 const gap=8;
 const innerWidth=l.width-40;
-const buttonWidth=(innerWidth-gap*2)/3;
+const buttonWidth=
+(
+innerWidth-
+gap*(this.categories.length-1)
+)
+/
+this.categories.length;
 
-ctx.font="16px Arial";
+ctx.font="13px Arial";
 ctx.textAlign="center";
 ctx.textBaseline="middle";
 

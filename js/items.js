@@ -324,6 +324,132 @@ ADAMANT_AXE:{
 
 
 // ==================================================
+// SCHAUFELN
+// ==================================================
+
+WOOD_SHOVEL:{
+    id:"wood_shovel",
+    name:"Holzschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:1,
+    damage:2,
+    range:3
+},
+
+STONE_SHOVEL:{
+    id:"stone_shovel",
+    name:"Steinschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:2,
+    damage:4,
+    range:3
+},
+
+COPPER_SHOVEL:{
+    id:"copper_shovel",
+    name:"Kupferschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:3,
+    damage:6,
+    range:3
+},
+
+IRON_SHOVEL:{
+    id:"iron_shovel",
+    name:"Eisenschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:4,
+    damage:8,
+    range:3
+},
+
+SILVER_SHOVEL:{
+    id:"silver_shovel",
+    name:"Silberschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:5,
+    damage:10,
+    range:3
+},
+
+GOLD_SHOVEL:{
+    id:"gold_shovel",
+    name:"Goldschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:6,
+    damage:12,
+    range:3
+},
+
+DIAMOND_SHOVEL:{
+    id:"diamond_shovel",
+    name:"Diamantschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:7,
+    damage:14,
+    range:3
+},
+
+COBALT_SHOVEL:{
+    id:"cobalt_shovel",
+    name:"Kobaltschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:8,
+    damage:16,
+    range:3
+},
+
+MITHRIL_SHOVEL:{
+    id:"mithril_shovel",
+    name:"Mithrilschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:9,
+    damage:18,
+    range:3
+},
+
+OBSIDIAN_SHOVEL:{
+    id:"obsidian_shovel",
+    name:"Obsidianschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:10,
+    damage:20,
+    range:3
+},
+
+ADAMANT_SHOVEL:{
+    id:"adamant_shovel",
+    name:"Adamantschaufel",
+    icon:"./assets/items/shovel.png",
+    type:"tool",
+    toolType:"shovel",
+    tier:11,
+    damage:22,
+    range:3
+},
+
+
+// ==================================================
 // ROHSTOFFE
 // ==================================================
 
@@ -348,6 +474,14 @@ STONE:{
     id:"stone",
     name:"Stein",
     icon:"./assets/items/stone.png",
+    type:"resource",
+    stack:100
+},
+
+SAND:{
+    id:"sand",
+    name:"Sand",
+    icon:"./assets/items/sand_item.png",
     type:"resource",
     stack:100
 },
@@ -468,6 +602,31 @@ ADAMANT_ORE:{
 // ==================================================
 // VERARBEITETE MATERIALIEN
 // ==================================================
+
+
+GLASS:{
+    id:"glass",
+    name:"Glas",
+    icon:"./assets/items/glass.png",
+    type:"resource",
+    stack:100
+},
+
+GLASS_BOTTLE:{
+    id:"glass_bottle",
+    name:"Glasflasche",
+    icon:"./assets/items/glass_bottle.png",
+    type:"resource",
+    stack:100
+},
+
+RAW_WATER:{
+    id:"raw_water",
+    name:"Ungekochtes Wasser",
+    icon:"./assets/items/raw_water.png",
+    type:"resource",
+    stack:100
+},
 
 
 WOOD_PLANKS:{
@@ -773,16 +932,74 @@ FURNACE:{
 
 },
 
+COOKING_STATION:{
+
+    id:"cooking_station",
+
+    name:"Kochstation",
+
+    icon:"./assets/items/cooking_station.png",
+
+    type:"building",
+
+    placementSurface:"land"
+
+},
+
 WOOD_BRIDGE:{
 
     id:"wood_bridge",
     name:"Holzbrücke",
-    // Vorläufig vorhandenes Holz-Icon; die Brücke selbst wird ingame prozedural gezeichnet.
     icon:"./assets/items/wood_bridge.png",
     type:"building",
     placementSurface:"water"
 
-}
+},
 
+// ==================================================
+// Monsterdrops
+// ==================================================
+
+CHITIN:{
+    id:"chitin",
+    name:"Chitin",
+    icon:"./assets/items/chitin.png",
+    type:"resource",
+    stack:100
+},
+
+RAW_BUG_MEAT:{
+    id:"raw_bug_meat",
+    name:"Rohes Käferfleisch",
+    icon:"./assets/items/raw_bug_meat.png",
+    type:"resource",
+    stack:100
+},
+
+// ==================================================
+// Essen
+// ==================================================
+
+COOKED_BUG_MEAT:{
+    id:"cooked_bug_meat",
+    name:"Gebratenes Käferfleisch",
+    icon:"./assets/items/cooked_bug_meat.png",
+    type:"food",
+    hungerRestore:30,
+    stack:100
+},
+
+// ==================================================
+// Trinken
+// ==================================================
+
+BOILED_WATER:{
+    id:"boiled_water",
+    name:"Gekochtes Wasser",
+    icon:"./assets/items/boiled_water.png",
+    type:"drink",
+    thirstRestore:30,
+    stack:100
+}
 
 };

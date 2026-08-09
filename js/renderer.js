@@ -75,6 +75,9 @@ this.tiles.furnace.src = "./assets/buildings/furnace_sprite.png";
 this.tiles.mechanical_workbench = new Image();
 this.tiles.mechanical_workbench.src = "./assets/buildings/mechanical_workbench.png";
 
+this.tiles.cooking_station = new Image();
+this.tiles.cooking_station.src = "./assets/buildings/cooking_station.png";
+
 this.tiles.wood_bridge = new Image();
 this.tiles.wood_bridge.src = "./assets/tiles/wood_bridge.png";
 
@@ -237,6 +240,7 @@ this.tileSize
 // ihre Child-Tiles das große Sprite nicht wieder mit Gras übermalen.
 let workbenchesToDraw=[];
 let mechanicalWorkbenchesToDraw=[];
+let cookingStationsToDraw=[];
 let furnacesToDraw=[];
 
 
@@ -431,6 +435,33 @@ tile.buildingPart==="origin"
 ){
 
 mechanicalWorkbenchesToDraw.push({
+
+x:screenX,
+
+y:screenY
+
+});
+
+}
+
+continue;
+
+}
+
+
+// ======================
+// KOCHSTATION 2x1
+// ======================
+
+if(
+tile.building==="cooking_station"
+){
+
+if(
+tile.buildingPart==="origin"
+){
+
+cookingStationsToDraw.push({
 
 x:screenX,
 
@@ -1330,6 +1361,25 @@ this.tileSize
 
 
 // ======================
+// KOCHSTATIONEN ÜBER TERRAIN
+// ======================
+
+for(
+let station of cookingStationsToDraw
+){
+
+ctx.drawImage(
+this.tiles.cooking_station,
+station.x,
+station.y,
+this.tileSize*2,
+this.tileSize
+);
+
+}
+
+
+// ======================
 // ÖFEN ÜBER TERRAIN
 // ======================
 
@@ -1780,9 +1830,7 @@ worldMouseY
 
 if(
 
-hovered!==0 &&
-hovered.ore!==13 &&
-hovered.ore!==14
+hovered!==0
 
 ){
 
@@ -1826,15 +1874,30 @@ hovered.building;
 else{
 
 
+if(
+hovered.ore===13 ||
+hovered.ore===14
+){
+
+
+// Wasser und Sand haben bewusst keine Seltenheit
+// und kein Vorkommen-Limit.
+
+this.tooltip.innerHTML =
+world.getOreName(
+hovered.ore
+);
+
+
+}
+else{
+
 
 let quality =
 hovered.quality || 1;
 
 
-
-
 this.tooltip.innerHTML =
-
 
 world.getOreName(
 hovered.ore
@@ -1864,6 +1927,8 @@ quality
 
 " Vorkommen";
 
+
+}
 
 
 }

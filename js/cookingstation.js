@@ -1,16 +1,19 @@
 import {ITEMS} from "./items.js";
 import {drawItemIcon,drawIngredientLine} from "./itemicons.js";
 
-export class Furnace{
+
+export class CookingStation{
+
 
 constructor(backpack,audio,game){
+
 
 this.backpack=backpack;
 this.audio=audio;
 this.game=game;
 
 this.open=false;
-this.category="Schmelzen";
+this.category="Essen";
 
 this.mouseX=0;
 this.mouseY=0;
@@ -18,23 +21,22 @@ this.mouseY=0;
 this.scroll=0;
 this.maxScroll=0;
 
+
 window.addEventListener(
 "mousemove",
 (e)=>{
 
-let canvas =
-document.getElementById("game");
+let canvas=document.getElementById("game");
+if(!canvas)
+return;
 
-let rect =
-canvas.getBoundingClientRect();
+let rect=canvas.getBoundingClientRect();
 
-this.mouseX =
-e.clientX-rect.left;
-
-this.mouseY =
-e.clientY-rect.top;
+this.mouseX=e.clientX-rect.left;
+this.mouseY=e.clientY-rect.top;
 
 });
+
 
 window.addEventListener(
 "keydown",
@@ -51,19 +53,18 @@ this.close();
 
 });
 
+
 window.addEventListener(
 "mousedown",
 (e)=>{
 
-if(e.button!==0)
-return;
-
-if(!this.open)
+if(e.button!==0 || !this.open)
 return;
 
 this.handleClick();
 
 });
+
 
 window.addEventListener(
 "wheel",
@@ -72,11 +73,9 @@ window.addEventListener(
 if(!this.open)
 return;
 
-this.scroll+=
-e.deltaY*0.3;
+this.scroll+=e.deltaY*0.3;
 
-this.scroll =
-Math.max(
+this.scroll=Math.max(
 0,
 Math.min(
 this.scroll,
@@ -87,6 +86,7 @@ this.maxScroll
 });
 
 }
+
 
 openMenu(){
 
@@ -101,6 +101,7 @@ this.game.inputLocked=true;
 
 }
 
+
 close(){
 
 this.open=false;
@@ -113,19 +114,16 @@ this.game.inputLocked=false;
 
 }
 
+
 getLayout(canvas){
 
 let width=900;
 let height=600;
 
-return {
+return{
 
-x:
-canvas.width/2-width/2,
-
-y:
-canvas.height/2-height/2,
-
+x:canvas.width/2-width/2,
+y:canvas.height/2-height/2,
 width,
 height
 
@@ -133,13 +131,12 @@ height
 
 }
 
+
 handleClick(){
 
-let canvas =
-document.getElementById("game");
+let canvas=document.getElementById("game");
+let l=this.getLayout(canvas);
 
-let l =
-this.getLayout(canvas);
 
 // =====================
 // KATEGORIEN
@@ -152,10 +149,11 @@ this.mouseY>=l.y+90 &&
 this.mouseY<=l.y+140
 ){
 
-this.category="Schmelzen";
+this.category="Essen";
 this.scroll=0;
 
 }
+
 
 if(
 this.mouseX>=l.x+40 &&
@@ -164,37 +162,22 @@ this.mouseY>=l.y+150 &&
 this.mouseY<=l.y+200
 ){
 
-this.category="Köhlerei";
+this.category="Trinken";
 this.scroll=0;
 
 }
 
-if(
-this.mouseX>=l.x+40 &&
-this.mouseX<=l.x+240 &&
-this.mouseY>=l.y+210 &&
-this.mouseY<=l.y+260
-){
-
-this.category="Gummi";
-this.scroll=0;
-
-}
 
 // =====================
 // REZEPTE
 // =====================
 
-let recipes =
-this.getRecipes();
+let recipes=this.getRecipes();
 
 recipes.forEach(
 (recipe,index)=>{
 
-let y =
-l.y+140+
-index*90-
-this.scroll;
+let y=l.y+140+index*90-this.scroll;
 
 if(
 this.mouseX>=l.x+700 &&
@@ -211,259 +194,27 @@ this.craft(recipe);
 
 }
 
+
 getRecipes(){
 
+
 // =====================
-// SCHMELZEN
+// ESSEN
 // =====================
 
-if(
-this.category==="Schmelzen"
-){
+if(this.category==="Essen"){
 
 return [
 
 {
-name:"1x Glas",
+name:"3x Gebratenes Käferfleisch",
 
 ingredients:[
+
 {
-item:ITEMS.SAND,
+item:ITEMS.RAW_BUG_MEAT,
 amount:3
 },
-{
-item:ITEMS.COAL,
-amount:1
-}
-
-],
-
-output:ITEMS.GLASS,
-outputAmount:1
-
-},
-
-{
-name:"2x Kupferbarren",
-
-ingredients:[
-
-{
-item:ITEMS.COPPER_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.COPPER_BAR,
-outputAmount:2
-
-},
-
-{
-name:"2x Eisenbarren",
-
-ingredients:[
-
-{
-item:ITEMS.IRON_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.IRON_BAR,
-outputAmount:2
-
-},
-
-{
-name:"2x Silberbarren",
-
-ingredients:[
-
-{
-item:ITEMS.SILVER_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.SILVER_BAR,
-outputAmount:2
-
-},
-
-{
-name:"2x Goldbarren",
-
-ingredients:[
-
-{
-item:ITEMS.GOLD_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.GOLD_BAR,
-outputAmount:2
-
-},
-
-{
-name:"2x Diamantbarren",
-
-ingredients:[
-
-{
-item:ITEMS.DIAMOND_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.DIAMOND_BAR,
-outputAmount:2
-
-},
-
-{
-name:"2x Kobaltbarren",
-
-ingredients:[
-
-{
-item:ITEMS.COBALT_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.COBALT_BAR,
-outputAmount:2
-
-},
-
-{
-name:"2x Mithrilbarren",
-
-ingredients:[
-
-{
-item:ITEMS.MITHRIL_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.MITHRIL_BAR,
-outputAmount:2
-
-},
-
-{
-name:"2x Obsidianbarren",
-
-ingredients:[
-
-{
-item:ITEMS.OBSIDIAN_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.OBSIDIAN_BAR,
-outputAmount:2
-
-},
-
-{
-name:"2x Adamantbarren",
-
-ingredients:[
-
-{
-item:ITEMS.ADAMANT_ORE,
-amount:5
-},
-
-{
-item:ITEMS.COAL,
-amount:2
-}
-
-],
-
-output:ITEMS.ADAMANT_BAR,
-outputAmount:2
-
-},
-
-];
-
-}
-
-// =====================
-// KÖHLEREI
-// =====================
-
-if(
-this.category==="Köhlerei"
-){
-
-return [
-
-{
-name:"3x Kohle",
-
-ingredients:[
-
-{
-item:ITEMS.WOOD,
-amount:1
-},
 
 {
 item:ITEMS.COAL,
@@ -472,68 +223,71 @@ amount:1
 
 ],
 
-output:ITEMS.COAL,
+output:ITEMS.COOKED_BUG_MEAT,
 outputAmount:3
-
 }
 
 ];
 
 }
 
+
 // =====================
-// GUMMI
+// TRINKEN
 // =====================
 
-if(
-this.category==="Gummi"
-){
+if(this.category==="Trinken"){
 
 return [
 
 {
-name:"1x Gummi",
+name:"3x Gekochtes Wasser",
 
 ingredients:[
 
 {
-item:ITEMS.RAW_RUBBER,
-amount:2
+item:ITEMS.RAW_WATER,
+amount:3
+},
+
+{
+item:ITEMS.COAL,
+amount:1
 }
 
 ],
 
-output:ITEMS.RUBBER,
-outputAmount:1
-
+output:ITEMS.BOILED_WATER,
+outputAmount:3
 }
 
 ];
 
 }
+
 
 return [];
 
 }
 
+
 hasItem(item,amount){
 
-let entry =
-this.backpack.items.find(
+let entry=this.backpack.items.find(
 e=>e.item.id===item.id
 );
 
-return (
+return(
 entry &&
 entry.amount>=amount
 );
 
 }
 
+
 removeItem(item,amount){
 
-let entry =
-this.backpack.items.find(
+let entry=this.backpack.items.find(
 e=>e.item.id===item.id
 );
 
@@ -553,11 +307,10 @@ this.backpack.items.indexOf(entry),
 
 }
 
+
 craft(recipe){
 
-for(
-let ing of recipe.ingredients
-){
+for(let ing of recipe.ingredients){
 
 if(
 !this.hasItem(
@@ -569,9 +322,8 @@ return;
 
 }
 
-for(
-let ing of recipe.ingredients
-){
+
+for(let ing of recipe.ingredients){
 
 this.removeItem(
 ing.item,
@@ -580,10 +332,12 @@ ing.amount
 
 }
 
+
 this.backpack.add(
 recipe.output,
 recipe.outputAmount
 );
+
 
 if(this.audio){
 
@@ -595,53 +349,34 @@ this.audio.playSound(
 
 }
 
+
 draw(ctx,canvas){
 
 if(!this.open)
 return;
 
-let l =
-this.getLayout(canvas);
+let l=this.getLayout(canvas);
 
 ctx.save();
 
-// =====================
-// FENSTER
-// =====================
-
-ctx.fillStyle=
-"rgba(0,0,0,0.9)";
-
-ctx.fillRect(
-l.x,
-l.y,
-l.width,
-l.height
-);
+ctx.fillStyle="rgba(0,0,0,0.9)";
+ctx.fillRect(l.x,l.y,l.width,l.height);
 
 ctx.strokeStyle="white";
 ctx.lineWidth=3;
+ctx.strokeRect(l.x,l.y,l.width,l.height);
 
-ctx.strokeRect(
-l.x,
-l.y,
-l.width,
-l.height
-);
-
-// =====================
-// TITEL
-// =====================
 
 ctx.fillStyle="white";
 ctx.textAlign="center";
 ctx.font="32px Arial";
 
 ctx.fillText(
-"Ofen",
+"Kochstation",
 canvas.width/2,
 l.y+45
 );
+
 
 // =====================
 // KATEGORIEN
@@ -651,28 +386,19 @@ ctx.font="22px Arial";
 ctx.textAlign="left";
 
 let cats=[
-
-"Schmelzen",
-"Köhlerei",
-"Gummi"
-
+"Essen",
+"Trinken"
 ];
 
 cats.forEach(
 (cat,i)=>{
 
-if(
+ctx.fillStyle=
 this.category===cat
-){
-
-ctx.fillStyle="yellow";
-
-}
-else{
-
-ctx.fillStyle="white";
-
-}
+?
+"yellow"
+:
+"white";
 
 ctx.fillText(
 cat,
@@ -682,30 +408,26 @@ l.y+110+i*60
 
 });
 
+
 // =====================
 // REZEPTE
 // =====================
 
-let recipes =
-this.getRecipes();
+let recipes=this.getRecipes();
 
-this.maxScroll =
-Math.max(
+this.maxScroll=Math.max(
 0,
 recipes.length*90-350
 );
 
 ctx.save();
-
 ctx.beginPath();
-
 ctx.rect(
 l.x+300,
 l.y+90,
 550,
 400
 );
-
 ctx.clip();
 
 ctx.textAlign="left";
@@ -714,12 +436,7 @@ ctx.font="20px Arial";
 recipes.forEach(
 (recipe,index)=>{
 
-let y =
-l.y+140+
-index*90-
-this.scroll;
-
-// NAME
+let y=l.y+140+index*90-this.scroll;
 
 ctx.fillStyle="white";
 
@@ -741,8 +458,6 @@ l.x+370,
 y
 );
 
-// MATERIALIEN
-
 ctx.fillStyle="#aaa";
 
 drawIngredientLine(
@@ -752,13 +467,10 @@ l.x+330,
 y+25
 );
 
-// BUTTON AKTIV?
 
 let canCraft=true;
 
-for(
-let ing of recipe.ingredients
-){
+for(let ing of recipe.ingredients){
 
 if(
 !this.hasItem(
@@ -773,9 +485,8 @@ canCraft=false;
 
 }
 
-// BUTTON
 
-ctx.fillStyle =
+ctx.fillStyle=
 canCraft
 ?
 "#2ecc71"
@@ -793,19 +504,8 @@ ctx.fillStyle="white";
 ctx.textAlign="center";
 ctx.font="18px Arial";
 
-let buttonText =
-this.category==="Schmelzen"
-?
-"Schmelzen"
-:
-this.category==="Köhlerei"
-?
-"Verkohlen"
-:
-"Herstellen";
-
 ctx.fillText(
-buttonText,
+"Kochen",
 l.x+760,
 y
 );
@@ -817,9 +517,6 @@ ctx.font="20px Arial";
 
 ctx.restore();
 
-// =====================
-// SCHLIESSEN
-// =====================
 
 ctx.font="16px Arial";
 ctx.fillStyle="white";
@@ -834,5 +531,6 @@ l.y+l.height-30
 ctx.restore();
 
 }
+
 
 }

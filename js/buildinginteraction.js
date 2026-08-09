@@ -7,7 +7,8 @@ buildingSystem,
 backpack,
 workbench,
 furnace,
-mechanicalWorkbench
+mechanicalWorkbench,
+cookingStation
 ){
 
 
@@ -28,6 +29,8 @@ this.furnace=furnace;
 
 this.mechanicalWorkbench=
 mechanicalWorkbench;
+
+this.cookingStation=cookingStation;
 
 
 this.nearBuilding=null;
@@ -156,6 +159,22 @@ this.mechanicalWorkbench.openMenu();
 
 }
 
+
+}
+
+
+// KOCHSTATION
+
+if(
+this.nearBuilding &&
+this.nearBuilding.id==="cooking_station"
+){
+
+if(this.cookingStation){
+
+this.cookingStation.openMenu();
+
+}
 
 }
 
@@ -572,6 +591,27 @@ canvas.height-130
 
 );
 
+
+}
+
+
+// ======================
+// KOCHSTATION
+// ======================
+
+if(
+this.nearBuilding.id==="cooking_station"
+){
+
+ctx.fillText(
+
+"[E] Öffnen",
+
+canvas.width/2,
+
+canvas.height-130
+
+);
 
 }
 

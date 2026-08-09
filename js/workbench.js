@@ -398,6 +398,19 @@ outputAmount:1
 },
 
 {
+name:"1x Glasflasche",
+
+input:ITEMS.GLASS,
+
+amount:2,
+
+output:ITEMS.GLASS_BOTTLE,
+
+outputAmount:1
+
+},
+
+{
 
 name:"3x Holzstangen",
 
@@ -584,33 +597,6 @@ return [
 
 {
 
-name:"Holzaxt",
-
-ingredients:[
-
-{
-item:ITEMS.WOOD_PLANKS,
-amount:3
-},
-
-{
-item:ITEMS.WOOD_ROD,
-amount:2
-}
-
-],
-
-output:ITEMS.WOOD_AXE,
-
-outputAmount:1
-
-
-},
-
-
-
-{
-
 name:"Holzspitzhacke",
 
 ingredients:[
@@ -631,20 +617,17 @@ output:ITEMS.WOOD_PICKAXE,
 
 outputAmount:1
 
-
 },
-
-
 
 
 {
 
-name:"Steinaxt",
+name:"Holzaxt",
 
 ingredients:[
 
 {
-item:ITEMS.STONE_PLATE,
+item:ITEMS.WOOD_PLANKS,
 amount:3
 },
 
@@ -655,14 +638,36 @@ amount:2
 
 ],
 
-output:ITEMS.STONE_AXE,
+output:ITEMS.WOOD_AXE,
 
 outputAmount:1
-
 
 },
 
 
+{
+
+name:"Holzschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.WOOD_PLANKS,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.WOOD_SHOVEL,
+
+outputAmount:1
+
+},
 
 
 {
@@ -687,19 +692,17 @@ output:ITEMS.STONE_PICKAXE,
 
 outputAmount:1
 
-
 },
-
 
 
 {
 
-name:"Kupferaxt",
+name:"Steinaxt",
 
 ingredients:[
 
 {
-item:ITEMS.COPPER_PLATE,
+item:ITEMS.STONE_PLATE,
 amount:3
 },
 
@@ -710,14 +713,36 @@ amount:2
 
 ],
 
-output:ITEMS.COPPER_AXE,
+output:ITEMS.STONE_AXE,
 
 outputAmount:1
-
 
 },
 
 
+{
+
+name:"Steinschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.STONE_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.STONE_SHOVEL,
+
+outputAmount:1
+
+},
 
 
 {
@@ -742,6 +767,80 @@ output:ITEMS.COPPER_PICKAXE,
 
 outputAmount:1
 
+},
+
+
+{
+
+name:"Kupferaxt",
+
+ingredients:[
+
+{
+item:ITEMS.COPPER_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.COPPER_AXE,
+
+outputAmount:1
+
+},
+
+
+{
+
+name:"Kupferschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.COPPER_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.COPPER_SHOVEL,
+
+outputAmount:1
+
+},
+
+
+{
+
+name:"Eisenspitzhacke",
+
+ingredients:[
+
+{
+item:ITEMS.IRON_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.IRON_PICKAXE,
+
+outputAmount:1
 
 },
 
@@ -768,15 +867,12 @@ output:ITEMS.IRON_AXE,
 
 outputAmount:1
 
-
 },
-
-
 
 
 {
 
-name:"Eisenspitzhacke",
+name:"Eisenschaufel",
 
 ingredients:[
 
@@ -792,39 +888,11 @@ amount:2
 
 ],
 
-output:ITEMS.IRON_PICKAXE,
+output:ITEMS.IRON_SHOVEL,
 
 outputAmount:1
 
-
 },
-
-{
-
-name:"Silberaxt",
-
-ingredients:[
-
-{
-item:ITEMS.SILVER_PLATE,
-amount:3
-},
-
-{
-item:ITEMS.WOOD_ROD,
-amount:2
-}
-
-],
-
-output:ITEMS.SILVER_AXE,
-
-outputAmount:1
-
-
-},
-
-
 
 
 {
@@ -849,17 +917,17 @@ output:ITEMS.SILVER_PICKAXE,
 
 outputAmount:1
 
-
 },
+
 
 {
 
-name:"Goldaxt",
+name:"Silberaxt",
 
 ingredients:[
 
 {
-item:ITEMS.GOLD_PLATE,
+item:ITEMS.SILVER_PLATE,
 amount:3
 },
 
@@ -870,14 +938,36 @@ amount:2
 
 ],
 
-output:ITEMS.GOLD_AXE,
+output:ITEMS.SILVER_AXE,
 
 outputAmount:1
-
 
 },
 
 
+{
+
+name:"Silberschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.SILVER_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.SILVER_SHOVEL,
+
+outputAmount:1
+
+},
 
 
 {
@@ -902,17 +992,17 @@ output:ITEMS.GOLD_PICKAXE,
 
 outputAmount:1
 
-
 },
+
 
 {
 
-name:"Diamantaxt",
+name:"Goldaxt",
 
 ingredients:[
 
 {
-item:ITEMS.DIAMOND_PLATE,
+item:ITEMS.GOLD_PLATE,
 amount:3
 },
 
@@ -923,14 +1013,36 @@ amount:2
 
 ],
 
-output:ITEMS.DIAMOND_AXE,
+output:ITEMS.GOLD_AXE,
 
 outputAmount:1
-
 
 },
 
 
+{
+
+name:"Goldschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.GOLD_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.GOLD_SHOVEL,
+
+outputAmount:1
+
+},
 
 
 {
@@ -955,17 +1067,17 @@ output:ITEMS.DIAMOND_PICKAXE,
 
 outputAmount:1
 
-
 },
+
 
 {
 
-name:"Kobaltaxt",
+name:"Diamantaxt",
 
 ingredients:[
 
 {
-item:ITEMS.COBALT_PLATE,
+item:ITEMS.DIAMOND_PLATE,
 amount:3
 },
 
@@ -976,14 +1088,36 @@ amount:2
 
 ],
 
-output:ITEMS.COBALT_AXE,
+output:ITEMS.DIAMOND_AXE,
 
 outputAmount:1
-
 
 },
 
 
+{
+
+name:"Diamantschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.DIAMOND_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.DIAMOND_SHOVEL,
+
+outputAmount:1
+
+},
 
 
 {
@@ -1008,17 +1142,17 @@ output:ITEMS.COBALT_PICKAXE,
 
 outputAmount:1
 
-
 },
+
 
 {
 
-name:"Mithrilaxt",
+name:"Kobaltaxt",
 
 ingredients:[
 
 {
-item:ITEMS.MITHRIL_PLATE,
+item:ITEMS.COBALT_PLATE,
 amount:3
 },
 
@@ -1029,14 +1163,36 @@ amount:2
 
 ],
 
-output:ITEMS.MITHRIL_AXE,
+output:ITEMS.COBALT_AXE,
 
 outputAmount:1
-
 
 },
 
 
+{
+
+name:"Kobaltschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.COBALT_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.COBALT_SHOVEL,
+
+outputAmount:1
+
+},
 
 
 {
@@ -1061,17 +1217,17 @@ output:ITEMS.MITHRIL_PICKAXE,
 
 outputAmount:1
 
-
 },
+
 
 {
 
-name:"Obsidianaxt",
+name:"Mithrilaxt",
 
 ingredients:[
 
 {
-item:ITEMS.OBSIDIAN_PLATE,
+item:ITEMS.MITHRIL_PLATE,
 amount:3
 },
 
@@ -1082,14 +1238,36 @@ amount:2
 
 ],
 
-output:ITEMS.OBSIDIAN_AXE,
+output:ITEMS.MITHRIL_AXE,
 
 outputAmount:1
-
 
 },
 
 
+{
+
+name:"Mithrilschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.MITHRIL_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.MITHRIL_SHOVEL,
+
+outputAmount:1
+
+},
 
 
 {
@@ -1114,17 +1292,17 @@ output:ITEMS.OBSIDIAN_PICKAXE,
 
 outputAmount:1
 
-
 },
+
 
 {
 
-name:"Adamantaxt",
+name:"Obsidianaxt",
 
 ingredients:[
 
 {
-item:ITEMS.ADAMANT_PLATE,
+item:ITEMS.OBSIDIAN_PLATE,
 amount:3
 },
 
@@ -1135,14 +1313,36 @@ amount:2
 
 ],
 
-output:ITEMS.ADAMANT_AXE,
+output:ITEMS.OBSIDIAN_AXE,
 
 outputAmount:1
-
 
 },
 
 
+{
+
+name:"Obsidianschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.OBSIDIAN_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.OBSIDIAN_SHOVEL,
+
+outputAmount:1
+
+},
 
 
 {
@@ -1167,15 +1367,63 @@ output:ITEMS.ADAMANT_PICKAXE,
 
 outputAmount:1
 
+},
+
+
+{
+
+name:"Adamantaxt",
+
+ingredients:[
+
+{
+item:ITEMS.ADAMANT_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.ADAMANT_AXE,
+
+outputAmount:1
+
+},
+
+
+{
+
+name:"Adamantschaufel",
+
+ingredients:[
+
+{
+item:ITEMS.ADAMANT_PLATE,
+amount:3
+},
+
+{
+item:ITEMS.WOOD_ROD,
+amount:2
+}
+
+],
+
+output:ITEMS.ADAMANT_SHOVEL,
+
+outputAmount:1
 
 }
+
 
 ];
 
 
 }
-
-
 
 
 

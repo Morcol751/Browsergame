@@ -15,6 +15,10 @@ this.y=y;
 
 this.speed=0.2;
 
+this.sprintMultiplier=1.7;
+this.isSprinting=false;
+this.lastMovementUpdate=performance.now();
+
 
 // ======================
 // CHARAKTER SPRITE
@@ -188,9 +192,51 @@ this.audio.stopMiningSound();
 
 
 
-update(world){
+update(world,playerStats=null){
 
 let moved=false;
+
+
+let now=performance.now();
+
+let dt=Math.min(
+0.1,
+(now-this.lastMovementUpdate)/1000
+);
+
+this.lastMovementUpdate=now;
+
+
+let wantsToMove=!!(
+this.keys["w"] ||
+this.keys["a"] ||
+this.keys["s"] ||
+this.keys["d"]
+);
+
+
+let wantsSprint=!!(
+this.keys["shift"] &&
+wantsToMove
+);
+
+
+this.isSprinting=!!(
+wantsSprint &&
+playerStats &&
+typeof playerStats.canSprint==="function" &&
+playerStats.canSprint()
+);
+
+
+let movementSpeed=
+this.speed*(
+this.isSprinting
+?
+this.sprintMultiplier
+:
+1
+);
 
 
 // ======================
@@ -201,7 +247,7 @@ if(this.keys["w"]){
 
 this.direction="up";
 
-let newY=this.y-this.speed;
+let newY=this.y-movementSpeed;
 
 if(
 !world ||
@@ -218,7 +264,7 @@ if(this.keys["s"]){
 
 this.direction="down";
 
-let newY=this.y+this.speed;
+let newY=this.y+movementSpeed;
 
 if(
 !world ||
@@ -239,7 +285,7 @@ if(this.keys["a"]){
 
 this.direction="left";
 
-let newX=this.x-this.speed;
+let newX=this.x-movementSpeed;
 
 if(
 !world ||
@@ -256,7 +302,7 @@ if(this.keys["d"]){
 
 this.direction="right";
 
-let newX=this.x+this.speed;
+let newX=this.x+movementSpeed;
 
 if(
 !world ||
@@ -265,6 +311,39 @@ this.canOccupy(world,newX,this.y)
 this.x=newX;
 moved=true;
 }
+
+}
+
+
+if(
+this.isSprinting &&
+moved &&
+playerStats &&
+typeof playerStats.useStamina==="function"
+){
+
+
+playerStats.useStamina(
+playerStats.staminaDrainPerSecond*
+dt
+);
+
+
+if(!playerStats.canSprint()){
+
+
+this.isSprinting=false;
+
+
+}
+
+
+}
+else if(!moved){
+
+
+this.isSprinting=false;
+
 
 }
 
@@ -797,12 +876,59 @@ return;
 
 
 
-// Wasser und Sand sind Terrain und werden nicht abgebaut.
-if(tile!==0 && (tile.ore===13 || tile.ore===14)){
+// ==================================================
+// WASSER / SAND SIND TERRAIN
+// ==================================================
+//
+// Wasser kann nur mit einer Glasflasche gesammelt werden.
+// Sand kann nur mit einer Schaufel gesammelt werden.
+// Beide Tiles bleiben dabei erhalten.
+
+if(tile!==0 && tile.ore===13){
+
+let selected=
+inventory.getSelectedItem();
+
+if(
+!selected ||
+!selected.item ||
+selected.item.id!=="glass_bottle"
+){
+
 this.stopMining();
 this.miningTile=null;
 this.mineStart=0;
+
+this.showMessage(
+"Du brauchst eine Glasflasche"
+);
+
 return;
+
+}
+
+}
+
+
+if(tile!==0 && tile.ore===14){
+
+if(
+!tool ||
+tool.toolType!=="shovel"
+){
+
+this.stopMining();
+this.miningTile=null;
+this.mineStart=0;
+
+this.showMessage(
+"Du brauchst eine Schaufel"
+);
+
+return;
+
+}
+
 }
 
 if(tile===0){
@@ -933,6 +1059,8 @@ return;
 if(
 tile.ore>=2 &&
 tile.ore!==12 &&
+tile.ore!==13 &&
+tile.ore!==14 &&
 tile.ore!==15
 ){
 
@@ -1043,6 +1171,15 @@ this.mineTime=5000;
 
 
 }
+else if(tile.ore===13){
+
+
+// Wasser abfüllen dauert kurz.
+
+this.mineTime=750;
+
+
+}
 else{
 
 
@@ -1145,6 +1282,79 @@ this.audio.playSound(
 
 
 
+
+
+// ==================================================
+// TERRAIN-RESSOURCEN
+// ==================================================
+
+// SAND: immer exakt 1, Tile bleibt erhalten.
+if(tile.ore===14){
+
+backpack.add(
+ITEMS.SAND,
+1
+);
+
+this.mineStart=0;
+this.miningTile=null;
+
+return;
+
+}
+
+
+// WASSER: Glasflasche verbrauchen,
+// immer exakt 1 ungekochtes Wasser,
+// Wasser-Tile bleibt erhalten.
+if(tile.ore===13){
+
+let selected=
+inventory.getSelectedItem();
+
+if(
+!selected ||
+!selected.item ||
+selected.item.id!=="glass_bottle"
+){
+
+this.mineStart=0;
+this.miningTile=null;
+return;
+
+}
+
+
+// Eine Flasche aus Backpack entfernen.
+backpack.removeItem(
+ITEMS.GLASS_BOTTLE
+);
+
+
+// Hotbar-Menge passend aktualisieren.
+selected.amount--;
+
+if(selected.amount<=0){
+
+inventory.slots[
+inventory.selectedSlot
+]=null;
+
+}
+
+
+backpack.add(
+ITEMS.RAW_WATER,
+1
+);
+
+
+this.mineStart=0;
+this.miningTile=null;
+
+return;
+
+}
 
 
 let amount =

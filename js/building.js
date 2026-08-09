@@ -196,6 +196,18 @@ height:1
 };
 
 
+case "cooking_station":
+
+
+return {
+
+width:2,
+
+height:1
+
+};
+
+
 
 
 
@@ -530,39 +542,24 @@ if(
 this.inventory.backpack
 ){
 
-
-
 this.inventory.backpack.removeItem(
-this.placing
+this.placing,
+1
 );
 
-
-
 }
 
 
+let selectedEntry=
+this.inventory.getSelectedItem();
 
-
-
-
-
-
-
-if(
-this.inventory.selectedSlot!==null
-){
-
-
-this.inventory.slots[
-this.inventory.selectedSlot
-]=null;
-
-
-}
-
-
-
-
+let hasMore=
+!!(
+selectedEntry &&
+selectedEntry.item &&
+selectedEntry.item.id===this.placing.id &&
+selectedEntry.amount>0
+);
 
 
 if(this.inventory.backpack.audio){
@@ -573,7 +570,12 @@ this.inventory.backpack.audio.playSound(
 
 }
 
+
+if(!hasMore){
+
 this.cancel();
+
+}
 
 
 
@@ -734,6 +736,28 @@ ITEMS.WOOD_PLANKS,
 
 this.inventory.backpack.add(
 ITEMS.WOOD_ROD,
+4
+);
+
+this.inventory.backpack.add(
+ITEMS.IRON_BAR,
+1
+);
+
+}
+
+
+if(
+building.id==="cooking_station"
+){
+
+this.inventory.backpack.add(
+ITEMS.WOOD_PLANKS,
+4
+);
+
+this.inventory.backpack.add(
+ITEMS.STONE,
 4
 );
 

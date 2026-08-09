@@ -17,6 +17,7 @@ import {BuildingInteraction} from "./buildinginteraction.js";
 import {Workbench} from "./workbench.js";
 import {Furnace} from "./furnace.js";
 import {MechanicalWorkbench} from "./mechanicalworkbench.js";
+import {CookingStation} from "./cookingstation.js";
 
 import {ITEMS} from "./items.js";
 import {Console} from "./console.js";
@@ -25,6 +26,9 @@ import {WorldMap} from "./worldmap.js";
 
 import {SaveManager} from "./save.js";
 import {Intro} from "./intro.js";
+import {Enemies} from "./enemies.js";
+import {PlayerStats} from "./playerstats.js";
+import {Combat} from "./combat.js";
 
 
 
@@ -157,6 +161,9 @@ new Inventory(
 this.backpack
 );
 
+this.backpack.inventory=
+this.inventory;
+
 
 
 this.crafting =
@@ -189,6 +196,18 @@ this
 );
 
 
+// ======================
+// KOCHSTATION
+// ======================
+
+this.cookingStation =
+new CookingStation(
+this.backpack,
+this.audio,
+this
+);
+
+
 
 
 
@@ -209,6 +228,17 @@ this.worldMap =
 new WorldMap(
 this.world
 );
+
+
+// ======================
+// SPIELERSTATS / SURVIVAL
+// ======================
+
+this.playerStats =
+new PlayerStats(
+this
+);
+
 
 this.save =
 new SaveManager(
@@ -299,6 +329,26 @@ this.audio
 );
 
 
+// ======================
+// GEGNER / MONSTER
+// ======================
+
+this.enemies =
+new Enemies(
+this
+);
+
+
+// ======================
+// KAMPFSYSTEM
+// ======================
+
+this.combat =
+new Combat(
+this
+);
+
+
 this.buildingInteraction =
 new BuildingInteraction(
 this.player,
@@ -306,7 +356,8 @@ this.building,
 this.backpack,
 this.workbench,
 this.furnace,
-this.mechanicalWorkbench
+this.mechanicalWorkbench,
+this.cookingStation
 );
 
 
@@ -438,13 +489,60 @@ this.updateSliders();
 
 
 // ======================
-// KLICK
+// RECHTSKLICK / VERBRAUCHSITEMS
 // ======================
 
+this.canvas.addEventListener(
+"contextmenu",
+(e)=>{
+
+e.preventDefault();
+
+}
+);
+
+
+// ======================
+// KLICK
+// ======================
 
 this.canvas.addEventListener(
 "mousedown",
 (e)=>{
+
+
+if(e.button===2){
+
+if(
+this.intro &&
+this.intro.active
+)
+return;
+
+if(
+this.combat &&
+this.combat.active
+)
+return;
+
+if(this.inputLocked)
+return;
+
+if(
+this.inventory &&
+typeof this.inventory.useSelectedConsumable==="function"
+){
+
+this.inventory.useSelectedConsumable(
+this.playerStats,
+this.player
+);
+
+}
+
+return;
+
+}
 
 
 if(
@@ -456,6 +554,45 @@ return;
 
 if(e.button!==0)
 return;
+
+
+// Kampfmenü fängt alle Klicks ab.
+
+if(
+this.combat &&
+this.combat.active
+){
+
+
+this.combat.handleClick(
+this.mouseX,
+this.mouseY,
+this.canvas
+);
+
+
+return;
+
+
+}
+
+
+// Status-Button oben links.
+
+if(
+this.playerStats &&
+this.playerStats.handleClick(
+this.mouseX,
+this.mouseY,
+this.canvas
+)
+){
+
+
+return;
+
+
+}
 
 
 
@@ -854,25 +991,79 @@ this.intro.active
 return;
 
 
+// Spielerwerte laufen auch im Kampf weiter.
+// Dadurch regeneriert sich Ausdauer dort ebenfalls.
+
+if(this.playerStats){
+
+
+this.playerStats.update();
+
+
+}
+
+
+// Während Tod/Respawn steht die komplette Welt still.
+
+if(
+this.playerStats &&
+this.playerStats.dying
+){
+
+
+return;
+
+
+}
+
+
+// Im Kampf steht die Welt komplett still.
+// Neben den Spielerwerten läuft nur die ATB-Logik.
+
+if(
+this.combat &&
+this.combat.active
+){
+
+
+this.combat.update();
+
+
+return;
+
+
+}
+
 
 if(
 this.settingsOpen ||
 this.workbench.open ||
 this.furnace.open ||
 this.mechanicalWorkbench.open ||
-this.worldMap.open
+this.cookingStation.open ||
+this.worldMap.open ||
+(
+this.playerStats &&
+this.playerStats.panelOpen
+)
 )
 return;
 
 
-
-
-
-
-
 this.player.update(
-this.world
+this.world,
+this.playerStats
 );
+
+
+if(this.enemies){
+
+this.enemies.update(
+this.world,
+this.player
+);
+
+}
 
 
 
@@ -994,6 +1185,18 @@ this.settingsOpen
 
 );
 
+if(this.enemies){
+
+this.enemies.draw(
+this.ctx,
+this.camera,
+this.canvas,
+32
+);
+
+}
+
+
 
 
 
@@ -1096,6 +1299,12 @@ this.canvas
 );
 
 
+this.cookingStation.draw(
+this.ctx,
+this.canvas
+);
+
+
 this.console.draw(
 this.ctx
 );
@@ -1114,6 +1323,57 @@ this.save.draw(
 this.ctx,
 this.canvas
 );
+
+
+// ======================
+// SPIELER-HUD / STATUS
+// ======================
+
+if(this.playerStats){
+
+
+this.playerStats.draw(
+this.ctx,
+this.canvas
+);
+
+
+}
+
+
+// ======================
+// KAMPF
+// ======================
+
+if(this.combat){
+
+
+this.combat.draw(
+this.ctx,
+this.canvas
+);
+
+
+}
+
+
+// ======================
+// TOD / RESPAWN OVERLAY
+// ======================
+
+if(
+this.playerStats &&
+typeof this.playerStats.drawDeathOverlay==="function"
+){
+
+
+this.playerStats.drawDeathOverlay(
+this.ctx,
+this.canvas
+);
+
+
+}
 
 
 // Intro ganz zuletzt zeichnen.
