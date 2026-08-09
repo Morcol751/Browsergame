@@ -24,6 +24,7 @@ import {Console} from "./console.js";
 import {WorldMap} from "./worldmap.js";
 
 import {SaveManager} from "./save.js";
+import {Intro} from "./intro.js";
 
 
 
@@ -105,6 +106,21 @@ this.radar
 );
 
 
+
+
+
+// ======================
+// INTRO
+// ======================
+
+
+this.inputLocked=false;
+
+
+this.intro =
+new Intro(
+this
+);
 
 
 
@@ -429,6 +445,13 @@ this.updateSliders();
 this.canvas.addEventListener(
 "mousedown",
 (e)=>{
+
+
+if(
+this.intro &&
+this.intro.active
+)
+return;
 
 
 if(e.button!==0)
@@ -825,6 +848,14 @@ update(){
 
 
 if(
+this.intro &&
+this.intro.active
+)
+return;
+
+
+
+if(
 this.settingsOpen ||
 this.workbench.open ||
 this.furnace.open ||
@@ -1083,6 +1114,21 @@ this.save.draw(
 this.ctx,
 this.canvas
 );
+
+
+// Intro ganz zuletzt zeichnen.
+// Dadurch liegt es über dem kompletten Spiel und allen Menüs.
+
+if(this.intro){
+
+
+this.intro.draw(
+this.ctx,
+this.canvas
+);
+
+
+}
 
 }
 

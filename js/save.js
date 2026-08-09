@@ -180,6 +180,18 @@ console.log(
 );
 
 
+if(
+this.game.intro &&
+!this.game.intro.seen
+){
+
+
+this.game.intro.show();
+
+
+}
+
+
 return false;
 
 
@@ -189,6 +201,15 @@ return false;
 console.log(
 "📂 Spielstand gefunden – wird automatisch geladen."
 );
+
+
+if(this.game.intro){
+
+
+this.game.intro.hideWithoutMarkingSeen();
+
+
+}
 
 
 await this.load();
@@ -950,6 +971,17 @@ let data={
 
 
 
+introSeen:
+(
+game.intro
+?
+game.intro.seen
+:
+true
+),
+
+
+
 player:{
 
 
@@ -1311,8 +1343,31 @@ let data =
 JSON.parse(save);
 
 
-
 let game=this.game;
+
+
+// =================================
+// INTRO-STATUS LADEN
+// =================================
+//
+// Alte Saves hatten noch kein introSeen.
+// Sie werden als bereits gesehen behandelt.
+
+if(game.intro){
+
+
+game.intro.seen =
+(data.introSeen===undefined)
+?
+true
+:
+data.introSeen===true;
+
+
+game.intro.active=false;
+
+
+}
 
 
 

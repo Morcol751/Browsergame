@@ -36,7 +36,7 @@ new Audio("sounds/mine_ore.mp3"),
 
 
 pickup_item:
-new Audio("sounds/pickup_item.mp3"),
+new Audio("sounds/pickup_item.mp3"), //Leiser stellen 50%
 
 
 
@@ -51,7 +51,7 @@ new Audio("sounds/place_building.mp3"),
 
 
 remove_building:
-new Audio("sounds/remove_building.mp3")
+new Audio("sounds/remove_building.mp3") //Leiser 50%
 
 
 
