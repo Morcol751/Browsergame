@@ -1811,10 +1811,29 @@ this.tooltip.style.display="none";
 
 
 
+
+
+}
+
+
+
+
+
+
+
+
 // ======================
-// SETTINGS BUTTON
+// SETTINGS UI
 // ======================
 
+drawSettingsUI(
+ctx,
+canvas,
+mouseX,
+mouseY,
+audio,
+settingsOpen
+){
 
 let gearX =
 canvas.width-90;
@@ -1979,18 +1998,7 @@ audio
 
 }
 
-
-
-
-
-
-
 }
-
-
-
-
-
 
 
 
