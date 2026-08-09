@@ -901,10 +901,59 @@ all:true
 }
 
 
+let runs=[];
+
+let width=this.world.width;
+let height=this.world.height;
+
+
+for(
+let y=0;
+y<height;
+y++
+){
+
+let baseIndex=y*width;
+
+let runStart=-1;
+
+
+for(
+let x=0;
+x<=width;
+x++
+){
+
+let discovered =
+x<width &&
+this.discovered[baseIndex+x]===1;
+
+
+if(discovered){
+
+if(runStart===-1)
+runStart=x;
+
+}
+else if(runStart!==-1){
+
+runs.push([
+y,
+runStart,
+x-runStart
+]);
+
+runStart=-1;
+
+}
+
+}
+
+}
+
+
 return {
-indices:[
-...this.discoveredList
-]
+runs:runs
 };
 
 }
@@ -915,8 +964,11 @@ indices:[
 // FOG OF WAR IMPORT
 // ======================
 //
-// Unterstützt sowohl die neuen kompakten Daten als auch
-// alte Spielstände, in denen direkt ein Array gespeichert war.
+// Unterstützt:
+// {all:true}
+// {runs:[[y,startX,length], ...]}
+// {indices:[...]}
+// altes direktes Index-Array
 // ======================
 
 importDiscovered(data){
@@ -930,8 +982,6 @@ this.allDiscovered=false;
 this.lastRevealX=null;
 this.lastRevealY=null;
 
-
-// Neuer Spezialfall: komplette Karte entdeckt.
 
 if(
 data &&
@@ -948,6 +998,92 @@ return;
 
 }
 
+
+// NEUES RUN-FORMAT
+
+if(
+data &&
+Array.isArray(data.runs)
+){
+
+for(
+let run of data.runs
+){
+
+if(
+!Array.isArray(run) ||
+run.length<3
+)
+continue;
+
+
+let y=run[0];
+let startX=run[1];
+let length=run[2];
+
+
+if(
+!Number.isInteger(y) ||
+!Number.isInteger(startX) ||
+!Number.isInteger(length) ||
+length<=0 ||
+y<0 ||
+y>=this.world.height
+)
+continue;
+
+
+let fromX =
+Math.max(
+0,
+startX
+);
+
+
+let toX =
+Math.min(
+this.world.width,
+startX+length
+);
+
+
+let baseIndex =
+y*this.world.width;
+
+
+for(
+let x=fromX;
+x<toX;
+x++
+){
+
+let index =
+baseIndex+x;
+
+
+if(this.discovered[index]===0){
+
+this.discovered[index]=1;
+
+this.discoveredList.push(
+index
+);
+
+}
+
+}
+
+}
+
+
+this.rebuildCache();
+
+return;
+
+}
+
+
+// ALTE INDEX-FORMATE
 
 let indices =
 Array.isArray(data)
@@ -989,7 +1125,6 @@ index
 this.rebuildCache();
 
 }
-
 
 
 // ======================
