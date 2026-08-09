@@ -286,27 +286,7 @@ entry.amount>=amount
 
 
 
-removeItem(item,amount){
 
-let entry=this.backpack.items.find(
-e=>e.item.id===item.id
-);
-
-if(!entry)
-return;
-
-entry.amount-=amount;
-
-if(entry.amount<=0){
-
-this.backpack.items.splice(
-this.backpack.items.indexOf(entry),
-1
-);
-
-}
-
-}
 
 
 
@@ -321,7 +301,7 @@ return;
 
 for(let ing of recipe.ingredients){
 
-this.removeItem(
+this.backpack.removeItem(
 ing.item,
 ing.amount
 );
