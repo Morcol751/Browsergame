@@ -1360,6 +1360,29 @@ this.canvas
 
 
 // ======================
+// SETTINGS UI
+// ======================
+
+if(
+this.renderer &&
+typeof this.renderer.drawSettingsUI==="function"
+){
+
+this.renderer.drawSettingsUI(
+this.ctx,
+this.canvas,
+this.mouseX,
+this.mouseY,
+this.audio,
+this.settingsOpen
+);
+
+}
+
+
+
+
+// ======================
 // KAMPF
 // ======================
 
