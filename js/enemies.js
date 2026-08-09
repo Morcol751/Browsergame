@@ -22,8 +22,8 @@ this.maxEnemies=7;
 // Der Alien-Krabbler darf aktuell nur zwischen
 // 100 und 300 Tiles Entfernung vom Spawn erscheinen.
 
-this.alienCrawlerSpawnMinDistance=100;
-this.alienCrawlerSpawnMaxDistance=300;
+this.alienCrawlerSpawnMinDistance=150;
+this.alienCrawlerSpawnMaxDistance=2500;
 
 
 // Monster werden weiterhin anhand der Entfernung
