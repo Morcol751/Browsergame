@@ -33,6 +33,40 @@ height:60
 };
 
 
+// =================================
+// INDEXEDDB
+// =================================
+//
+// Spielstände liegen künftig in IndexedDB.
+// localStorage wird nur noch für die automatische
+// Übernahme alter Spielstände verwendet.
+
+this.dbName="forgeveinSaveDB";
+
+this.dbVersion=1;
+
+this.storeName="saves";
+
+this.saveKey="main";
+
+this.legacyLocalStorageKey="factorioSave";
+
+
+// Vorhandenen alten localStorage-Spielstand einmalig
+// nach IndexedDB übernehmen.
+
+this.migrateLegacySave().catch(
+e=>{
+
+console.error(
+"Save-Migration fehlgeschlagen:",
+e
+);
+
+}
+);
+
+
 
 
 
@@ -105,6 +139,423 @@ this.open=false;
 
 
 
+// =================================
+// INDEXEDDB ÖFFNEN
+// =================================
+
+openDatabase(){
+
+
+return new Promise(
+(resolve,reject)=>{
+
+
+let request =
+indexedDB.open(
+this.dbName,
+this.dbVersion
+);
+
+
+request.onupgradeneeded =
+()=>{
+
+
+let db =
+request.result;
+
+
+if(
+!db.objectStoreNames.contains(
+this.storeName
+)
+){
+
+
+db.createObjectStore(
+this.storeName
+);
+
+
+}
+
+
+};
+
+
+request.onsuccess =
+()=>{
+
+
+resolve(
+request.result
+);
+
+
+};
+
+
+request.onerror =
+()=>{
+
+
+reject(
+request.error
+);
+
+
+};
+
+
+}
+);
+
+
+}
+
+
+
+
+
+
+
+// =================================
+// SAVE IN INDEXEDDB SCHREIBEN
+// =================================
+
+async writeIndexedSave(json){
+
+
+let db =
+await this.openDatabase();
+
+
+return new Promise(
+(resolve,reject)=>{
+
+
+let transaction =
+db.transaction(
+this.storeName,
+"readwrite"
+);
+
+
+let store =
+transaction.objectStore(
+this.storeName
+);
+
+
+store.put(
+json,
+this.saveKey
+);
+
+
+transaction.oncomplete =
+()=>{
+
+
+db.close();
+
+
+resolve();
+
+
+};
+
+
+transaction.onerror =
+()=>{
+
+
+let error =
+transaction.error;
+
+
+db.close();
+
+
+reject(error);
+
+
+};
+
+
+transaction.onabort =
+()=>{
+
+
+let error =
+transaction.error;
+
+
+db.close();
+
+
+reject(error);
+
+
+};
+
+
+}
+);
+
+
+}
+
+
+
+
+
+
+
+// =================================
+// SAVE AUS INDEXEDDB LESEN
+// =================================
+
+async readIndexedSave(){
+
+
+let db =
+await this.openDatabase();
+
+
+return new Promise(
+(resolve,reject)=>{
+
+
+let transaction =
+db.transaction(
+this.storeName,
+"readonly"
+);
+
+
+let store =
+transaction.objectStore(
+this.storeName
+);
+
+
+let request =
+store.get(
+this.saveKey
+);
+
+
+request.onsuccess =
+()=>{
+
+
+let result =
+request.result;
+
+
+db.close();
+
+
+resolve(
+typeof result==="string"
+?
+result
+:
+null
+);
+
+
+};
+
+
+request.onerror =
+()=>{
+
+
+let error =
+request.error;
+
+
+db.close();
+
+
+reject(error);
+
+
+};
+
+
+}
+);
+
+
+}
+
+
+
+
+
+
+
+// =================================
+// SAVE AUS INDEXEDDB LÖSCHEN
+// =================================
+
+async deleteIndexedSave(){
+
+
+let db =
+await this.openDatabase();
+
+
+return new Promise(
+(resolve,reject)=>{
+
+
+let transaction =
+db.transaction(
+this.storeName,
+"readwrite"
+);
+
+
+let store =
+transaction.objectStore(
+this.storeName
+);
+
+
+store.delete(
+this.saveKey
+);
+
+
+transaction.oncomplete =
+()=>{
+
+
+db.close();
+
+
+resolve();
+
+
+};
+
+
+transaction.onerror =
+()=>{
+
+
+let error =
+transaction.error;
+
+
+db.close();
+
+
+reject(error);
+
+
+};
+
+
+transaction.onabort =
+()=>{
+
+
+let error =
+transaction.error;
+
+
+db.close();
+
+
+reject(error);
+
+
+};
+
+
+}
+);
+
+
+}
+
+
+
+
+
+
+
+// =================================
+// ALTEN LOCALSTORAGE-SAVE MIGRIEREN
+// =================================
+
+async migrateLegacySave(){
+
+
+let legacySave =
+localStorage.getItem(
+this.legacyLocalStorageKey
+);
+
+
+if(!legacySave)
+return false;
+
+
+// Falls bereits ein IndexedDB-Save existiert,
+// wird der alte Save nicht darübergeschrieben.
+
+let existing =
+await this.readIndexedSave();
+
+
+if(existing){
+
+
+localStorage.removeItem(
+this.legacyLocalStorageKey
+);
+
+
+console.log(
+"📦 Alter localStorage-Save entfernt – IndexedDB-Save existiert bereits."
+);
+
+
+return false;
+
+
+}
+
+
+await this.writeIndexedSave(
+legacySave
+);
+
+
+localStorage.removeItem(
+this.legacyLocalStorageKey
+);
+
+
+console.log(
+"✅ Alter localStorage-Spielstand nach IndexedDB migriert."
+);
+
+
+return true;
+
+
+}
+
+
+
+
 
 
 
@@ -129,7 +580,7 @@ Date.now()+2500;
 
 
 
-save(show=true){
+async save(show=true){
 
 
 
@@ -534,6 +985,11 @@ console.log(
 );
 
 console.log(
+"Speicher:",
+"IndexedDB"
+);
+
+console.log(
 "Gesamter JSON:",
 Math.round(json.length/1024),
 "KB"
@@ -594,9 +1050,7 @@ console.log(
 
 
 
-localStorage.setItem(
-
-"factorioSave",
+await this.writeIndexedSave(
 
 json
 
@@ -680,14 +1134,68 @@ this.showMessage(
 
 
 
-load(){
+async load(){
 
 
 
 let save =
+await this.readIndexedSave();
+
+
+// Sicherheits-Fallback für einen alten Save,
+// falls die automatische Migration beim Start
+// noch nicht fertig gewesen sein sollte.
+
+if(!save){
+
+
+let legacySave =
 localStorage.getItem(
-"factorioSave"
+this.legacyLocalStorageKey
 );
+
+
+if(legacySave){
+
+
+save=legacySave;
+
+
+try{
+
+
+await this.writeIndexedSave(
+legacySave
+);
+
+
+localStorage.removeItem(
+this.legacyLocalStorageKey
+);
+
+
+console.log(
+"✅ Alter localStorage-Spielstand beim Laden nach IndexedDB migriert."
+);
+
+
+}
+catch(e){
+
+
+console.warn(
+"Migration beim Laden fehlgeschlagen – alter Save wird trotzdem geladen.",
+e
+);
+
+
+}
+
+
+}
+
+
+}
 
 
 
@@ -1202,16 +1710,35 @@ return true;
 
 
 
-reset(){
+async reset(){
 
 
 
-localStorage.removeItem(
+try{
 
-"factorioSave"
 
+await this.deleteIndexedSave();
+
+
+}
+catch(e){
+
+
+console.error(
+"IndexedDB-Spielstand konnte nicht gelöscht werden:",
+e
 );
 
+
+}
+
+
+// Alten Save ebenfalls entfernen,
+// falls noch einer vorhanden ist.
+
+localStorage.removeItem(
+this.legacyLocalStorageKey
+);
 
 
 location.reload();
