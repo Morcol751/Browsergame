@@ -1,85 +1,477 @@
+import {World} from "./world.js";
+import {Player} from "./player.js";
+import {Camera} from "./camera.js";
+import {Renderer} from "./renderer.js";
+import {Minimap} from "./minimap.js";
+
+import {Inventory} from "./inventory.js";
+import {Input} from "./input.js";
+import {Hotbar} from "./hotbar.js";
+import {Crafting} from "./crafting.js";
+import {Backpack} from "./backpack.js";
+
+import {AudioManager} from "./audio.js";
+
+import {BuildingSystem} from "./building.js";
+import {BuildingInteraction} from "./buildinginteraction.js";
+import {Workbench} from "./workbench.js";
+import {Furnace} from "./furnace.js";
+import {MechanicalWorkbench} from "./mechanicalworkbench.js";
+import {CookingStation} from "./cookingstation.js";
+
 import {ITEMS} from "./items.js";
+import {Console} from "./console.js";
+
+import {WorldMap} from "./worldmap.js";
+
+import {SaveManager} from "./save.js";
+import {Intro} from "./intro.js";
+import {Enemies} from "./enemies.js";
+import {PlayerStats} from "./playerstats.js";
+import {Combat} from "./combat.js";
 
 
 
-export class Player{
 
 
 
-constructor(x,y,audio){
+
+export class Game{
 
 
-this.x=x;
-this.y=y;
 
 
-this.speed=0.2;
 
-this.sprintMultiplier=1.7;
-this.isSprinting=false;
-this.lastMovementUpdate=performance.now();
+
+
+constructor(){
+
+
+
+
+
+
+
+this.canvas =
+document.getElementById("game");
+
+
+
+
+
+this.ctx =
+this.canvas.getContext("2d");
+
+
+
+
+
+
+
 
 
 // ======================
-// CHARAKTER SPRITE
+// AUDIO
 // ======================
 
-this.sprite=new Image();
-this.sprite.src="./assets/player/player_walk.png";
 
-this.spriteFrameWidth=32;
-this.spriteFrameHeight=48;
-this.spriteFrames=4;
-
-this.direction="down";
-this.walking=false;
-this.animationFrame=0;
-this.animationTimer=0;
-this.animationSpeed=120;
+this.audio =
+new AudioManager();
 
 
-this.keys={};
+
+
+this.settingsOpen=false;
+
+
+this.draggingSlider=false;
+
+
+
+
+
+
+
+
+
+// ======================
+// MINIMAP
+// ======================
+
+
+this.radar =
+document.getElementById("radar");
+
+
+
+this.minimap =
+new Minimap(
+this.radar
+);
+
+
+
+
+
+// ======================
+// INTRO
+// ======================
+
+
+this.inputLocked=false;
+
+
+this.intro =
+new Intro(
+this
+);
+
+
+
+// ======================
+// DEV KONSOLE
+// ======================
+
+
+this.items =
+ITEMS;
+
+
+this.console =
+new Console(
+this
+);
+
+
+
+// ======================
+// INVENTAR
+// ======================
+
+
+this.backpack =
+new Backpack(
+this.audio
+);
+
+
+
+this.inventory =
+new Inventory(
+this.backpack
+);
+
+this.backpack.inventory=
+this.inventory;
+
+
+
+this.crafting =
+new Crafting(
+this.backpack
+);
+
+
+this.workbench =
+new Workbench(
+this.backpack,
+this.audio,
+this
+);
+
+
+this.furnace =
+new Furnace(
+this.backpack,
+this.audio,
+this
+);
+
+
+this.mechanicalWorkbench =
+new MechanicalWorkbench(
+this.backpack,
+this.audio,
+this
+);
+
+
+// ======================
+// KOCHSTATION
+// ======================
+
+this.cookingStation =
+new CookingStation(
+this.backpack,
+this.audio,
+this
+);
+
+
+
+
+
+
+// ======================
+// WORLD
+// ======================
+
+
+this.world =
+new World(
+2500,
+2500
+);
+
+
+this.worldMap =
+new WorldMap(
+this.world
+);
+
+
+// ======================
+// SPIELERSTATS / SURVIVAL
+// ======================
+
+this.playerStats =
+new PlayerStats(
+this
+);
+
+
+this.save =
+new SaveManager(
+this
+);
+
+
+
+
+// ======================
+// BUILDING
+// ======================
+
+
+this.building =
+new BuildingSystem(
+this.world,
+this.inventory
+);
+
+
+
+
+
+
+
+
+
+// ======================
+// INPUT
+// ======================
+
+
+this.input =
+new Input(
+this.inventory,
+this
+);
+
+
+
+
+
+
+
+
+
+// ======================
+// HOTBAR
+// ======================
+
+
+this.hotbar =
+new Hotbar(
+
+this.inventory,
+
+this.backpack,
+
+this.crafting,
+
+this.building
+
+);
+
+
+
+
+
+
+
+
+
+// ======================
+// PLAYER
+// ======================
+
+
+this.player =
+new Player(
+
+1250,
+
+1250,
+
+this.audio
+
+);
+
+
+// ======================
+// GEGNER / MONSTER
+// ======================
+
+this.enemies =
+new Enemies(
+this
+);
+
+
+// ======================
+// KAMPFSYSTEM
+// ======================
+
+this.combat =
+new Combat(
+this
+);
+
+
+this.buildingInteraction =
+new BuildingInteraction(
+this.player,
+this.building,
+this.backpack,
+this.workbench,
+this.furnace,
+this.mechanicalWorkbench,
+this.cookingStation
+);
+
+
+
+
+
+
+// ======================
+// CAMERA
+// ======================
+
+
+this.camera =
+new Camera();
+
+
+this.building.setCamera(
+this.camera,
+this.canvas
+);
+
+
+
+
+
+
+// ======================
+// RENDERER
+// ======================
+
+
+this.renderer =
+new Renderer(
+this.ctx,
+this.items
+);
+
+
+
+
+
+
 
 
 
 this.mouseX=0;
+
 this.mouseY=0;
 
 
 
-this.mining=false;
-
-
-this.mineStart=0;
-
-this.miningTile=null;
-
-
-this.mineTime=10000;
 
 
 
-this.audio=audio;
 
 
 
-this.message="";
+// ======================
+// RESIZE
+// ======================
 
-this.messageTime=0;
 
-
-
+this.resize();
 
 
 
 window.addEventListener(
-"keydown",
+"resize",
+()=>this.resize()
+);
+
+
+
+
+
+
+
+
+
+// ======================
+// MOUSE
+// ======================
+
+
+this.canvas.addEventListener(
+"mousemove",
 (e)=>{
 
 
-this.keys[
-e.key.toLowerCase()
-]=true;
+let rect =
+this.canvas.getBoundingClientRect();
+
+
+
+this.mouseX =
+e.clientX-rect.left;
+
+
+this.mouseY =
+e.clientY-rect.top;
+
+
+
+
+
+if(
+this.settingsOpen &&
+this.draggingSlider
+){
+
+this.updateSliders();
+
+}
+
 
 
 });
@@ -90,35 +482,206 @@ e.key.toLowerCase()
 
 
 
-window.addEventListener(
-"keyup",
+
+
+
+
+
+
+// ======================
+// RECHTSKLICK / VERBRAUCHSITEMS
+// ======================
+
+this.canvas.addEventListener(
+"contextmenu",
 (e)=>{
 
+e.preventDefault();
 
-this.keys[
-e.key.toLowerCase()
-]=false;
-
-
-});
+}
+);
 
 
+// ======================
+// KLICK
+// ======================
 
-
-
-
-
-
-
-window.addEventListener(
+this.canvas.addEventListener(
 "mousedown",
 (e)=>{
 
 
-if(e.button===0){
+if(e.button===2){
+
+if(
+this.intro &&
+this.intro.active
+)
+return;
+
+if(
+this.combat &&
+this.combat.active
+)
+return;
+
+if(this.inputLocked)
+return;
+
+if(
+this.inventory &&
+typeof this.inventory.useSelectedConsumable==="function"
+){
+
+this.inventory.useSelectedConsumable(
+this.playerStats,
+this.player
+);
+
+}
+
+return;
+
+}
 
 
-this.mining=true;
+if(
+this.intro &&
+this.intro.active
+)
+return;
+
+
+if(e.button!==0)
+return;
+
+
+// Kampfmenü fängt alle Klicks ab.
+
+if(
+this.combat &&
+this.combat.active
+){
+
+
+this.combat.handleClick(
+this.mouseX,
+this.mouseY,
+this.canvas
+);
+
+
+return;
+
+
+}
+
+
+// Status-Button oben links.
+
+if(
+this.playerStats &&
+this.playerStats.handleClick(
+this.mouseX,
+this.mouseY,
+this.canvas
+)
+){
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+// Gebäude platzieren
+
+
+if(
+this.building.placing
+){
+
+
+this.building.place();
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+// Zahnrad
+
+
+let gearX =
+this.canvas.width-90;
+
+
+let gearY =
+this.canvas.height-90;
+
+
+
+
+if(
+
+this.mouseX>=gearX &&
+
+this.mouseX<=gearX+60 &&
+
+this.mouseY>=gearY &&
+
+this.mouseY<=gearY+60
+
+){
+
+
+this.toggleSettings();
+
+
+return;
+
+
+}
+
+
+
+
+
+
+
+if(
+this.save
+){
+
+this.save.click(
+this.mouseX,
+this.mouseY,
+this.canvas
+);
+
+
+}
+
+if(this.settingsOpen){
+
+
+this.draggingSlider=true;
+
+
+this.updateSliders();
 
 
 }
@@ -137,50 +700,16 @@ this.mining=true;
 
 window.addEventListener(
 "mouseup",
-(e)=>{
+()=>{
 
 
-if(e.button===0){
-
-
-this.mining=false;
-
-
-this.stopMining();
-
-
-this.mineStart=0;
-
-this.miningTile=null;
-
-
-}
-
+this.draggingSlider=false;
 
 
 });
 
 
 
-}
-
-
-
-
-
-
-
-stopMining(){
-
-
-if(this.audio){
-
-
-this.audio.stopMiningSound();
-
-
-}
-
 
 
 }
@@ -190,788 +719,166 @@ this.audio.stopMiningSound();
 
 
 
+resize(){
 
 
-update(world,playerStats=null){
 
-let moved=false;
-
-
-let now=performance.now();
-
-let dt=Math.min(
-0.1,
-(now-this.lastMovementUpdate)/1000
-);
-
-this.lastMovementUpdate=now;
+this.canvas.width =
+window.innerWidth;
 
 
-let wantsToMove=!!(
-this.keys["w"] ||
-this.keys["a"] ||
-this.keys["s"] ||
-this.keys["d"]
-);
 
+this.canvas.height =
+window.innerHeight;
 
-let wantsSprint=!!(
-this.keys["shift"] &&
-wantsToMove
-);
-
-
-if(!wantsSprint){
-
-
-this.isSprinting=false;
-
-
-}
-else if(
-this.isSprinting &&
-playerStats &&
-typeof playerStats.canContinueSprint==="function"
-){
-
-
-this.isSprinting=
-playerStats.canContinueSprint();
-
-
-}
-else if(
-!this.isSprinting &&
-playerStats &&
-typeof playerStats.canStartSprint==="function"
-){
-
-
-this.isSprinting=
-playerStats.canStartSprint();
-
-
-}
-else{
-
-
-this.isSprinting=false;
 
 
 }
 
 
-let movementSpeed=
-this.speed*(
-this.isSprinting
-?
-this.sprintMultiplier
-:
-1
-);
 
 
-// ======================
-// VERTIKALE BEWEGUNG
-// ======================
 
-if(this.keys["w"]){
 
-this.direction="up";
 
-let newY=this.y-movementSpeed;
 
-if(
-!world ||
-this.canOccupy(world,this.x,newY)
-){
-this.y=newY;
-moved=true;
-}
+
+toggleSettings(){
+
+
+
+this.settingsOpen =
+!this.settingsOpen;
+
+
 
 }
 
 
-if(this.keys["s"]){
-
-this.direction="down";
-
-let newY=this.y+movementSpeed;
-
-if(
-!world ||
-this.canOccupy(world,this.x,newY)
-){
-this.y=newY;
-moved=true;
-}
-
-}
 
 
-// ======================
-// HORIZONTALE BEWEGUNG
-// ======================
-
-if(this.keys["a"]){
-
-this.direction="left";
-
-let newX=this.x-movementSpeed;
-
-if(
-!world ||
-this.canOccupy(world,newX,this.y)
-){
-this.x=newX;
-moved=true;
-}
-
-}
 
 
-if(this.keys["d"]){
 
-this.direction="right";
 
-let newX=this.x+movementSpeed;
 
-if(
-!world ||
-this.canOccupy(world,newX,this.y)
-){
-this.x=newX;
-moved=true;
-}
+updateSliders(){
 
-}
+
+
+let width=420;
+
+
+let height=280;
+
+
+
+let x =
+this.canvas.width/2-width/2;
+
+
+
+let y =
+this.canvas.height/2-height/2+120;
+
+
+
+
+
+
+
+
+
+// MUSIK
 
 
 if(
-this.isSprinting &&
-moved &&
-playerStats &&
-typeof playerStats.useStamina==="function"
-){
 
+this.mouseY>=y+115 &&
 
-playerStats.useStamina(
-playerStats.staminaDrainPerSecond*
-dt
-);
+this.mouseY<=y+135
 
-
-if(
-typeof playerStats.canContinueSprint==="function" &&
-!playerStats.canContinueSprint()
-){
-
-
-this.isSprinting=false;
-
-
-}
-
-
-}
-else if(!moved){
-
-
-this.isSprinting=false;
-
-
-}
-
-
-this.walking=moved;
-
-if(this.walking){
-
-let now=Date.now();
-
-if(now-this.animationTimer>=this.animationSpeed){
-this.animationFrame=(this.animationFrame+1)%this.spriteFrames;
-this.animationTimer=now;
-}
-
-}
-else{
-this.animationFrame=0;
-this.animationTimer=Date.now();
-}
-
-}
-
-
-
-
-// ======================
-// SPIELER-KOLLISIONSBOX
-// ======================
-//
-// x/y beschreiben das 1x1-Tile, auf dem die Füße des
-// Spielers stehen. Der 32x48-Sprite darf weiterhin 16 Pixel
-// nach oben über dieses Tile hinausragen.
-//
-// Für die Kollision prüfen wir aber die KOMPLETTE 1x1-Fläche.
-// Dadurch kann kein Teil des Spieler-Tiles mehr in einen Stein,
-// ein Erz, einen Baum oder ein Gebäude hineinrutschen.
-//
-// Das kleine EPSILON verhindert, dass eine exakt berührte
-// Tile-Kante schon als das nächste Tile gewertet wird.
-// ======================
-
-canOccupy(world,x,y){
-
-if(!world)
-return true;
-
-
-const EPSILON=0.001;
-
-
-// ======================
-// FUSS-HITBOX
-// ======================
-//
-// x = horizontale MITTE des Spielers
-// y = Weltposition des Spielers
-//
-// Der Sprite ist 32x48 Pixel.
-// Kollidieren soll nur der Bereich
-// direkt um die Füße.
-// ======================
-
-
-// Seitlich symmetrisch.
-// 0.90 = 90 % eines Tiles breit.
-const hitboxWidth = 0.60;
-
-
-// Fußbereich vertikal.
-//
-// WICHTIG:
-// Diese Werte sind relativ zu y,
-// NICHT von 0 bis 1 innerhalb eines Tiles.
-const hitboxTopOffset = 0.15;
-
-const hitboxBottomOffset = 0.425;
-
-
-
-// ======================
-// HITBOX-GRENZEN
-// ======================
-
-
-const left =
-x -
-hitboxWidth/2;
-
-
-const right =
-x +
-hitboxWidth/2;
-
-
-const top =
-y +
-hitboxTopOffset;
-
-
-const bottom =
-y +
-hitboxBottomOffset;
-
-
-
-// ======================
-// BETROFFENE TILES
-// ======================
-
-
-const tileLeft =
-Math.floor(
-left
-);
-
-
-const tileRight =
-Math.floor(
-right-EPSILON
-);
-
-
-const tileTop =
-Math.floor(
-top
-);
-
-
-const tileBottom =
-Math.floor(
-bottom-EPSILON
-);
-
-
-
-// ======================
-// KOLLISION
-// ======================
-
-
-return(
-
-world.isWalkable(
-tileLeft,
-tileTop
-)
-
-&&
-
-world.isWalkable(
-tileRight,
-tileTop
-)
-
-&&
-
-world.isWalkable(
-tileLeft,
-tileBottom
-)
-
-&&
-
-world.isWalkable(
-tileRight,
-tileBottom
-)
-
-);
-
-
-}
-
-
-
-
-
-
-setMouse(x,y){
-
-
-this.mouseX=x;
-
-this.mouseY=y;
-
-
-}
-
-
-
-
-
-
-
-
-showMessage(text){
-
-
-this.message=text;
-
-
-this.messageTime=
-Date.now()+2000;
-
-
-}
-
-
-
-
-
-
-
-
-getRequiredTool(ore){
-
-
-switch(ore){
-
-
-
-// Kohle
-case 2:
-
-return {
-
-tier:2,
-
-name:"Steinspitzhacke"
-
-};
-
-
-
-
-// Kupfer
-case 3:
-
-return {
-
-tier:2,
-
-name:"Steinspitzhacke"
-
-};
-
-
-
-
-
-// Eisen
-case 4:
-
-return {
-
-tier:3,
-
-name:"Kupferspitzhacke"
-
-};
-
-
-
-
-
-// Silber
-case 5:
-
-return {
-
-tier:4,
-
-name:"Eisenspitzhacke"
-
-};
-
-
-
-
-
-// Gold
-case 6:
-
-return {
-
-tier:5,
-
-name:"Silberspitzhacke"
-
-};
-
-
-
-
-
-// Diamant
-case 7:
-
-return {
-
-tier:6,
-
-name:"Goldspitzhacke"
-
-};
-
-
-
-
-
-// Kobalt
-case 8:
-
-return {
-
-tier:7,
-
-name:"Diamantspitzhacke"
-
-};
-
-
-
-
-
-// Mithril
-case 9:
-
-return {
-
-tier:8,
-
-name:"Kobaltspitzhacke"
-
-};
-
-
-
-
-
-// Obsidian
-case 10:
-
-return {
-
-tier:9,
-
-name:"Mithrilspitzhacke"
-
-};
-
-
-
-
-
-// Adamant
-case 11:
-
-return {
-
-tier:10,
-
-name:"Obsidianhacke"
-
-};
-
-
-
-}
-
-
-
-return null;
-
-
-}
-
-
-
-
-
-
-
-getMineTime(tool){
-
-
-let base=10000;
-
-
-let reduction =
-tool.tier*700;
-
-
-
-let time =
-base-reduction;
-
-
-
-if(time<3000)
-
-time=3000;
-
-
-
-return time;
-
-
-
-}
-
-
-
-
-
-mine(
-world,
-camera,
-canvas,
-inventory,
-backpack
 ){
 
 
 
-let tool =
-inventory.getSelectedTool();
+let value =
 
-
-
-
-
-
-
-let worldX =
-Math.floor(
-
-camera.x+
 (
-this.mouseX-
-canvas.width/2
+this.mouseX-(x+80)
 )
-/32
+/260;
 
+
+
+value =
+Math.max(
+0,
+Math.min(
+1,
+value
+)
 );
 
 
 
+this.audio.setMusicVolume(
+value
+);
 
-let worldY =
-Math.floor(
 
-camera.y+
+
+}
+
+
+
+
+
+
+
+
+
+// SOUNDS
+
+
+if(
+
+this.mouseY>=y+185 &&
+
+this.mouseY<=y+205
+
+){
+
+
+
+let value =
+
 (
-this.mouseY-
-canvas.height/2
+this.mouseX-(x+80)
 )
-/32
+/260;
 
+
+
+value =
+Math.max(
+0,
+Math.min(
+1,
+value
+)
 );
 
 
 
-
-
-
-
-let dx =
-worldX-this.x;
-
-
-let dy =
-worldY-this.y;
-
-
-
-let distance =
-Math.sqrt(
-dx*dx+
-dy*dy
+this.audio.setSoundVolume(
+value
 );
 
 
 
-
-
-
-if(distance>3){
-
-
-this.stopMining();
-
-return;
-
-
 }
 
-
-
-
-
-
-
-let tile =
-world.getTile(
-worldX,
-worldY
-);
-
-
-// GEBÄUDE NICHT MIT HAND ABBauen
-if(
-tile.building
-){
-
-this.stopMining();
-
-this.showMessage(
-"Benutze X zum Entfernen"
-);
-
-this.miningTile=null;
-this.mineStart=0;
-
-return;
-
-}
-
-
-
-
-// ==================================================
-// WASSER / SAND SIND TERRAIN
-// ==================================================
-//
-// Wasser kann nur mit einer Glasflasche gesammelt werden.
-// Sand kann nur mit einer Schaufel gesammelt werden.
-// Beide Tiles bleiben dabei erhalten.
-
-if(tile!==0 && tile.ore===13){
-
-let selected=
-inventory.getSelectedItem();
-
-if(
-!selected ||
-!selected.item ||
-selected.item.id!=="glass_bottle"
-){
-
-this.stopMining();
-this.miningTile=null;
-this.mineStart=0;
-
-this.showMessage(
-"Du brauchst eine Glasflasche"
-);
-
-return;
-
-}
-
-}
-
-
-if(tile!==0 && tile.ore===14){
-
-if(
-!tool ||
-tool.toolType!=="shovel"
-){
-
-this.stopMining();
-this.miningTile=null;
-this.mineStart=0;
-
-this.showMessage(
-"Du brauchst eine Schaufel"
-);
-
-return;
-
-}
-
-}
-
-if(tile===0){
-
-
-this.stopMining();
-
-return;
 
 
 }
@@ -984,210 +891,29 @@ return;
 
 
 
-// ==================================================
-// WERKZEUG PRÜFUNG
-// ==================================================
-
-
-// HOLZ
-
-if(tile.ore===1 || tile.ore===15){
+start(){
 
 
 
-if(
-tool.toolType!=="axe" &&
-tool.id!=="hand"
-){
+let enableAudio = ()=>{
+
+
+this.audio.startMusic();
 
 
 
-this.stopMining();
-
-
-this.showMessage(
-"Du brauchst eine Axt"
+window.removeEventListener(
+"click",
+enableAudio
 );
 
 
 
-return;
-
-
-
-}
-
-
-}
-
-
-
-
-
-
-
-
-// ==================================================
-// STEIN
-// ==================================================
-
-
-if(tile.ore===12){
-
-
-
-let required = {
-
-tier:1,
-
-name:"Holzspitzhacke"
-
-};
-
-
-
-
-
-if(
-tool.toolType!=="pickaxe" ||
-tool.tier < required.tier
-){
-
-
-
-this.stopMining();
-
-
-this.showMessage(
-"Du brauchst eine "+
-required.name
+window.removeEventListener(
+"keydown",
+enableAudio
 );
 
-
-
-this.miningTile=null;
-
-this.mineStart=0;
-
-
-
-return;
-
-
-
-}
-
-
-
-
-}
-
-
-
-
-
-
-
-
-// ERZE
-
-if(
-tile.ore>=2 &&
-tile.ore!==12 &&
-tile.ore!==13 &&
-tile.ore!==14 &&
-tile.ore!==15
-){
-
-
-
-let required =
-this.getRequiredTool(
-tile.ore
-);
-
-
-
-
-
-
-if(
-tool.toolType!=="pickaxe" ||
-tool.tier < required.tier
-){
-
-
-
-this.stopMining();
-
-
-this.showMessage(
-"Du brauchst eine "+
-required.name
-);
-
-
-
-this.miningTile=null;
-
-this.mineStart=0;
-
-
-
-return;
-
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-// ==================================================
-// NEUER ABBauVORGANG
-// ==================================================
-
-
-if(
-
-!this.miningTile ||
-
-this.miningTile.x!==worldX ||
-
-this.miningTile.y!==worldY
-
-){
-
-
-
-this.stopMining();
-
-
-
-
-
-this.miningTile={
-
-
-x:worldX,
-
-
-y:worldY,
-
-
-ore:tile.ore,
-
-
-quality:tile.quality
 
 
 };
@@ -1197,68 +923,49 @@ quality:tile.quality
 
 
 
-
-
-if(tile.ore===12){
-
-
-this.mineTime=5000;
-
-
-}
-else if(tile.ore===13){
-
-
-// Wasser abfüllen dauert kurz.
-
-this.mineTime=750;
-
-
-}
-else{
-
-
-this.mineTime =
-this.getMineTime(tool);
-
-
-}
-
-
-
-
-
-
-this.mineStart =
-Date.now();
-
-
-
-
-
-
-
-if(this.audio){
-
-
-
-if(tile.ore===1 || tile.ore===15){
-
-
-
-this.audio.startMiningSound(
-"chop_wood"
+window.addEventListener(
+"click",
+enableAudio
 );
 
 
 
+window.addEventListener(
+"keydown",
+enableAudio
+);
+
+
+
+
+this.loop();
+
+
+
 }
-else{
 
 
 
-this.audio.startMiningSound(
-"mine_ore"
+
+
+
+
+
+
+loop(){
+
+
+
+this.update();
+
+
+
+this.draw();
+
+
+
+requestAnimationFrame(
+()=>this.loop()
 );
 
 
@@ -1267,427 +974,467 @@ this.audio.startMiningSound(
 
 
 
-}
-
-
-
-}
 
 
 
 
 
 
+update(){
 
 
-
-let elapsed =
-Date.now()
--
-this.mineStart;
-
-
-
-
-
-
-
-
-if(elapsed>=this.mineTime){
-
-
-
-this.stopMining();
-
-
-
-
-
-if(this.audio){
-
-
-this.audio.playSound(
-"pickup_item"
-);
-
-
-}
-
-
-
-
-
-
-
-// ==================================================
-// TERRAIN-RESSOURCEN
-// ==================================================
-
-// SAND: immer exakt 1, Tile bleibt erhalten.
-if(tile.ore===14){
-
-backpack.add(
-ITEMS.SAND,
-1
-);
-
-this.mineStart=0;
-this.miningTile=null;
-
-return;
-
-}
-
-
-// WASSER: Glasflasche verbrauchen,
-// immer exakt 1 ungekochtes Wasser,
-// Wasser-Tile bleibt erhalten.
-if(tile.ore===13){
-
-let selected=
-inventory.getSelectedItem();
 
 if(
-!selected ||
-!selected.item ||
-selected.item.id!=="glass_bottle"
-){
-
-this.mineStart=0;
-this.miningTile=null;
+this.intro &&
+this.intro.active
+)
 return;
+
+
+// Spielerwerte laufen auch im Kampf weiter.
+// Dadurch regeneriert sich Ausdauer dort ebenfalls.
+
+if(this.playerStats){
+
+
+this.playerStats.update();
+
 
 }
 
 
-// Eine Flasche aus Backpack entfernen.
-//
-// Backpack und Hotbar verwenden für stackbare Items
-// denselben Eintrag. Deshalb darf die Hotbar-Menge
-// NICHT noch einmal separat reduziert werden.
-backpack.removeItem(
-ITEMS.GLASS_BOTTLE,
-1
-);
+// Während Tod/Respawn steht die komplette Welt still.
 
+if(
+this.playerStats &&
+this.playerStats.dying
+){
 
-backpack.add(
-ITEMS.RAW_WATER,
-1
-);
-
-
-this.mineStart=0;
-this.miningTile=null;
 
 return;
 
-}
-
-
-let amount =
-world.getAmount(
-tile.quality || 1
-);
-
-
-
-
-
-
-
-// HOLZ
-
-if(tile.ore===1 || tile.ore===15){
-
-backpack.add(
-ITEMS.WOOD,
-amount
-);
 
 }
 
 
-// KAUTSCHUKBAUM: zusätzlich rohen Kautschuk erhalten
-if(tile.ore===15){
-
-backpack.add(
-ITEMS.RAW_RUBBER,
-amount
-);
-
-}
-
-
-
-
-
-
-
-// STEIN
-
-if(tile.ore===12){
-
-
-
-backpack.add(
-
-ITEMS.STONE,
-
-amount
-
-);
-
-
-
-}
-
-
-
-
-
-
-
-// ERZE
-
-if(tile.ore===2){
-
-
-backpack.add(
-ITEMS.COAL,
-amount
-);
-
-
-}
-
-
-
-
-if(tile.ore===3){
-
-
-backpack.add(
-ITEMS.COPPER_ORE,
-amount
-);
-
-
-}
-
-
-
-
-if(tile.ore===4){
-
-
-backpack.add(
-ITEMS.IRON_ORE,
-amount
-);
-
-
-}
-
-
-
-
-
-
-if(tile.ore===5){
-
-
-backpack.add(
-ITEMS.SILVER_ORE,
-amount
-);
-
-
-}
-
-
-
-
-
-if(tile.ore===6){
-
-
-backpack.add(
-ITEMS.GOLD_ORE,
-amount
-);
-
-
-}
-
-
-
-
-
-if(tile.ore===7){
-
-
-backpack.add(
-ITEMS.DIAMOND_ORE,
-amount
-);
-
-
-}
-
-
-
-
-
-if(tile.ore===8){
-
-
-backpack.add(
-ITEMS.COBALT_ORE,
-amount
-);
-
-
-}
-
-
-
-
-
-if(tile.ore===9){
-
-
-backpack.add(
-ITEMS.MITHRIL_ORE,
-amount
-);
-
-
-}
-
-
-
-
-
-if(tile.ore===10){
-
-
-backpack.add(
-ITEMS.OBSIDIAN_ORE,
-amount
-);
-
-
-}
-
-
-
-
-
-if(tile.ore===11){
-
-
-backpack.add(
-ITEMS.ADAMANT_ORE,
-amount
-);
-
-
-}
-
-
-
-
-
-
-
-
-
-world.removeTile(
-
-worldX,
-
-worldY
-
-);
-
-
-
-
-
-this.mineStart=0;
-
-this.miningTile=null;
-
-
-
-}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-draw(
-ctx,
-camera,
-canvas,
-tileSize
+// Im Kampf steht die Welt komplett still.
+// Neben den Spielerwerten läuft nur die ATB-Logik.
+
+if(
+this.combat &&
+this.combat.active
 ){
 
-let directionRow={
-down:0,
-left:1,
-right:2,
-up:3
-};
 
-let row=directionRow[this.direction] ?? 0;
+this.combat.update();
 
-let sourceX=
-this.animationFrame*this.spriteFrameWidth;
 
-let sourceY=
-row*this.spriteFrameHeight;
+return;
 
-// Füße bleiben auf dem ursprünglichen 32x32-Spielertile.
-// Der 32x48-Charakter ragt 16 Pixel nach oben heraus.
-let screenX=Math.floor(
-canvas.width/2-tileSize/2
-);
-
-let screenY=Math.floor(
-canvas.height/2+tileSize/2-this.spriteFrameHeight
-);
-
-ctx.save();
-ctx.imageSmoothingEnabled=false;
-
-ctx.drawImage(
-this.sprite,
-sourceX,
-sourceY,
-this.spriteFrameWidth,
-this.spriteFrameHeight,
-screenX,
-screenY,
-tileSize,
-Math.round(tileSize*1.5)
-);
-
-ctx.restore();
 
 }
+
+
+if(
+this.settingsOpen ||
+this.workbench.open ||
+this.furnace.open ||
+this.mechanicalWorkbench.open ||
+this.cookingStation.open ||
+this.worldMap.open ||
+(
+this.playerStats &&
+this.playerStats.panelOpen
+)
+)
+return;
+
+
+this.player.update(
+this.world,
+this.playerStats
+);
+
+
+if(this.enemies){
+
+this.enemies.update(
+this.world,
+this.player
+);
+
+}
+
+
+
+
+
+this.camera.update(
+this.player
+);
+
+
+
+
+
+
+
+
+
+this.player.setMouse(
+
+this.mouseX,
+
+this.mouseY
+
+);
+
+
+
+
+
+
+
+
+
+// Building Position aktualisieren
+
+
+this.building.update(
+
+this.camera,
+
+this.canvas
+
+);
+
+this.buildingInteraction.update();
+
+
+
+
+
+
+
+if(this.player.mining){
+
+
+
+this.player.mine(
+
+this.world,
+
+this.camera,
+
+this.canvas,
+
+this.inventory,
+
+this.backpack
+
+);
+
+
+
+}
+
+
+
+}
+
+
+
+
+
+
+
+
+
+draw(){
+
+
+
+this.renderer.draw(
+
+
+
+this.world,
+
+
+this.player,
+
+
+this.camera,
+
+
+this.canvas,
+
+
+this.mouseX,
+
+
+this.mouseY,
+
+
+this.audio,
+
+
+this.settingsOpen
+
+
+
+);
+
+if(this.enemies){
+
+this.enemies.draw(
+this.ctx,
+this.camera,
+this.canvas,
+32
+);
+
+}
+
+
+// Spawn-Navigator über den Monstern,
+// aber weiterhin unter der Minimap zeichnen.
+
+if(
+this.renderer &&
+typeof this.renderer.drawSpawnNavigator==="function"
+){
+
+this.renderer.drawSpawnNavigator(
+this.ctx,
+this.world,
+this.player,
+this.canvas
+);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+// Gebäude Vorschau
+
+
+this.building.drawPreview(
+
+this.ctx
+
+);
+
+
+
+
+
+
+
+
+
+this.minimap.draw(
+
+this.world,
+
+this.player
+
+);
+
+
+
+
+
+this.buildingInteraction.draw(
+this.ctx,
+this.canvas
+);
+
+
+
+this.hotbar.draw(
+
+this.ctx,
+
+this.canvas
+
+);
+
+
+
+
+
+
+
+
+
+this.backpack.draw(
+
+this.ctx
+
+);
+
+
+
+
+
+
+
+
+
+this.crafting.draw(
+
+this.ctx,
+
+this.canvas
+
+);
+
+
+this.workbench.draw(
+this.ctx,
+this.canvas
+);
+
+
+this.furnace.draw(
+this.ctx,
+this.canvas
+);
+
+
+this.mechanicalWorkbench.draw(
+this.ctx,
+this.canvas
+);
+
+
+this.cookingStation.draw(
+this.ctx,
+this.canvas
+);
+
+
+this.console.draw(
+this.ctx
+);
+
+this.worldMap.draw(
+this.player
+);
+
+
+this.worldMap.render(
+this.ctx,
+this.canvas
+);
+
+this.save.draw(
+this.ctx,
+this.canvas
+);
+
+
+// ======================
+// SPIELER-HUD / STATUS
+// ======================
+
+if(this.playerStats){
+
+
+this.playerStats.draw(
+this.ctx,
+this.canvas
+);
+
+
+}
+
+
+// ======================
+// SETTINGS UI
+// ======================
+
+if(
+this.renderer &&
+typeof this.renderer.drawSettingsUI==="function"
+){
+
+this.renderer.drawSettingsUI(
+this.ctx,
+this.canvas,
+this.mouseX,
+this.mouseY,
+this.audio,
+this.settingsOpen
+);
+
+}
+
+
+
+
+// ======================
+// KAMPF
+// ======================
+
+if(this.combat){
+
+
+this.combat.draw(
+this.ctx,
+this.canvas
+);
+
+
+}
+
+
+// ======================
+// TOD / RESPAWN OVERLAY
+// ======================
+
+if(
+this.playerStats &&
+typeof this.playerStats.drawDeathOverlay==="function"
+){
+
+
+this.playerStats.drawDeathOverlay(
+this.ctx,
+this.canvas
+);
+
+
+}
+
+
+// Intro ganz zuletzt zeichnen.
+// Dadurch liegt es über dem kompletten Spiel und allen Menüs.
+
+if(this.intro){
+
+
+this.intro.draw(
+this.ctx,
+this.canvas
+);
+
+
+}
+
+}
+
+
+
 
 
 }
