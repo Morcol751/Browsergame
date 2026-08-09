@@ -237,6 +237,13 @@ distanceToPlayer<14;
 
 if(chasing){
 
+// Sobald der Spieler gejagt wird,
+// wird eine eventuell laufende Wander-Pause
+// sofort abgebrochen.
+
+enemy.pauseUntil=0;
+
+
 let targetTileX =
 Math.floor(
 player.x
@@ -433,9 +440,13 @@ enemy.nextWanderChange=now+900+Math.random()*2200;
 
 if(Math.random()<0.20){
 
+// Beim normalen Herumlaufen gelegentlich
+// für 3 bis 10 Sekunden stehen bleiben.
 
-enemy.pauseUntil=now+300+Math.random()*900;
-
+enemy.pauseUntil=
+now+
+3000+
+Math.random()*7000;
 
 }
 
@@ -462,7 +473,15 @@ return;
 }
 
 
-let speed=enemy.speed;
+// Im Jagdmodus bewegt sich das Monster
+// doppelt so schnell wie beim normalen Herumlaufen.
+
+let speed=
+chasing
+?
+enemy.speed*2
+:
+enemy.speed;
 
 let moveX=Math.cos(angle)*speed;
 
