@@ -1361,21 +1361,14 @@ return;
 
 
 // Eine Flasche aus Backpack entfernen.
+//
+// Backpack und Hotbar verwenden für stackbare Items
+// denselben Eintrag. Deshalb darf die Hotbar-Menge
+// NICHT noch einmal separat reduziert werden.
 backpack.removeItem(
-ITEMS.GLASS_BOTTLE
+ITEMS.GLASS_BOTTLE,
+1
 );
-
-
-// Hotbar-Menge passend aktualisieren.
-selected.amount--;
-
-if(selected.amount<=0){
-
-inventory.slots[
-inventory.selectedSlot
-]=null;
-
-}
 
 
 backpack.add(
