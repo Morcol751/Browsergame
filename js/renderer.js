@@ -1400,163 +1400,6 @@ this.tileSize*2
 
 
 // ======================
-// SPAWN NAVIGATOR
-// ======================
-
-
-let spawnDX =
-world.spawnX-player.x;
-
-
-let spawnDY =
-world.spawnY-player.y;
-
-
-
-let distance =
-Math.sqrt(
-spawnDX*spawnDX+
-spawnDY*spawnDY
-);
-
-
-
-if(distance>50){
-
-
-
-ctx.save();
-
-
-
-let angle =
-Math.atan2(
-spawnDY,
-spawnDX
-);
-
-
-
-
-// Position unter der Minimap
-
-let arrowX =
-canvas.width-135;
-
-
-let arrowY =
-280;
-
-
-
-
-
-ctx.translate(
-arrowX,
-arrowY
-);
-
-
-
-ctx.rotate(
-angle+Math.PI/2
-);
-
-
-
-
-
-ctx.fillStyle="yellow";
-
-
-
-ctx.beginPath();
-
-
-
-ctx.moveTo(
-0,
--25
-);
-
-
-
-ctx.lineTo(
-14,
-15
-);
-
-
-
-ctx.lineTo(
-0,
-8
-);
-
-
-
-ctx.lineTo(
--14,
-15
-);
-
-
-
-ctx.closePath();
-
-
-
-ctx.fill();
-
-
-
-ctx.restore();
-
-
-
-
-
-
-
-
-ctx.save();
-
-
-
-ctx.fillStyle="yellow";
-
-
-ctx.font="18px Arial";
-
-
-ctx.textAlign="center";
-
-
-
-ctx.fillText(
-
-"🏠 Spawn "+
-Math.floor(distance)+
-" Felder",
-
-arrowX,
-
-arrowY+45
-
-);
-
-
-
-ctx.restore();
-
-
-
-}
-
-
-
-
-// ======================
 // MINING BALKEN
 // ======================
 
@@ -2151,9 +1994,167 @@ audio
 
 
 
+// ======================
+// SPAWN NAVIGATOR
+// ======================
+
+drawSpawnNavigator(
+ctx,
+world,
+player,
+canvas
+){
+
+let spawnDX =
+world.spawnX-player.x;
+
+
+let spawnDY =
+world.spawnY-player.y;
 
 
 
+let distance =
+Math.sqrt(
+spawnDX*spawnDX+
+spawnDY*spawnDY
+);
+
+
+
+if(distance>50){
+
+
+
+ctx.save();
+
+
+
+let angle =
+Math.atan2(
+spawnDY,
+spawnDX
+);
+
+
+
+
+// Position unter der Minimap
+
+let arrowX =
+canvas.width-135;
+
+
+let arrowY =
+280;
+
+
+
+
+
+ctx.translate(
+arrowX,
+arrowY
+);
+
+
+
+ctx.rotate(
+angle+Math.PI/2
+);
+
+
+
+
+
+ctx.fillStyle="yellow";
+
+
+
+ctx.beginPath();
+
+
+
+ctx.moveTo(
+0,
+-25
+);
+
+
+
+ctx.lineTo(
+14,
+15
+);
+
+
+
+ctx.lineTo(
+0,
+8
+);
+
+
+
+ctx.lineTo(
+-14,
+15
+);
+
+
+
+ctx.closePath();
+
+
+
+ctx.fill();
+
+
+
+ctx.restore();
+
+
+
+
+
+
+
+
+ctx.save();
+
+
+
+ctx.fillStyle="yellow";
+
+
+ctx.font="18px Arial";
+
+
+ctx.textAlign="center";
+
+
+
+ctx.fillText(
+
+"🏠 Spawn "+
+Math.floor(distance)+
+" Felder",
+
+arrowX,
+
+arrowY+45
+
+);
+
+
+
+ctx.restore();
+
+
+
+}
+
+}
 
 
 

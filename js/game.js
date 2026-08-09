@@ -1197,6 +1197,24 @@ this.canvas,
 }
 
 
+// Spawn-Navigator über den Monstern,
+// aber weiterhin unter der Minimap zeichnen.
+
+if(
+this.renderer &&
+typeof this.renderer.drawSpawnNavigator==="function"
+){
+
+this.renderer.drawSpawnNavigator(
+this.ctx,
+this.world,
+this.player,
+this.canvas
+);
+
+}
+
+
 
 
 
