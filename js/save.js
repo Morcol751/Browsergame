@@ -52,18 +52,28 @@ this.saveKey="main";
 this.legacyLocalStorageKey="factorioSave";
 
 
-// Vorhandenen alten localStorage-Spielstand einmalig
-// nach IndexedDB übernehmen.
+// Save-System erst nach der restlichen synchronen
+// Spielinitialisierung starten.
+//
+// Dadurch sind WorldMap, Gebäude, Inventar usw.
+// garantiert vorhanden, bevor ein Spielstand geladen wird.
 
-this.migrateLegacySave().catch(
+setTimeout(
+()=>{
+
+this.initializeSaveSystem().catch(
 e=>{
 
 console.error(
-"Save-Migration fehlgeschlagen:",
+"Save-System konnte nicht initialisiert werden:",
 e
 );
 
 }
+);
+
+},
+100
 );
 
 
@@ -134,6 +144,78 @@ this.open=false;
 
 
 }
+
+
+
+
+
+// =================================
+// SAVE-SYSTEM INITIALISIEREN
+// =================================
+//
+// 1. Alten localStorage-Save übernehmen, falls vorhanden.
+// 2. Prüfen, ob ein IndexedDB-Save existiert.
+// 3. Falls ja: automatisch laden.
+// 4. Falls nein: neue Welt einfach weiterlaufen lassen.
+// =================================
+
+async initializeSaveSystem(){
+
+
+try{
+
+
+await this.migrateLegacySave();
+
+
+let save =
+await this.readIndexedSave();
+
+
+if(!save){
+
+
+console.log(
+"💾 Kein Spielstand gefunden – neue Welt gestartet."
+);
+
+
+return false;
+
+
+}
+
+
+console.log(
+"📂 Spielstand gefunden – wird automatisch geladen."
+);
+
+
+await this.load();
+
+
+return true;
+
+
+}
+catch(e){
+
+
+console.error(
+"Automatisches Laden fehlgeschlagen:",
+e
+);
+
+
+return false;
+
+
+}
+
+
+}
+
+
 
 
 
