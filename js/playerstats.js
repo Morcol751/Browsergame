@@ -385,11 +385,23 @@ return this.stamina>0;
 
 
 
-canSprint(){
+canStartSprint(){
 
 
 return (
-this.stamina>0.01
+this.stamina>25
+);
+
+
+}
+
+
+
+canContinueSprint(){
+
+
+return (
+this.stamina>0
 );
 
 

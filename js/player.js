@@ -221,12 +221,44 @@ wantsToMove
 );
 
 
-this.isSprinting=!!(
-wantsSprint &&
+if(!wantsSprint){
+
+
+this.isSprinting=false;
+
+
+}
+else if(
+this.isSprinting &&
 playerStats &&
-typeof playerStats.canSprint==="function" &&
-playerStats.canSprint()
-);
+typeof playerStats.canContinueSprint==="function"
+){
+
+
+this.isSprinting=
+playerStats.canContinueSprint();
+
+
+}
+else if(
+!this.isSprinting &&
+playerStats &&
+typeof playerStats.canStartSprint==="function"
+){
+
+
+this.isSprinting=
+playerStats.canStartSprint();
+
+
+}
+else{
+
+
+this.isSprinting=false;
+
+
+}
 
 
 let movementSpeed=
@@ -329,7 +361,10 @@ dt
 );
 
 
-if(!playerStats.canSprint()){
+if(
+typeof playerStats.canContinueSprint==="function" &&
+!playerStats.canContinueSprint()
+){
 
 
 this.isSprinting=false;
