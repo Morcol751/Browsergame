@@ -181,6 +181,17 @@ console.log(
 
 
 if(
+this.game.building &&
+!this.game.building.crashedShipSalvaged &&
+typeof this.game.building.spawnCrashedShip==="function"
+){
+
+this.game.building.spawnCrashedShip();
+
+}
+
+
+if(
 this.game.intro &&
 !this.game.intro.seen
 ){
@@ -1076,6 +1087,9 @@ typeof game.worldMap.exportDiscovered==="function"
 buildings:
 game.building.buildings,
 
+crashedShipSalvaged:
+!!game.building.crashedShipSalvaged,
+
 
 
 
@@ -1756,6 +1770,10 @@ game.building.buildings =
 data.buildings || [];
 
 
+game.building.crashedShipSalvaged=
+!!data.crashedShipSalvaged;
+
+
 
 
 
@@ -1838,6 +1856,24 @@ quality:1
 
 }
 
+
+
+
+
+
+// Alte Spielstände kennen das Wrack noch nicht.
+// Solange es nicht ausgeschlachtet wurde, wird es ergänzt.
+if(
+!game.building.crashedShipSalvaged &&
+!game.building.buildings.some(
+building=>building.id==="crashed_ship"
+) &&
+typeof game.building.spawnCrashedShip==="function"
+){
+
+game.building.spawnCrashedShip();
+
+}
 
 
 // =================================

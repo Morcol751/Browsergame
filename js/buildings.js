@@ -37,6 +37,18 @@ width:2,
 
 height:1
 
+},
+
+CRASHED_SHIP:{
+
+id:"crashed_ship",
+
+name:"Abgestürztes Raumschiff",
+
+width:4,
+
+height:3
+
 }
 
 

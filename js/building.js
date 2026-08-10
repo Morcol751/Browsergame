@@ -17,6 +17,9 @@ this.placing=null;
 
 this.buildings=[];
 
+// Bleibt nach dem Ausschlachten dauerhaft true.
+this.crashedShipSalvaged=false;
+
 
 this.mouseX=0;
 this.mouseY=0;
@@ -100,6 +103,135 @@ this.canvas=canvas;
 
 
 
+
+
+
+
+spawnCrashedShip(){
+
+
+// Bereits vorhanden? Dann nichts doppelt erzeugen.
+if(
+this.buildings.some(
+building=>building.id==="crashed_ship"
+)
+)
+return;
+
+
+// 4x3 direkt unterhalb des Weltspawns.
+const width=4;
+const height=3;
+
+const x=
+Math.floor(this.world.spawnX)-
+Math.floor(width/2);
+
+const y=
+Math.floor(this.world.spawnY)+
+2;
+
+
+// Falls dort wider Erwarten etwas blockiert,
+// wird nur Gras/Sand akzeptiert.
+for(let dx=0;dx<width;dx++){
+
+for(let dy=0;dy<height;dy++){
+
+let tile=
+this.world.getTile(
+x+dx,
+y+dy
+);
+
+let free=
+tile===0 ||
+(
+tile &&
+tile.ore===14 &&
+!tile.building
+);
+
+if(!free)
+return;
+
+}
+
+}
+
+
+// Untergrund merken und Gebäudetiles setzen.
+let underlyingTiles=[];
+
+for(let dx=0;dx<width;dx++){
+
+for(let dy=0;dy<height;dy++){
+
+let oldTile=
+this.world.tiles[y+dy][x+dx];
+
+let underlyingOre=
+(oldTile!==0 && oldTile.ore)
+?
+oldTile.ore
+:
+0;
+
+underlyingTiles.push({
+dx:dx,
+dy:dy,
+ore:underlyingOre
+});
+
+this.world.tiles[y+dy][x+dx]={
+building:"crashed_ship",
+underlyingOre:underlyingOre,
+buildingPart:
+(dx===0 && dy===0)
+?
+"origin"
+:
+"child",
+ore:0,
+quality:1
+};
+
+if(
+typeof this.world.notifyTileChanged==="function"
+){
+
+this.world.notifyTileChanged(
+x+dx,
+y+dy
+);
+
+}
+
+}
+
+}
+
+
+this.buildings.push({
+id:"crashed_ship",
+name:"Abgestürztes Raumschiff",
+icon:"./assets/buildings/crashed_ship.png",
+x:x,
+y:y,
+width:width,
+height:height,
+underlyingTiles:underlyingTiles
+});
+
+
+console.log(
+"🚀 Abgestürztes Raumschiff gespawnt:",
+x,
+y
+);
+
+
+}
 
 
 
@@ -765,6 +897,48 @@ this.inventory.backpack.add(
 ITEMS.IRON_BAR,
 1
 );
+
+}
+
+
+if(building.id==="crashed_ship"){
+
+// Das Wrack wird vollständig ausgeschlachtet.
+// Danach bleibt an seiner Stelle normaler Untergrund zurück.
+
+this.inventory.backpack.add(
+ITEMS.BOILED_WATER,
+10
+);
+
+this.inventory.backpack.add(
+ITEMS.COOKED_BUG_MEAT,
+10
+);
+
+this.inventory.backpack.add(
+ITEMS.IRON_PLATE,
+5
+);
+
+this.inventory.backpack.add(
+ITEMS.WOOD,
+10
+);
+
+this.inventory.backpack.add(
+ITEMS.STONE,
+10
+);
+
+
+// Merken, damit das Raumschiff nach Save/Load
+// nicht erneut gespawnt wird.
+//
+// Das BuildingSystem besitzt den Status selbst.
+// Deshalb darf das Setzen NICHT davon abhängen,
+// ob inventory.game existiert.
+this.crashedShipSalvaged=true;
 
 }
 

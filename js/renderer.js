@@ -78,6 +78,9 @@ this.tiles.mechanical_workbench.src = "./assets/buildings/mechanical_workbench.p
 this.tiles.cooking_station = new Image();
 this.tiles.cooking_station.src = "./assets/buildings/cooking_station.png";
 
+this.tiles.crashed_ship = new Image();
+this.tiles.crashed_ship.src = "./assets/buildings/crashed_ship.png";
+
 this.tiles.wood_bridge = new Image();
 this.tiles.wood_bridge.src = "./assets/tiles/wood_bridge.png";
 
@@ -242,6 +245,7 @@ let workbenchesToDraw=[];
 let mechanicalWorkbenchesToDraw=[];
 let cookingStationsToDraw=[];
 let furnacesToDraw=[];
+let crashedShipsToDraw=[];
 
 
 
@@ -365,6 +369,31 @@ this.tileSize
 ctx.restore();
 
 }
+
+
+// ======================
+// ABGESTÜRZTES RAUMSCHIFF 4x3
+// ======================
+
+if(
+tile.building==="crashed_ship"
+){
+
+if(
+tile.buildingPart==="origin"
+){
+
+crashedShipsToDraw.push({
+x:screenX,
+y:screenY
+});
+
+}
+
+continue;
+
+}
+
 
 
 // ======================
@@ -1323,6 +1352,26 @@ this.tileSize
 
 
 // ======================
+// ABGESTÜRZTES RAUMSCHIFF ÜBER TERRAIN
+// ======================
+
+for(
+let ship of crashedShipsToDraw
+){
+
+ctx.drawImage(
+this.tiles.crashed_ship,
+ship.x,
+ship.y,
+this.tileSize*4,
+this.tileSize*3
+);
+
+}
+
+
+
+// ======================
 // HANDWERKSBÄNKE ÜBER TERRAIN
 // ======================
 
@@ -1701,6 +1750,14 @@ if(item){
 
 this.tooltip.innerHTML =
 item.name;
+
+}
+else if(
+hovered.building==="crashed_ship"
+){
+
+this.tooltip.innerHTML =
+"Kaputtes Raumschiff";
 
 }
 else{
