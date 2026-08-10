@@ -981,6 +981,19 @@ true
 ),
 
 
+// ======================
+// SPIELZEIT SPEICHERN
+// ======================
+
+playTimeMs:
+Math.max(
+0,
+Math.floor(
+game.playTimeMs || 0
+)
+),
+
+
 
 player:{
 
@@ -1358,6 +1371,34 @@ JSON.parse(save);
 
 
 let game=this.game;
+
+
+// =================================
+// SPIELZEIT LADEN
+// =================================
+//
+// Alte Saves besitzen playTimeMs noch nicht
+// und starten deshalb automatisch bei 0.
+
+game.playTimeMs=
+(
+Number.isFinite(
+data.playTimeMs
+)
+&&
+data.playTimeMs>=0
+)
+?
+data.playTimeMs
+:
+0;
+
+
+// Zeitbasis nach dem Laden neu setzen,
+// damit die Ladezeit nicht auf die Spielzeit gerechnet wird.
+
+game.playTimeLastUpdate=
+Date.now();
 
 
 // =================================

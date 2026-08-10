@@ -87,6 +87,19 @@ this.settingsOpen=false;
 this.draggingSlider=false;
 
 
+// ======================
+// SPIELZEIT
+// ======================
+//
+// Wird in Millisekunden gespeichert.
+// Alte Spielstände ohne diesen Wert starten bei 0.
+
+this.playTimeMs=0;
+
+this.playTimeLastUpdate=
+Date.now();
+
+
 
 
 
@@ -743,6 +756,197 @@ window.innerHeight;
 
 
 
+updatePlayTime(){
+
+
+// Intro zählt nicht zur eigentlichen Spielzeit.
+
+if(
+this.intro &&
+this.intro.active
+){
+
+this.playTimeLastUpdate=
+Date.now();
+
+return;
+
+}
+
+
+let now=
+Date.now();
+
+
+let delta=
+now-
+this.playTimeLastUpdate;
+
+
+this.playTimeLastUpdate=
+now;
+
+
+// Falls der Browser-Tab lange komplett pausiert wurde,
+// wird nicht plötzlich die gesamte Hintergrundzeit addiert.
+
+delta=
+Math.max(
+0,
+Math.min(
+delta,
+1000
+)
+);
+
+
+this.playTimeMs+=delta;
+
+
+}
+
+
+
+
+
+formatPlayTime(){
+
+
+let totalMinutes=
+Math.floor(
+this.playTimeMs/
+60000
+);
+
+
+let days=
+Math.floor(
+totalMinutes/
+1440
+);
+
+
+let hours=
+Math.floor(
+(totalMinutes%1440)/
+60
+);
+
+
+let minutes=
+totalMinutes%60;
+
+
+return (
+"Spielzeit: "+
+days+"T "+
+hours+"S "+
+minutes+"M"
+);
+
+
+}
+
+
+
+
+
+drawPlayTime(
+ctx,
+canvas
+){
+
+
+ctx.save();
+
+
+ctx.font=
+"bold 17px Arial";
+
+
+ctx.textAlign=
+"center";
+
+
+ctx.textBaseline=
+"middle";
+
+
+let text=
+this.formatPlayTime();
+
+
+let centerX=
+canvas.width-130;
+
+
+let y=25;
+
+
+let textWidth=
+ctx.measureText(
+text
+).width;
+
+
+let paddingX=10;
+
+let height=28;
+
+
+ctx.fillStyle=
+"rgba(0,0,0,0.72)";
+
+
+ctx.fillRect(
+centerX-
+textWidth/2-
+paddingX,
+y-height/2,
+textWidth+
+paddingX*2,
+height
+);
+
+
+ctx.strokeStyle=
+"rgba(255,255,255,0.45)";
+
+
+ctx.lineWidth=1;
+
+
+ctx.strokeRect(
+centerX-
+textWidth/2-
+paddingX,
+y-height/2,
+textWidth+
+paddingX*2,
+height
+);
+
+
+ctx.fillStyle=
+"white";
+
+
+ctx.fillText(
+text,
+centerX,
+y
+);
+
+
+ctx.restore();
+
+
+}
+
+
+
+
+
 toggleSettings(){
 
 
@@ -981,6 +1185,12 @@ requestAnimationFrame(
 
 
 update(){
+
+
+// Spielzeit vor allen Menü-/Kampf-Returns aktualisieren.
+// Dadurch zählen auch Kampf, Crafting und Menüs zur Spielzeit.
+
+this.updatePlayTime();
 
 
 
@@ -1247,6 +1457,14 @@ this.world,
 
 this.player
 
+);
+
+
+// Spielzeit direkt über der Minimap.
+
+this.drawPlayTime(
+this.ctx,
+this.canvas
 );
 
 
